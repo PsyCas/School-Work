@@ -1,21 +1,20 @@
+//Parakram Basnet
+
 #include <vector>
 #include <iostream>
 
-using namespace std;
-
 class SequenceMap{
 
-    public:
-        
+    public:  
         SequenceMap();
 
-        SequenceMap(const string &a_rec_seq, const string &an_enz_acro);
+        SequenceMap(const std::string &a_rec_seq, const std::string &an_enz_acro);
         bool operator < (const SequenceMap &rhs) const;
-        // overload << operator
-        void merge(const SequenceMap &other_sequence)
+        friend std::ostream& operator<<(std::ostream &out, const SequenceMap &rhs); // displays the sequence map 
+        void merge(const SequenceMap &other_sequence);
 
     private:
 
-        string recognition_sequence;
-        vector<string> enzyme_acronyms_;
+        std::string recognition_sequence;
+        std::vector<std::string> enzyme_acronyms_;
 };
