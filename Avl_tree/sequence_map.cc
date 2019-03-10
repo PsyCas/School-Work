@@ -26,5 +26,5 @@ std::ostream &operator<<(std::ostream &out, const SequenceMap &rhs){
 
 void SequenceMap:: merge(const SequenceMap &other_sequence){
 
-    std::cout << this;
+    //this funtion still needs work
 }
