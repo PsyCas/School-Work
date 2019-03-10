@@ -1,5 +1,4 @@
 //Parakram Basnet
-
 #include "sequence_map.h"
 
 SequenceMap:: SequenceMap() = default;
@@ -27,4 +26,7 @@ std::ostream &operator<<(std::ostream &out, const SequenceMap &rhs){
 void SequenceMap:: merge(const SequenceMap &other_sequence){
 
     //this funtion still needs work
+
+    // cout << this;
+    cout << other_sequence;
 }
