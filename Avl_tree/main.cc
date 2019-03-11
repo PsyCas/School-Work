@@ -1,19 +1,28 @@
+// #include "sequence_map.h"
+#include <vector>
+#include <string>
 #include <iostream>
-#include "sequence_map.h"
+using namespace std;
 
 int main(){
 
-    std::string first = "AanI";
-    std::string second = "TTA'TAA";
-    std::string comparison = "AanI";
+    string first = "AanI";
+    string second = "TTA'TAA";
+    string comparison = "Bbni";
 
-    std::cout << first.length();
+    vector<string> vec1= {"AanI", "Bbni"};
+    vector<string> vec2= {"CcnI", "Dcni"};
 
-    SequenceMap map1(first, second);
-    SequenceMap map2(comparison, second);
+    for(string newStr : vec1)
+        cout << newStr << endl;
+    
+    cout << endl;
 
-    // map1.merge(map2);
+    for(string newStr : vec2)
+        vec1.push_back(newStr);
 
-    std::cout << map1;
-    std::cout << (map1 < map2);
+    for(string newStr : vec1)
+        cout << newStr << endl;
+   
+
 }
