@@ -12,6 +12,9 @@ using namespace std;
 
 namespace {
 
+  // parses through the recognition sequence of the line from file
+  // returns true if a sequence can be extracted and false if not
+  // lineValMod is passed by reference and modified on every function call
   bool getNextRecognitionSequence(string& lineValMod, string& a_reco_seq){
 
     string word = "";
@@ -32,6 +35,8 @@ namespace {
     return false;
   }
 
+  // Function that returns the enzyme acronym from the file line
+  // lineValMod is passed by reference and modified on every function call
   string getEnzymeAcronym(string& lineValMod){
 
     string finalVal = "";
@@ -53,6 +58,7 @@ namespace {
   template <typename TreeType>
   void QueryTree(const string &db_filename, TreeType &a_tree) {
 
+    // opening the file
     ifstream fin(db_filename);
     string lineVal = "";
     
@@ -67,19 +73,20 @@ namespace {
       string lineValMod = lineVal;
       string an_enz_acronym = getEnzymeAcronym(lineValMod);
       
-      string a_reco_seq;
+      string a_reco_seq;    // stores the recognition sequence from the input line.
 
+      // loop that runs while there is still recognition sequence in the db line.
       while (getNextRecognitionSequence(lineValMod, a_reco_seq)){
         
         SequenceMap new_sequence_map(a_reco_seq, an_enz_acronym);
         a_tree.insert(new_sequence_map);
       }
     }
-    
-    fin.close();
+
+    fin.close();  // closing the file stream
   }
 
-}  // namespace
+}  // end namespace
 
 //argc is the number of arguments passed in the terminal
 //argv is the value of the argument in the form of an array
