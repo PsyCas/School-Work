@@ -1,0 +1,14 @@
+ 
+REBASE version 210                                              staden.210
+ 
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    REBASE, The Restriction Enzyme Database   http://rebase.neb.com
+    Copyright (c)  Dr. Richard J. Roberts, 2012.   All rights reserved.
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ 
+Rich Roberts                                                    Sep 29 2012
+ 
+AanI/TTA'TAA//
+PsiI/TTA'TAA//
+AlfI/GCANNNNNNTGCNNNNNNNNNNNN'/NN'NNNNNNNNNNGCANNNNNNTGC//
+AlfI/GCANNNNNNTGCNNNNNNNNNNNN'/NN'NNNNNNNNNNGCANNNNNNTGC//

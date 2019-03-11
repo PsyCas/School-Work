@@ -1,3 +1,5 @@
+// Edited by: Parakram Basnet
+
 #ifndef AVL_TREE_H
 #define AVL_TREE_H
 
@@ -21,6 +23,11 @@ using namespace std;
 // void printTree( )      --> Print tree in sorted order
 // ******************ERRORS********************************
 // Throws UnderflowException as warranted
+
+//*************EXTRA FUNCTIONS ADDED LATER*****************
+// public: 
+        //Comparable find( Comparable )  --> returns comparable if it is in the tree   
+
 
 template <typename Comparable>
 class AvlTree
@@ -124,18 +131,35 @@ class AvlTree
 
     /**
      * Insert x into the tree; duplicates are ignored.
+     * Edited to merge duplicate values 
      */
     void insert( const Comparable & x )
     {
-        insert( x, root );
+        // if the element is already in the tree, update it
+        if(contains(x)){
+            AvlNode * new_node = find(x, root);
+            new_node ->  element.merge(x);
+        }
+
+        else{
+            insert( x, root );
+        }
     }
      
     /**
      * Insert x into the tree; duplicates are ignored.
+     * * Edited to merge duplicate values
      */
     void insert( Comparable && x )
-    {
-        insert( std::move( x ), root );
+    {   
+        // if the element is already in the tree, update it
+        if(contains(x)){
+            AvlNode * new_node = find(x, root);
+            new_node ->  element.merge(x);
+        }
+        else{
+            insert( std::move( x ), root );
+        }
     }
      
     /**
@@ -162,6 +186,20 @@ class AvlTree
     };
 
     AvlNode *root;
+
+    /*
+     *  Pre-condition: Comparable exists in the tree. The public function "find" checks it.
+    */
+    AvlNode * find(const Comparable &x, AvlNode * & t){
+        
+        if( x < t->element )
+            return find( x, t->left );
+        else if( t->element < x )
+            return find( x, t->right );
+        else{
+            return t;    // Match
+        }
+    }
 
 
     /**

@@ -15,21 +15,20 @@ namespace {
   bool getNextRecognitionSequence(string& lineValMod, string& a_reco_seq){
 
     string word = "";
-
     for(size_t i = 0; i < lineValMod.length(); ++i){
         
-        if (lineValMod[i] == '/' && lineValMod[i+1] != '/'){          
+        if(lineValMod.length() == 1){
+          return false;
+        }
+
+        else if (lineValMod[i] == '/'){
           a_reco_seq = word;
-          lineValMod = lineValMod.substr(i);
+          lineValMod = lineValMod.substr(i+1);
           return true;  
         }
 
-        else if(lineValMod[i] == '/' && lineValMod[i+1] != '/'){
-          return false;
-        }
         else word += lineValMod[i];
     }
-
     return false;
   }
 
@@ -67,18 +66,16 @@ namespace {
 
       string lineValMod = lineVal;
       string an_enz_acronym = getEnzymeAcronym(lineValMod);
-
+      
       string a_reco_seq;
 
       while (getNextRecognitionSequence(lineValMod, a_reco_seq)){
         
-        cout << a_reco_seq << endl;
         SequenceMap new_sequence_map(a_reco_seq, an_enz_acronym);
         a_tree.insert(new_sequence_map);
       }
-
     }
-
+    
     fin.close();
   }
 
@@ -96,7 +93,6 @@ int main(int argc, char **argv) {
   const string db_filename(argv[1]);
   
   cout << "Input filename is " << db_filename << endl;
-  // Note that you will replace AvlTree<int> with AvlTree<SequenceMap>
  
   AvlTree<SequenceMap> a_tree;
   QueryTree(db_filename, a_tree);
