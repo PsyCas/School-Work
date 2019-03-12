@@ -89,8 +89,18 @@ namespace {
   void TestTree(const string &db_filename, const string &seq_filename, TreeType &a_tree) {
 
     readFile(db_filename, a_tree);
-    cout << "2: " << a_tree.getNodeNum() << endl;
+    int nodeNum = a_tree.getNodeNum();
+    float avgDepth = a_tree.getInternalPathLength()/ float(nodeNum);
 
+
+
+
+
+
+
+
+    cout << "2: " << nodeNum << endl;
+    cout << "3a: " << avgDepth << endl;
   }
 
 }  // namespace

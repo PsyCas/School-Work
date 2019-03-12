@@ -179,6 +179,10 @@ class AvlTree
         return getNodeNum(root);
     }
 
+    int getInternalPathLength(){
+        return getInternalPathLength(root);
+    }
+
   private:
     struct AvlNode
     {
@@ -203,6 +207,16 @@ class AvlTree
         }
         else{
             return (1+ getNodeNum(t->left) + getNodeNum(t->right)); 
+        }
+    }
+
+    float getInternalPathLength(AvlNode * t){
+
+        if(t == nullptr){
+            return 0;
+        }
+        else{
+            return (getInternalPathLength(t->left) + getInternalPathLength(t -> right) + getNodeNum(t) -1);
         }
     }
 
