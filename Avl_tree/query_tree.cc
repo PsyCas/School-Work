@@ -88,7 +88,7 @@ namespace {
     string input_word; // stores individual words from input
     vector<string> input_values;  // stores the three inputs
     
-    // taking three inputs
+    // takes three inputs
     for(int i = 0; i < 3; i++){
       cin >> input_word;
       input_values.push_back(input_word);
