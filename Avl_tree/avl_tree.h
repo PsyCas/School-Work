@@ -175,6 +175,10 @@ class AvlTree
         return *(find(x, root));
     }
 
+    int getNodeNum(){
+        return getNodeNum(root);
+    }
+
   private:
     struct AvlNode
     {
@@ -192,6 +196,16 @@ class AvlTree
 
     AvlNode *root;
 
+    int getNodeNum(AvlNode * t){
+
+        if(t == nullptr){
+            return 0;
+        }
+        else{
+            return (1+ getNodeNum(t->left) + getNodeNum(t->right)); 
+        }
+    }
+
     /*
      *  Pre-condition: Comparable exists in the tree. The public function "find" checks it.
     */
@@ -205,7 +219,6 @@ class AvlTree
             return &(t->element);    // Match
         }
     }
-
 
     /**
      * Internal method to insert into a subtree.
