@@ -9,10 +9,6 @@ class SequenceMap{
     public:  
         SequenceMap() = default;
 
-        vector<string> getRecog() const{
-            return enzyme_acronyms_;
-        }
-
         SequenceMap(const string &a_rec_seq, const string &an_enz_acro){
             recognition_sequence_ = a_rec_seq;
             enzyme_acronyms_.push_back(an_enz_acro);
@@ -33,7 +29,7 @@ class SequenceMap{
         } 
         
         // precondition: recognition_sequence_ ==  other_sequence_.recognition_sequence_
-        void merge(const SequenceMap &other_sequence_){
+        void Merge(const SequenceMap &other_sequence_){
 
             // flag that checks if there are duplicates or not
             bool canMerge = true;
@@ -53,6 +49,14 @@ class SequenceMap{
                 // only merges if the flag is set to true
                 if(canMerge) enzyme_acronyms_.push_back(enzo_acro);
             }
+        }
+
+        // function thats prints all the enzyme acronyms
+        void PrintEnzymeAcronyms(){
+
+            for(string word: enzyme_acronyms_){
+                cout << word << " ";
+            } 
         }
 
     private:

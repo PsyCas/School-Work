@@ -83,7 +83,31 @@ namespace {
       }
     }
 
-    fin.close();  // closing the file stream
+    fin.close();  // closes the file stream
+
+    string input_word; // stores individual words from input
+    vector<string> input_values;  // stores the three inputs
+    
+    // taking three inputs
+    for(int i = 0; i < 3; i++){
+      cin >> input_word;
+      input_values.push_back(input_word);
+    }
+
+    //finds and displays input from the input stream 
+    for (string word : input_values){
+      SequenceMap check_sequence(word, "");
+
+      if(a_tree.contains(check_sequence)){
+        SequenceMap newMap = a_tree.find(check_sequence);
+        newMap.PrintEnzymeAcronyms();
+      }
+
+      else{
+        cout << "Not Found";
+      }
+      cout << endl;
+    }
   }
 
 }  // end namespace
@@ -99,7 +123,7 @@ int main(int argc, char **argv) {
   
   const string db_filename(argv[1]);
   
-  cout << "Input filename is " << db_filename << endl;
+  // cout << "Input filename is " << db_filename << endl;
  
   AvlTree<SequenceMap> a_tree;
   QueryTree(db_filename, a_tree);

@@ -137,8 +137,8 @@ class AvlTree
     {
         // if the element is already in the tree, update it
         if(contains(x)){
-            AvlNode * new_node = find(x, root);
-            new_node ->  element.merge(x);
+            Comparable * new_node = find(x, root);
+            new_node -> Merge(x);
         }
 
         else{
@@ -148,14 +148,14 @@ class AvlTree
      
     /**
      * Insert x into the tree; duplicates are ignored.
-     * * Edited to merge duplicate values
+     * * Edited to Merge duplicate values
      */
     void insert( Comparable && x )
     {   
         // if the element is already in the tree, update it
         if(contains(x)){
-            AvlNode * new_node = find(x, root);
-            new_node ->  element.merge(x);
+            Comparable * new_node = find(x, root);
+            new_node -> Merge(x);
         }
         else{
             insert( std::move( x ), root );
@@ -168,6 +168,11 @@ class AvlTree
     void remove( const Comparable & x )
     {
         remove( x, root );
+    }
+
+    Comparable find(const Comparable& x){
+        
+        return *(find(x, root));
     }
 
   private:
@@ -190,14 +195,14 @@ class AvlTree
     /*
      *  Pre-condition: Comparable exists in the tree. The public function "find" checks it.
     */
-    AvlNode * find(const Comparable &x, AvlNode * & t){
+    Comparable * find(const Comparable &x, AvlNode * & t){
         
         if( x < t->element )
             return find( x, t->left );
         else if( t->element < x )
             return find( x, t->right );
         else{
-            return t;    // Match
+            return &(t->element);    // Match
         }
     }
 
