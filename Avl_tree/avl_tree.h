@@ -96,9 +96,9 @@ class AvlTree
     /**
      * Returns true if x is found in the tree.
      */
-    bool contains( const Comparable & x ) const
+    bool contains( const Comparable & x) const
     {
-        return contains( x, root );
+        return contains( x, root);
     }
 
     /**
@@ -183,6 +183,11 @@ class AvlTree
         return getInternalPathLength(root);
     }
 
+    int findRecursiveCalls(const Comparable &x){
+
+        return findRecursiveCalls(x, root);
+    }
+
   private:
     struct AvlNode
     {
@@ -200,6 +205,7 @@ class AvlTree
 
     AvlNode *root;
 
+    // returns the total number of nodes in the tree
     int getNodeNum(AvlNode * t){
 
         if(t == nullptr){
@@ -210,6 +216,7 @@ class AvlTree
         }
     }
 
+    // returns the internal path length of the tree 
     float getInternalPathLength(AvlNode * t){
 
         if(t == nullptr){
@@ -220,15 +227,30 @@ class AvlTree
         }
     }
 
+    // returns the total number of recursive calls made to find a node.
+    int findRecursiveCalls(const Comparable &x, AvlNode * t){
+        if( t == nullptr )
+            return 0;
+        
+        else if( x < t->element )
+            return (1 + findRecursiveCalls( x, t->left));
+        
+        else if( t->element < x )
+            return (1 + findRecursiveCalls( x, t->right));
+
+        else
+            return 1;    // Match
+    }
+
     /*
      *  Pre-condition: Comparable exists in the tree. The public function "find" checks it.
     */
     Comparable * find(const Comparable &x, AvlNode * & t){
         
         if( x < t->element )
-            return find( x, t->left );
+            return find( x, t->left);
         else if( t->element < x )
-            return find( x, t->right );
+            return find( x, t->right);
         else{
             return &(t->element);    // Match
         }
@@ -357,10 +379,13 @@ class AvlTree
     {
         if( t == nullptr )
             return false;
+        
         else if( x < t->element )
-            return contains( x, t->left );
+            return contains( x, t->left);
+        
         else if( t->element < x )
-            return contains( x, t->right );
+            return contains( x, t->right);
+        
         else
             return true;    // Match
     }
