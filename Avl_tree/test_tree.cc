@@ -96,34 +96,57 @@ namespace {
     // log base 2 of n is log base e of n divided by log base e of 2
     float ratio =  avg_depth/(log(node_num)/ log(2));
 
-    // Part 4, checking successful calls and average recursive calls
+    // setting up for part 4 and 5 by creating a vector to store the data
+    vector<string> db_data;
     fstream fin(seq_filename);
     string db_line;
-    int successful_queries = 0;
-    int all_queries = 0;
-    int number_of_recursive_calls = 0;
-    float avg_number_of_recursive_calls = 0;
 
     while(fin >> db_line){
-      SequenceMap compare_sequence(db_line, "");
-      if(a_tree.contains(compare_sequence)){
-         ++successful_queries;
-      }
+      db_data.push_back(db_line);
+    }
+    fin.close();
+
+    // Variables for part 4, checking successful calls and average recursive calls
+    int successful_queries = 0, all_queries = 0, number_of_recursive_calls = 0; 
+    float avg_number_of_recursive_calls = 0;
+
+    //variables for part 5. removing every other sequence from the tree
+    int total_remove_calls = 0, successful_removes = 0,  remove_recursive_calls = 0;
+    float avg_remove_recursive_calls = 0;
+
+    for (size_t i = 0; i < db_data.size(); ++i){
       
+      SequenceMap compare_sequence(db_data[i], "");
+
+      // counting number of successful queries
+      if(a_tree.contains(compare_sequence)){
+         ++successful_queries;  // 4a
+      }
+
+      if(i %2 == 0){
+          if(a_tree.contains(compare_sequence)) ++successful_removes; // 5a
+
+          remove_recursive_calls = a_tree.remove(compare_sequence); // removing
+          avg_remove_recursive_calls += remove_recursive_calls;
+          ++total_remove_calls; // total number of calls
+      }
+
       all_queries++;
       number_of_recursive_calls = a_tree.findRecursiveCalls(compare_sequence);
+
       avg_number_of_recursive_calls += number_of_recursive_calls; 
     }
 
     avg_number_of_recursive_calls /= float(all_queries); 
-
-    // part 5D
+    avg_remove_recursive_calls /= float(total_remove_calls);
 
     cout << "2: " << node_num << endl;
     cout << "3a: " << avg_depth << endl;
     cout << "3b: " << ratio << endl;
     cout << "4a: " << successful_queries << endl;
     cout << "4b: " << avg_number_of_recursive_calls << endl;
+    cout << "5a: " << successful_removes << endl;
+    cout << "5b: " << avg_remove_recursive_calls << endl;
   }
 
 }  // namespace

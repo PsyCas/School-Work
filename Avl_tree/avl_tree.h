@@ -165,9 +165,9 @@ class AvlTree
     /**
      * Remove x from the tree. Nothing is done if x is not found.
      */
-    void remove( const Comparable & x )
+    int remove( const Comparable & x )
     {
-        remove( x, root );
+        return remove( x, root );        
     }
 
     Comparable find(const Comparable& x){
@@ -229,6 +229,7 @@ class AvlTree
 
     // returns the total number of recursive calls made to find a node.
     int findRecursiveCalls(const Comparable &x, AvlNode * t){
+
         if( t == nullptr )
             return 0;
         
@@ -298,19 +299,22 @@ class AvlTree
      * t is the node that roots the subtree.
      * Set the new root of the subtree.
      */
-    void remove( const Comparable & x, AvlNode * & t )
+    int remove( const Comparable & x, AvlNode * & t )
     {
+        int num = 0;    // stores the extra number of calls after the node is found
+
         if( t == nullptr )
-            return;   // Item not found; do nothing
+            return 0;   // Item not found; do nothing
         
         if( x < t->element )
-            remove( x, t->left );
+            return (1 + remove( x, t->left));
         else if( t->element < x )
-            remove( x, t->right );
+            return (1 + remove( x, t->right));
+        
         else if( t->left != nullptr && t->right != nullptr ) // Two children
         {
-            t->element = findMin( t->right )->element;
-            remove( t->element, t->right );
+            t->element = findMin(t->right)->element;  
+            num = remove(t->element, t->right) + 1;     // +1 for the current execution call
         }
         else
         {
@@ -319,7 +323,8 @@ class AvlTree
             delete oldNode;
         }
         
-        balance( t );
+        balance(t);
+        return num + 1; // +1 is for the function call when node is found
     }
     
     static const int ALLOWED_IMBALANCE = 1;
@@ -348,13 +353,14 @@ class AvlTree
      * Internal method to find the smallest item in a subtree t.
      * Return node containing the smallest item.
      */
-    AvlNode * findMin( AvlNode *t ) const
+    AvlNode * findMin( AvlNode *t) const
     {
         if( t == nullptr )
             return nullptr;
         if( t->left == nullptr )
             return t;
-        return findMin( t->left );
+    
+        return findMin( t->left);
     }
 
     /**
