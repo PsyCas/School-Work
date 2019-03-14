@@ -123,6 +123,16 @@ namespace {
          ++successful_queries;  // 4a
       }
 
+      all_queries++;
+      number_of_recursive_calls = a_tree.findRecursiveCalls(compare_sequence);
+      avg_number_of_recursive_calls += number_of_recursive_calls; 
+    }
+
+    // question 5
+    for(size_t i = 0; i< db_data.size(); ++i){
+
+      SequenceMap compare_sequence(db_data[i], "");
+
       if(i %2 == 0){
           if(a_tree.contains(compare_sequence)) ++successful_removes; // 5a
 
@@ -130,11 +140,6 @@ namespace {
           avg_remove_recursive_calls += remove_recursive_calls;
           ++total_remove_calls; // total number of calls
       }
-
-      all_queries++;
-      number_of_recursive_calls = a_tree.findRecursiveCalls(compare_sequence);
-
-      avg_number_of_recursive_calls += number_of_recursive_calls; 
     }
 
     avg_number_of_recursive_calls /= float(all_queries); 
