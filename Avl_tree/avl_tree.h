@@ -96,9 +96,9 @@ class AvlTree
     /**
      * Returns true if x is found in the tree.
      */
-    bool contains( const Comparable & x ) const
+    bool contains( const Comparable & x) const
     {
-        return contains( x, root );
+        return contains( x, root);
     }
 
     /**
@@ -165,14 +165,27 @@ class AvlTree
     /**
      * Remove x from the tree. Nothing is done if x is not found.
      */
-    void remove( const Comparable & x )
+    int remove( const Comparable & x )
     {
-        remove( x, root );
+        return remove( x, root );        
     }
 
     Comparable find(const Comparable& x){
         
         return *(find(x, root));
+    }
+
+    int getNodeNum(){
+        return getNodeNum(root);
+    }
+
+    int getInternalPathLength(){
+        return getInternalPathLength(root);
+    }
+
+    int findRecursiveCalls(const Comparable &x){
+
+        return findRecursiveCalls(x, root);
     }
 
   private:
@@ -192,20 +205,57 @@ class AvlTree
 
     AvlNode *root;
 
+    // returns the total number of nodes in the tree
+    int getNodeNum(AvlNode * t){
+
+        if(t == nullptr){
+            return 0;
+        }
+        else{
+            return (1+ getNodeNum(t->left) + getNodeNum(t->right)); 
+        }
+    }
+
+    // returns the internal path length of the tree 
+    float getInternalPathLength(AvlNode * t){
+
+        if(t == nullptr){
+            return 0;
+        }
+        else{
+            return (getInternalPathLength(t->left) + getInternalPathLength(t -> right) + getNodeNum(t) -1);
+        }
+    }
+
+    // returns the total number of recursive calls made to find a node.
+    int findRecursiveCalls(const Comparable &x, AvlNode * t){
+
+        if( t == nullptr )
+            return 0;
+        
+        else if( x < t->element )
+            return (1 + findRecursiveCalls( x, t->left));
+        
+        else if( t->element < x )
+            return (1 + findRecursiveCalls( x, t->right));
+
+        else
+            return 1;    // Match
+    }
+
     /*
      *  Pre-condition: Comparable exists in the tree. The public function "find" checks it.
     */
     Comparable * find(const Comparable &x, AvlNode * & t){
         
         if( x < t->element )
-            return find( x, t->left );
+            return find( x, t->left);
         else if( t->element < x )
-            return find( x, t->right );
+            return find( x, t->right);
         else{
             return &(t->element);    // Match
         }
     }
-
 
     /**
      * Internal method to insert into a subtree.
@@ -249,19 +299,22 @@ class AvlTree
      * t is the node that roots the subtree.
      * Set the new root of the subtree.
      */
-    void remove( const Comparable & x, AvlNode * & t )
+    int remove( const Comparable & x, AvlNode * & t )
     {
+        int num = 0;    // stores the extra number of calls after the node is found
+
         if( t == nullptr )
-            return;   // Item not found; do nothing
+            return 0;   // Item not found; do nothing
         
         if( x < t->element )
-            remove( x, t->left );
+            return (1 + remove( x, t->left));
         else if( t->element < x )
-            remove( x, t->right );
+            return (1 + remove( x, t->right));
+        
         else if( t->left != nullptr && t->right != nullptr ) // Two children
         {
-            t->element = findMin( t->right )->element;
-            remove( t->element, t->right );
+            t->element = findMin(t->right)->element;  
+            num = remove(t->element, t->right) + 1;     // +1 for the current execution call
         }
         else
         {
@@ -270,7 +323,8 @@ class AvlTree
             delete oldNode;
         }
         
-        balance( t );
+        balance(t);
+        return num + 1; // +1 is for the function call when node is found
     }
     
     static const int ALLOWED_IMBALANCE = 1;
@@ -299,13 +353,14 @@ class AvlTree
      * Internal method to find the smallest item in a subtree t.
      * Return node containing the smallest item.
      */
-    AvlNode * findMin( AvlNode *t ) const
+    AvlNode * findMin( AvlNode *t) const
     {
         if( t == nullptr )
             return nullptr;
         if( t->left == nullptr )
             return t;
-        return findMin( t->left );
+    
+        return findMin( t->left);
     }
 
     /**
@@ -330,10 +385,13 @@ class AvlTree
     {
         if( t == nullptr )
             return false;
+        
         else if( x < t->element )
-            return contains( x, t->left );
+            return contains( x, t->left);
+        
         else if( t->element < x )
-            return contains( x, t->right );
+            return contains( x, t->right);
+        
         else
             return true;    // Match
     }
