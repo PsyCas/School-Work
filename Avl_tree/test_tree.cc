@@ -146,11 +146,11 @@ namespace {
     avg_remove_recursive_calls /= float(total_remove_calls);
 
     // Part 6
-    int node_num_updated = a_tree.getNodeNum();
-    float avg_depth_updated = a_tree.getInternalPathLength()/ float(node_num_updated);
+    int node_num_updated = a_tree.getNodeNum(); // 6a
+    float avg_depth_updated = a_tree.getInternalPathLength()/ float(node_num_updated);  //6b
 
     // log base 2 of n is log base e of n divided by log base e of 2
-    float ratio_updated =  avg_depth_updated/(log(node_num_updated)/ log(2));
+    float ratio_updated =  avg_depth_updated/(log(node_num_updated)/ log(2));   //6c
 
     cout << "2: " << node_num << endl;
     cout << "3a: " << avg_depth << endl;
