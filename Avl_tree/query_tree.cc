@@ -96,20 +96,19 @@ namespace {
 
     //finds and displays input from the input stream 
     for (string word : input_values){
+      
       SequenceMap check_sequence(word, "");
 
       if(a_tree.contains(check_sequence)){
         SequenceMap newMap = a_tree.find(check_sequence);
         newMap.PrintEnzymeAcronyms();
       }
-
       else{
         cout << "Not Found";
       }
       cout << endl;
     }
   }
-
 }  // end namespace
 
 //argc is the number of arguments passed in the terminal
