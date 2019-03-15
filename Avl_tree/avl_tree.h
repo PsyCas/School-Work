@@ -1,5 +1,5 @@
-// Edited by: Parakram Basnet
-
+// Edited by: Parakram Basnet 
+// Contains template class AvlTree that has functions and data memebrs for an AVL tree.
 #ifndef AVL_TREE_H
 #define AVL_TREE_H
 
@@ -23,11 +23,6 @@ using namespace std;
 // void printTree( )      --> Print tree in sorted order
 // ******************ERRORS********************************
 // Throws UnderflowException as warranted
-
-//*************EXTRA FUNCTIONS ADDED LATER*****************
-// public: 
-        //Comparable find( Comparable )  --> returns comparable if it is in the tree   
-
 
 template <typename Comparable>
 class AvlTree
@@ -148,7 +143,7 @@ class AvlTree
      
     /**
      * Insert x into the tree; duplicates are ignored.
-     * * Edited to Merge duplicate values
+     * Edited to Merge duplicate values
      */
     void insert( Comparable && x )
     {   
@@ -164,25 +159,41 @@ class AvlTree
      
     /**
      * Remove x from the tree. Nothing is done if x is not found.
+     * EDITED to return the total number of recurive calls made by remove
      */
     int remove( const Comparable & x )
     {
         return remove( x, root );        
     }
 
+    /*
+     * Finds the Comparable x in the tree and returns the Comparable.
+     * Precondition: x exists in the tree
+    */
     Comparable find(const Comparable& x){
         
         return *(find(x, root));
     }
 
+    /*
+     * Counts the total number of nodes in the tree and returns it 
+    */
     int getNodeNum(){
         return getNodeNum(root);
     }
 
+    
+    /*
+     * Calculates the internal path length and returns it 
+    */
     int getInternalPathLength(){
         return getInternalPathLength(root);
     }
 
+    
+    /*
+     * Counts the total number of recursive calls made to find Comparable x and returns it 
+    */
     int findRecursiveCalls(const Comparable &x){
 
         return findRecursiveCalls(x, root);
@@ -205,7 +216,10 @@ class AvlTree
 
     AvlNode *root;
 
-    // returns the total number of nodes in the tree
+    
+    /*
+     *  Counts and eturns the total number of nodes in the tree 
+    */
     int getNodeNum(AvlNode * t){
 
         if(t == nullptr){
@@ -216,7 +230,9 @@ class AvlTree
         }
     }
 
-    // returns the internal path length of the tree 
+    /*
+     *  Calculates and returns the internal path length of the tree  
+    */
     float getInternalPathLength(AvlNode * t){
 
         if(t == nullptr){
@@ -245,6 +261,7 @@ class AvlTree
 
     /*
      *  Pre-condition: Comparable exists in the tree. The public function "find" checks it.
+     *  Finds the Comparable x in the tree and returns it as a pointer
     */
     Comparable * find(const Comparable &x, AvlNode * & t){
         

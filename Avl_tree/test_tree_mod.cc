@@ -1,7 +1,7 @@
-// <Parakram Basnet
+// Parakram Basnet
 // Main file for Part2(c) of Homework 2.
 
-#include "avl_tree_modified.h"
+#include "avl_tree_modified.h"  // importing the modified version of avl tree
 #include "sequence_map.h"
 
 #include <iostream>
@@ -52,6 +52,7 @@ namespace {
     return final_val;
   }
 
+  // Reads the file stored in the variable db_filename and creates a tree using a_tree from the data
   template <typename TreeType>
   void readFile(const string& db_filename, TreeType &a_tree){
     
@@ -115,8 +116,8 @@ namespace {
     int total_remove_calls = 0, successful_removes = 0,  remove_recursive_calls = 0;
     float avg_remove_recursive_calls = 0;
  
+  // for part 4
     for (size_t i = 0; i < db_data.size(); ++i){
-      
       SequenceMap compare_sequence(db_data[i], "");
 
       // counting number of successful queries
@@ -129,7 +130,7 @@ namespace {
       avg_number_of_recursive_calls += number_of_recursive_calls; 
     }
 
-    // question 5
+    // For part 5
     for(size_t i = 0; i< db_data.size(); ++i){
 
       SequenceMap compare_sequence(db_data[i], "");
@@ -143,6 +144,7 @@ namespace {
       }
     }
 
+    // calculating the averages
     avg_number_of_recursive_calls /= float(all_queries); 
     avg_remove_recursive_calls /= float(total_remove_calls);
 
@@ -153,6 +155,7 @@ namespace {
     // log base 2 of n is log base e of n divided by log base e of 2
     float ratio_updated =  avg_depth_updated/(log(node_num_updated)/ log(2));   //6c
 
+    // displaying all the final outputs
     cout << "2: " << node_num << endl;
     cout << "3a: " << avg_depth << endl;
     cout << "3b: " << ratio << endl;
