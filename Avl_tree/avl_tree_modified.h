@@ -499,8 +499,27 @@ class AvlTree
      */
     void doubleWithLeftChild( AvlNode * & k3 )
     {
-        rotateWithRightChild( k3->left );
-        rotateWithLeftChild( k3 );
+
+        AvlNode* k1 = k3 -> left;
+        AvlNode* k2 = k1 -> right;
+
+        // moving subtree B to be the right child of parent node
+        k1 -> right = k2 -> left;
+        k2 -> left = k1;
+
+        // moving subtree C to be the left child of the grandparent node
+        k3 -> left = k2 -> right;
+        k2 -> right = k3;
+
+
+        // recalculating heights
+        k3->height = max( height( k3->left ), height( k3->right ) ) + 1;
+        k1->height = max( height( k1->right), height(k1 -> left) ) + 1;
+        k2->height = max( height(k1), height(k3) ) + 1;
+        
+        k3 = k2;
+        // rotateWithRightChild( k3->left );
+        // rotateWithLeftChild( k3 );
     }
 
     /**
@@ -511,8 +530,27 @@ class AvlTree
      */
     void doubleWithRightChild( AvlNode * & k1 )
     {
-        rotateWithLeftChild( k1->right );
-        rotateWithRightChild( k1 );
+        AvlNode* k3 = k1 -> right;
+        AvlNode* k2 = k3 -> left;
+
+        // moving subtree C to be the left child of parent node
+        k3 -> left = k2 -> right;
+        k2 -> right = k3;
+
+        // moving subtree B to be the right child of the grandparent node
+        k1 -> right = k2 -> left;
+        k2 -> left = k1;
+
+
+        // recalculating heights
+        k3->height = max( height( k3->left ), height( k3->right ) ) + 1;
+        k1->height = max( height( k1->right), height(k1 -> left) ) + 1;
+        k2->height = max( height(k1), height(k3) ) + 1;
+        
+        k1 = k2;
+
+        // rotateWithLeftChild( k1->right );
+        // rotateWithRightChild( k1 );
     }
 };
 
