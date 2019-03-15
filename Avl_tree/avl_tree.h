@@ -1,5 +1,30 @@
 // Edited by: Parakram Basnet 
 // Contains template class AvlTree that has functions and data memebrs for an AVL tree.
+
+/*  Edited function:
+
+    public:
+        void insert( const Comparable & x )
+        void insert( Comparable && x )
+        int remove( const Comparable & x ) 
+
+    private:
+         int remove( const Comparable & x, AvlNode * & t )
+
+    Additional Functions:
+    public:
+        Comparable find(const Comparable& x)
+        int getNodeNum()
+        int getInternalPathLength()
+        int findRecursiveCalls(const Comparable &x)
+
+    private:
+        int getNodeNum(AvlNode * t)
+        float getInternalPathLength(AvlNode * t)
+        int findRecursiveCalls(const Comparable &x, AvlNode * t)
+        int findRecursiveCalls(const Comparable &x, AvlNode * t)
+*/
+
 #ifndef AVL_TREE_H
 #define AVL_TREE_H
 

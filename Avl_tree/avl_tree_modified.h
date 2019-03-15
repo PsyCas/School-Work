@@ -2,6 +2,32 @@
 // This file is edited for part 2(c)
 // double rotations have been modified to be independent functions that dont call single rotation
 
+/*  Edited functions:
+
+    public:
+        void insert( const Comparable & x )
+        void insert( Comparable && x )
+        int remove( const Comparable & x ) 
+
+    private:
+        int remove( const Comparable & x, AvlNode * & t )
+        void doubleWithLeftChild( AvlNode * & k3 )
+        void doubleWithRightChild( AvlNode * & k1 )
+
+    Additional Functions:
+    public:
+        Comparable find(const Comparable& x)
+        int getNodeNum()
+        int getInternalPathLength()
+        int findRecursiveCalls(const Comparable &x)
+
+    private:
+        int getNodeNum(AvlNode * t)
+        float getInternalPathLength(AvlNode * t)
+        int findRecursiveCalls(const Comparable &x, AvlNode * t)
+        int findRecursiveCalls(const Comparable &x, AvlNode * t)
+*/
+
 #ifndef AVL_TREE_H
 #define AVL_TREE_H
 
