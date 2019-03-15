@@ -113,7 +113,7 @@ namespace {
     //variables for part 5. removing every other sequence from the tree
     int total_remove_calls = 0, successful_removes = 0,  remove_recursive_calls = 0;
     float avg_remove_recursive_calls = 0;
-
+ 
     for (size_t i = 0; i < db_data.size(); ++i){
       
       SequenceMap compare_sequence(db_data[i], "");
@@ -123,6 +123,16 @@ namespace {
          ++successful_queries;  // 4a
       }
 
+      all_queries++;
+      number_of_recursive_calls = a_tree.findRecursiveCalls(compare_sequence);
+      avg_number_of_recursive_calls += number_of_recursive_calls; 
+    }
+
+    // question 5
+    for(size_t i = 0; i< db_data.size(); ++i){
+
+      SequenceMap compare_sequence(db_data[i], "");
+
       if(i %2 == 0){
           if(a_tree.contains(compare_sequence)) ++successful_removes; // 5a
 
@@ -130,23 +140,17 @@ namespace {
           avg_remove_recursive_calls += remove_recursive_calls;
           ++total_remove_calls; // total number of calls
       }
-
-      all_queries++;
-      number_of_recursive_calls = a_tree.findRecursiveCalls(compare_sequence);
-
-      avg_number_of_recursive_calls += number_of_recursive_calls; 
     }
 
     avg_number_of_recursive_calls /= float(all_queries); 
     avg_remove_recursive_calls /= float(total_remove_calls);
 
     // Part 6
-    int node_num_updated = a_tree.getNodeNum();
-    float avg_depth_updated = a_tree.getInternalPathLength()/ float(node_num_updated);
+    int node_num_updated = a_tree.getNodeNum(); // 6a
+    float avg_depth_updated = a_tree.getInternalPathLength()/ float(node_num_updated);  //6b
 
     // log base 2 of n is log base e of n divided by log base e of 2
-    float ratio_updated =  avg_depth_updated/(log(node_num_updated)/ log(2));
-
+    float ratio_updated =  avg_depth_updated/(log(node_num_updated)/ log(2));   //6c
 
     cout << "2: " << node_num << endl;
     cout << "3a: " << avg_depth << endl;
