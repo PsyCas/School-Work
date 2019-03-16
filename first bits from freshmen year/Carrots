@@ -1,0 +1,23 @@
+import java.util.Scanner;
+
+public class Carrots
+{
+   public static void main ( String[] args)
+   {
+      Scanner in = new Scanner ( System.in);
+      
+      System.out.print("");
+      int des = in.nextInt();
+      
+      System.out.print("");
+      int solved = in.nextInt();
+      
+      for ( int i = 0; i < des + 1; i = i + 1)
+      {
+         System.out.print("");
+         String description = in.nextLine();
+      }
+      
+      System.out.println( solved);
+   }
+}
