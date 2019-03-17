@@ -123,3 +123,13 @@
 	 finally (when solved (return t)))))
   
 (defparameter *trace-search* nil)
+
+
+;state is equal to some state in list (there has to be an equal-states method defined)
+(defun already-statep (state list)
+  (member state list :test 'equal-states))
+
+;state is equal to state of some node in list (there has to be an equal-states method defined)
+(defun already-nodep (state list)
+  (loop for node in list
+       thereis (equal-states state (state node))))
