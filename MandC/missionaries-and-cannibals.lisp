@@ -1,134 +1,13 @@
-;;;****************************************************************************************
-;;;THIS PROVIDES THE FOUNDATION FOR CLOS AI SEARCH
-;;;to be used concurrently with a problem file
-;;;****************************************************************************************
+;;; Parakram Basnet
+;;; Assignment 5, Part 3: Missionaries-And-Cannibals
+;;; Solves the Missionaries and Cannibals using breadth first search.
+;;; Output Answer: TAKE-2-CANNIBALS TAKE-1-CANNIBAL TAKE-2-CANNIBALS TAKE-1-CANNIBAL TAKE-2-MISSIONARIES TAKE-MISSIONARY-CANNIBAL TAKE-2-MISSIONARIES TAKE-1-CANNIBAL TAKE-2-CANNIBALS TAKE-1-MISSIONARY TAKE-MISSIONARY-CANNIBAL
+;;; TAKE-2-CANNIBALS: Take 2 cannibals from the side the boat is currently on.
+;;; TAKE-2-MISSIONARIES: Take 2 missionaries from the side the boat is currently on.
+;;; TAKE-MISSIONARY-CANNIBAL: Take 1 missionary and 1 cannibal from the side the boat is currently on.
+;;; TAKE-MISSIONARY: Take 1 missionary from the side the boat is currently on.
+;;; TAKE-CANNIBAL: Take 1 cannibal from the side the boat is currently on.
 
-;;;****************************************************************************************
-;;;Search STATISTICS
-;;;****************************************************************************************
-(defclass search-statistics ()
-  ((nodes-generated :initarg :nodes-generated :initform 0 :accessor nodes-generated)
-   (nodes-expanded :initarg :nodes-expanded :initform 0 :accessor nodes-expanded)
-   (maximum-frontier :initarg :maximum-frontier :initform 0 :accessor maximum-frontier)
-   (length-of-solution :initarg :length-of-solution :initform 0 :accessor length-of-solution)
-   (maximum-depth :initarg :maximum-depth :initform 0 :accessor maximum-depth)))
-  
-;;;****************************************************************************************
-;;;CLASS DEFINITIONS
-;;;****************************************************************************************
-
-(defclass problem ()
-  ((name :initarg :name :initform nil :accessor name)
-   (start-state :initarg :start-state :initform nil :accessor start-state)
-   (goal-test :initarg :goal-test :initform nil :accessor goal-test)
-   (operators :initarg :operators :initform nil :accessor operators)
-   (statistics :initarg :statistics :initform (make-instance 'search-statistics) :accessor statistics)))
-
-(defmethod reset-statistics ((self problem))
-  (setf (statistics self) (make-instance 'search-statistics)))
-  
-(defparameter *trace-search* nil)
-
-;the following  should be redefined for each problem
-(defclass state ()
-  ())
-
-(defmethod equal-states ((self state) (other state))
-  ())
-
-(defmethod copy-state ((self state))
-  ())
-
-(defmethod estimated-distance-from-goal ((self state))
-  ())
-
-(defmethod printer ((self state))
-  ())
-
-(defclass node ()
-  ((state :initarg :state :initform nil :accessor state)
-   (problem :initarg :problem :initform nil :accessor problem)
-   (path :initarg :path :initform nil :accessor path)
-   (ancestors :initarg :ancestors :initform nil :accessor ancestors)))
-  
-(defmethod update-statistics ((self problem) expand frontier)
-  (let ((stats (statistics self)))
-    (when (> (length frontier) (maximum-frontier stats))
-      (setf (maximum-frontier stats) (length frontier)))
-    (when (> (length (path expand)) (maximum-depth stats))
-      (setf (maximum-depth stats) (length (path expand))))))
-
-;;;****************************************************************************************
-;;;GENERAL FUNCTIONS 
-;;;****************************************************************************************
-
-;adds atom to the end of list
-(defun add-to-end (atom list)
-  (append list (list atom)))
-
-;finds the successor of state resulting from application of operator
-(defun successor-state (state operator)
-  (funcall operator state))
-
-;makes successor node from successor of state
-(defmethod successor-node ((self node) operator)
-  (let ((next (successor-state (state self) operator)))
-    (when next
-      (make-instance 'node :state next :path (add-to-end operator (path self)) :problem (problem self)))))
-
-(defmethod reached-the-goal ((self node))
-  (funcall (goal-test (problem self)) (state self)))
-
-;;;****************************************************************************************
-;;;BREADTH FIRST SEARCH DEFINITIONS
-;;;****************************************************************************************
-
-(defmethod finish-successful-search ((self problem) expand)
-  (setf (length-of-solution (statistics self)) (length (path expand)))
-  (describe (statistics self))
-  (format t "%")
-  (describe expand)
-  expand)
-
-;keep a list of states alredy visited
-(defmethod depth-first-search-with-duplicate-node-detection ((self problem))
-  (reset-statistics self)
-  (format t "~%Performing depth first search with duplicate node detection on problem ~a.~%" (name self))
-  (let* ((initial-state (start-state self))
-         (frontier (list (make-instance 'node :state initial-state :path nil :problem self)))
-         (operators (operators self))
-         (generated (list initial-state))
-         solved expanded expand)
-    (loop until (or solved (null frontier))
-       do (setf expand (pop frontier))
-	 (incf (nodes-expanded (statistics self)))
-	 (setf expanded (cons (state expand) expanded))
-	 (when *trace-search* (format t "~%~%Exploring ") (describe expand))
-	 (cond ((reached-the-goal expand)
-		(setf solved t)
-		(finish-successful-search self expand))
-	       (t (loop for operator in operators
-		     for child = (successor-node expand operator)
-		     when (and child (not (already-statep (state child) expanded))) ;; BIG difference
-		     do (incf (nodes-generated (statistics self)))
-		     and do (push (state child) generated) 
-		     and do (setf frontier (push child frontier))
-		     and do (update-statistics self child frontier))))
-       finally (when solved (return t)))))
-
-;state is equal to some state in list (there has to be an equal-states method defined)
-(defun already-statep (state list)
-  (member state list :test 'equal-states))
-
-;state is equal to state of some node in list (there has to be an equal-states method defined)
-(defun already-nodep (state list)
-  (loop for node in list
-       thereis (equal-states state (state node))))
-
-;;***********************************************************************************************************************************
-
-;;Parakram Basnet
-;; Assignment 5 Missionaries-And-Cannibals
 
 ;; Defines the state of the two shores at any given time
 (defclass game-state (state)
@@ -138,11 +17,12 @@
      (cannibals-left :initarg :cannibals-left :initform nil :accessor cannibals-left :documentation "Number of cannibals on the left shore.")
      (boat-position :initarg :boat-position :initform nil :accessor boat-position :documentation "Number of cannibals on the boat." )))
 
+;; Defines the problem with actions and goal state 
 (defparameter *missionaries-and-cannibals* 
   (make-instance 'problem 
     :start-state (make-instance 'game-state :missionaries-right 3 :missionaries-left 0 :cannibals-right 3 :cannibals-left 0 :boat-position 'R)
     :goal-test 'all-on-leftp
-    :operators '(take-two-missionaries take-two-cannibals take-missionary-cannibal take-one-missionary take-one-cannibal)
+    :operators '(take-2-missionaries take-2-cannibals take-missionary-cannibal take-1-missionary take-1-cannibal)
     :name "missionaries and cannibals"))
 
 ;; defining the goal state
@@ -176,7 +56,7 @@
 ;;;OPERATORS AND THEIR SUPPORTING DEFINITIONS
 ;;;****************************************************************************************
 
-;; checking conditions for safe moves
+;; checking the state for safe moves
 (defun safe(state)
     (cond   ((and   (< (missionaries-left state) (cannibals-left state)) 
                     (not (eql (missionaries-left state) 0)))
@@ -191,40 +71,40 @@
     (cond ((eql side 'L) 'R)
           ((eql side 'R) 'L))) 
 
-;; Action that transfers 2 missionaries on the boat
-(defun take-two-missionaries (state)
-    (cond   ((and (eql (boat-position state) 'R) (> (missionaries-right state) 1)) 
+;; Action that transfers two missionaries on the boat
+(defun take-2-missionaries (state)
+    (cond   ((and (eql (boat-position state) 'R) (> (missionaries-right state) 1))      ; if the boat is on the right
              (let ((proposed (copy-state state))) 
                  (setf (missionaries-right proposed) (- (missionaries-right state) 2))
                  (setf (missionaries-left proposed) (+ (missionaries-left state) 2))
                  (setf (boat-position proposed) (move-boat (boat-position state)))
                  (safe proposed))) 
-            ((and (eql (boat-position state) 'L) (> (missionaries-left state) 1))
+            ((and (eql (boat-position state) 'L) (> (missionaries-left state) 1))       ; if the boat is on the left
              (let ((proposed (copy-state state)))
                 (setf (missionaries-left proposed) (- (missionaries-left state) 2))
                 (setf (missionaries-right proposed) (+ (missionaries-right state) 2))
                 (setf (boat-position proposed) (move-boat (boat-position state)))
                 (safe proposed)))))
 
-;; action that takes two cannibals
-(defun take-two-cannibals (state)
-    (cond   ((and (eql (boat-position state) 'R) (> (cannibals-right state) 1)) 
+;; Action that transfers two cannibals on the boat
+(defun take-2-cannibals (state)
+    (cond   ((and (eql (boat-position state) 'R) (> (cannibals-right state) 1))         ; if the boat is on the right
             (let ((proposed (copy-state state)))
                  (setf (cannibals-right proposed) (- (cannibals-right state) 2))
                  (setf (cannibals-left proposed) (+ (cannibals-left state) 2))
                  (setf (boat-position proposed) (move-boat (boat-position state)))
                  (safe proposed)))
 
-            ((and (eql (boat-position state) 'L) (> (cannibals-left state) 1))
+            ((and (eql (boat-position state) 'L) (> (cannibals-left state) 1))          ; if the boat is on the left
             (let ((proposed (copy-state state)))
                  (setf (cannibals-left proposed) (- (cannibals-left state) 2))
                  (setf (cannibals-right proposed) (+ (cannibals-right state) 2))
                  (setf (boat-position proposed) (move-boat (boat-position state)))                 
                  (safe proposed)))))
 
-;; action that takes one missionary and one cannibal
+;; Action that trasnfers one missionary and one cannibal on the boat
 (defun take-missionary-cannibal (state)
-   (cond   ((and (eql (boat-position state) 'R) (and (>= (cannibals-right state) 1) (>= (missionaries-right state) 1) )) 
+   (cond   ((and (eql (boat-position state) 'R) (and (>= (cannibals-right state) 1) (>= (missionaries-right state) 1))) ; if the boat is on the right 
             (let ((proposed (copy-state state)))
                 (setf (cannibals-right proposed) (- (cannibals-right state) 1))
                 (setf (missionaries-right proposed) (- (missionaries-right state) 1))
@@ -232,7 +112,7 @@
                 (setf (missionaries-left proposed) (+ (missionaries-left state) 1))
                 (setf (boat-position proposed) (move-boat (boat-position state)))
                 (safe proposed)))
-            ((and (eql (boat-position state) 'L) (and (>= (cannibals-left state) 1) (>= (missionaries-left state) 1)))
+            ((and (eql (boat-position state) 'L) (and (>= (cannibals-left state) 1) (>= (missionaries-left state) 1))) ; if the boat is on the left
             (let ((proposed (copy-state state)))
                 (setf (cannibals-left proposed) (- (cannibals-left state) 1))
                 (setf (missionaries-left proposed) (- (missionaries-left state) 1))
@@ -241,34 +121,34 @@
                 (setf (boat-position proposed) (move-boat (boat-position state)))
                 (safe proposed)))))
 
-;; Action that takes only one missionary
-(defun take-one-missionary (state)
-    (cond   ((and (eql (boat-position state) 'R) (>= (missionaries-right state) 1)) 
+;; Action that trasnfers only one missionary 
+(defun take-1-missionary (state)
+    (cond   ((and (eql (boat-position state) 'R) (>= (missionaries-right state) 1))     ; if the boat is on the right
             (let ((proposed (copy-state state)))
                 (setf (missionaries-right proposed) (- (missionaries-right state) 1))
                 (setf (missionaries-left proposed) (+ (missionaries-left state) 1))
                 (setf (boat-position proposed) (move-boat (boat-position state)))
                 (safe proposed)))
-            ((and (eql (boat-position state) 'L) (>= (missionaries-left state) 1))
+            ((and (eql (boat-position state) 'L) (>= (missionaries-left state) 1))      ; if the boat is on the left
             (let ((proposed (copy-state state)))
                 (setf (missionaries-left proposed) (- (missionaries-left state) 1))
                 (setf (missionaries-right proposed) (+ (missionaries-right state) 1))
                 (setf (boat-position proposed) (move-boat (boat-position state)))
                 (safe proposed)))))
 
-;; Action that takes only one cannibal
-(defun take-one-cannibal (state)
-    (cond   ((and (eql (boat-position state) 'R) (>= (cannibals-right state) 1)) 
+;; Action that transfers only one cannibal
+(defun take-1-cannibal (state)
+    (cond   ((and (eql (boat-position state) 'R) (>= (cannibals-right state) 1))    ; if the boat is on the right
             (let ((proposed (copy-state state)))
                  (setf (cannibals-right proposed) (- (cannibals-right state) 1))
                  (setf (cannibals-left proposed) (+ (cannibals-left state) 1))
                  (setf (boat-position proposed) (move-boat (boat-position state)))
                  (safe proposed)))
-            ((and (eql (boat-position state) 'L) (>= (cannibals-left state) 1))
+            ((and (eql (boat-position state) 'L) (>= (cannibals-left state) 1))     ; if the boat is on the left
             (let ((proposed (copy-state state)))
                  (setf (cannibals-left proposed) (- (cannibals-left state) 1))
                  (setf (cannibals-right proposed) (+ (cannibals-right state) 1))
                  (setf (boat-position proposed) (move-boat (boat-position state)))
                 (safe proposed)))))
 
-(depth-first-search-with-duplicate-node-detection  *missionaries-and-cannibals*) 
+(breadth-first-search  *missionaries-and-cannibals*) 
