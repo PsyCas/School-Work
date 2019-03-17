@@ -1,11 +1,11 @@
 public class Rectangle
 {
-   // instance variable
+   // instance variables for a rectangle
    
    private double length;
    private double width;
    
-   // constructors
+   // default constructor
    
    public Rectangle()  // no argument
    {
@@ -13,6 +13,7 @@ public class Rectangle
       width = 10;
    }
    
+   // parameterized constructor
    public Rectangle ( double newLength, double newWidth)
    {
       length = newLength;
@@ -31,7 +32,7 @@ public class Rectangle
       width = newWidth;
    }
    
-   // getters
+   // getter functions
    
    public double getLength()
    {
