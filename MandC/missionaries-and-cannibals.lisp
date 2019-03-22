@@ -6,6 +6,8 @@
 ;;; TAKE-MISSIONARY: Take 1 missionary from the side the boat is currently on.
 ;;; TAKE-CANNIBAL: Take 1 cannibal from the side the boat is currently on.
 
+;;; This file needs to be run concurrently with the "breadth-first-search" file in order to work.
+
 
 ;; Defines the state of the two shores at any given time
 (defclass game-state (state)
