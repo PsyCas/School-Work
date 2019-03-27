@@ -8,29 +8,29 @@
 
 namespace {
 
-// Internal method to test if a positive number is prime.
-bool IsPrime(size_t n) {
-  if( n == 2 || n == 3 )
-    return true;
-  
-  if( n == 1 || n % 2 == 0 )
-    return false;
-  
-  for( size_t i = 3; i * i <= n; i += 2 )
-    if( n % i == 0 )
+  // Internal method to test if a positive number is prime.
+  bool IsPrime(size_t n) {
+    if( n == 2 || n == 3 )
+      return true;
+    
+    if( n == 1 || n % 2 == 0 )
       return false;
-  
-  return true;
-}
+    
+    for( size_t i = 3; i * i <= n; i += 2 )
+      if( n % i == 0 )
+        return false;
+    
+    return true;
+  }
 
 
-// Internal method to return a prime number at least as large as n.
-int NextPrime(size_t n) {
-  if (n % 2 == 0)
-    ++n;  
-  while (!IsPrime(n)) n += 2;  
-  return n;
-}
+  // Internal method to return a prime number at least as large as n.
+  int NextPrime(size_t n) {
+    if (n % 2 == 0)
+      ++n;  
+    while (!IsPrime(n)) n += 2;  
+    return n;
+  }
 
 }  // namespace
 
@@ -117,12 +117,12 @@ class HashTableQuadratic {
     size_t offset = 1;
     size_t current_pos = InternalHash(x);
       
-    while (array_[current_pos].info_ != EMPTY &&
-	   array_[current_pos].element_ != x) {
+    while (array_[current_pos].info_ != EMPTY && array_[current_pos].element_ != x) {
       current_pos += offset;  // Compute ith probe.
       offset += 2;
-      if (current_pos >= array_.size())
-	current_pos -= array_.size();
+      if (current_pos >= array_.size()){
+	      current_pos -= array_.size();
+      }
     }
     return current_pos;
   }
@@ -139,12 +139,13 @@ class HashTableQuadratic {
     current_size_ = 0;
     for (auto & entry :old_array)
       if (entry.info_ == ACTIVE)
-	Insert(std::move(entry.element_));
+	  Insert(std::move(entry.element_));
   }
   
+  // std::hash has overloaded operator () that calculates the hash
   size_t InternalHash(const HashedObj & x) const {
     static std::hash<HashedObj> hf;
-    return hf(x) % array_.size( );
+    return hf(x) % array_.size( );  // returns the position of the hashed value
   }
 };
 
