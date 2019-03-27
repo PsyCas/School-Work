@@ -1,4 +1,4 @@
-// YOUR NAME.
+// Parakram Basnet.
 
 #include "quadratic_probing.h"
 #include <iostream>
@@ -37,13 +37,19 @@ main(int argc, char **argv) {
   if (param_flag == "linear") {
     // HashTableLinear<string> linear_probing_table;
     // TestFunctionForHashTable(linear_probing_table, words_filename, query_filename);    
-  } else if (param_flag == "quadratic") {
-    HashTable<string> quadratic_probing_table;
+  } 
+  
+  else if (param_flag == "quadratic") {
+    HashTableQuadratic<string> quadratic_probing_table;
     TestFunctionForHashTable(quadratic_probing_table, words_filename, query_filename);    
-  } else if (param_flag == "double") {
+  } 
+  
+  else if (param_flag == "double") {
     // HashTableDouble<string> double_probing_table;
-    // TestFunctionForHashTable(double_probing_table, words_filename, query_filename);    
-  } else {
+    // TestFunctionForHashTable(double_probsing_table, words_filename, query_filename);    
+  }
+  
+  else {
     cout << "Uknown tree type " << param_flag << " (User should provide linear, quadratic, or double)" << endl;
   }
   return 0;

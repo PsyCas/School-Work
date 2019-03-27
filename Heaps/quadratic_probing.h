@@ -16,7 +16,7 @@ bool IsPrime(size_t n) {
   if( n == 1 || n % 2 == 0 )
     return false;
   
-  for( int i = 3; i * i <= n; i += 2 )
+  for( size_t i = 3; i * i <= n; i += 2 )
     if( n % i == 0 )
       return false;
   
@@ -37,11 +37,11 @@ int NextPrime(size_t n) {
 
 // Quadratic probing implementation.
 template <typename HashedObj>
-class HashTable {
+class HashTableQuadratic {
  public:
   enum EntryType {ACTIVE, EMPTY, DELETED};
 
-  explicit HashTable(size_t size = 101) : array_(NextPrime(size))
+  explicit HashTableQuadratic(size_t size = 101) : array_(NextPrime(size))
     { MakeEmpty(); }
   
   bool Contains(const HashedObj & x) const {
