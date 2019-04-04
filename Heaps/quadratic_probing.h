@@ -37,11 +37,11 @@ namespace {
 
 // Quadratic probing implementation.
 template <typename HashedObj>
-class HashTableQuadratic {
+class HashTable {
  public:
   enum EntryType {ACTIVE, EMPTY, DELETED};
 
-  explicit HashTableQuadratic(size_t size = 101) : array_(NextPrime(size))
+  explicit HashTable(size_t size = 101) : array_(NextPrime(size))
     { MakeEmpty(); }
   
   bool Contains(const HashedObj & x) const {
