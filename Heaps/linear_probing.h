@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <functional>
 
+#include <iostream>
 
 // Quadratic probing implementation.
 template <typename HashedObj>
@@ -12,7 +13,7 @@ class HashTableLinear {
  public:
   enum EntryType {ACTIVE, EMPTY, DELETED};
 
-  explicit HashTableLinear(size_t size = 101) : array_(NextPrime(size))
+  explicit HashTableLinear(size_t size = 101) : array_(NextPrime(size)), collisionCounter(0)
     {MakeEmpty();}
   
   bool Contains(const HashedObj & x) const {
@@ -25,9 +26,9 @@ class HashTableLinear {
       entry.info_ = EMPTY;
   }
 
-  bool Insert(const HashedObj &x, int &collisions) {
+  bool Insert(const HashedObj &x) {
     // Insert x as active
-    size_t current_pos = FindPos(x, collisions);
+    size_t current_pos = FindPos(x);
     if (IsActive(current_pos))
       return false;
     
@@ -36,13 +37,13 @@ class HashTableLinear {
     
     // Rehash; see Section 5.5
     if (++current_size_ > array_.size() / 2)
-      Rehash(collisions);    
+      Rehash();    
     return true;
   }
     
-  bool Insert(HashedObj && x, int &collisions) {
+  bool Insert(HashedObj && x) {
     // Insert x as active
-    size_t current_pos = FindPos(x, collisions);
+    size_t current_pos = FindPos(x);
     if (IsActive(current_pos))
       return false;
     
@@ -51,7 +52,7 @@ class HashTableLinear {
 
     // Rehash; see Section 5.5
     if (++current_size_ > array_.size() / 2)
-      Rehash(collisions);
+      Rehash();
 
     return true;
   }
@@ -72,6 +73,10 @@ class HashTableLinear {
   int GetTableSize(){
     return array_.size();
   }
+  
+  int GetCollisions(){
+    return collisionCounter; 
+  }
 
  private:        
   struct HashEntry {
@@ -88,18 +93,18 @@ class HashTableLinear {
 
   std::vector<HashEntry> array_;
   size_t current_size_;
+  int collisionCounter;
 
   bool IsActive(size_t current_pos) const
   { return array_[current_pos].info_ == ACTIVE; }
 
-  virtual size_t FindPos(const HashedObj & x, int &collisions) const {
+  virtual size_t FindPos(const HashedObj & x) {
     size_t offset = 1;
     size_t current_pos = InternalHash(x);
       
     while (array_[current_pos].info_ != EMPTY && array_[current_pos].element_ != x) {
       current_pos += offset;  // Compute ith probe.
-      offset += 1;
-      collisions++;
+      collisionCounter++;
       if (current_pos >= array_.size()){
 	      current_pos -= array_.size();
       }
@@ -107,7 +112,8 @@ class HashTableLinear {
     return current_pos;
   }
 
-  void Rehash(int &collisions) {
+  void Rehash() {
+      std::cout << "Rehashing... " << std::endl;
     std::vector<HashEntry> old_array = array_;
 
     // Create new double-sized, empty table.
@@ -119,7 +125,7 @@ class HashTableLinear {
     current_size_ = 0;
     for (auto & entry :old_array)
       if (entry.info_ == ACTIVE)
-	  Insert(std::move(entry.element_), collisions);
+	  Insert(std::move(entry.element_));
   }
   
   // std::hash has overloaded operator () that calculates the hash
