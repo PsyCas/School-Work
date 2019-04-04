@@ -34,7 +34,6 @@ namespace {
 
 }  // namespace
 
-
 // Quadratic probing implementation.
 template <typename HashedObj>
 class HashTableQuadratic {

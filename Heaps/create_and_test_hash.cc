@@ -29,12 +29,12 @@ void TestFunctionForHashTable(HashTableType &hash_table, const string &words_fil
   int tableSize = hash_table.GetTableSize();
   int collisions = hash_table.GetCollisions(); 
   double loadFactor = itemCount/ double(tableSize);
-
+  double avgCollisions = collisions/double(itemCount);
   cout << "Collisions: " << collisions <<endl;
   cout << "Number of items: " << itemCount <<endl;
   cout << "Size of hash table: " << tableSize <<endl;
   cout << "Load factor: " << loadFactor << endl;
-  cout << "Avg. number of collisions: " << collisions/double(itemCount) << endl;
+  cout << "Avg. number of collisions: " << avgCollisions << endl;
 }
 
 // Sample main for program create_and_test_hash
