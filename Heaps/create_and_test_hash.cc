@@ -2,6 +2,7 @@
 
 #include "quadratic_probing.h"
 #include "linear_probing.h"
+#include "double_hash.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -19,11 +20,13 @@ void readWordAndCreateTable(HashTableType &hash_table, const string &words_filen
 
 template <typename HashTableType>
 void TestFunctionForHashTable(HashTableType &hash_table, const string &words_filename, const string &query_filename) {
+  
   cout << "TestFunctionForHashTables..." << endl;
   cout << "Words filename: " << words_filename << endl;
   cout << "Query filename: " << query_filename << endl;
   hash_table.MakeEmpty();
   //..Insert your own code
+  
   readWordAndCreateTable(hash_table, words_filename);
   int itemCount = hash_table.GetItemCount();
   int tableSize = hash_table.GetTableSize();
@@ -59,8 +62,8 @@ int main(int argc, char **argv) {
   } 
   
   else if (param_flag == "double") {
-    // HashTableDouble<string> double_probing_table;
-    // TestFunctionForHashTable(double_probsing_table, words_filename, query_filename);    
+    HashTableDouble<string> double_probing_table;
+    TestFunctionForHashTable(double_probing_table, words_filename, query_filename);    
   }
   
   else {
