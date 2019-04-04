@@ -5,8 +5,6 @@
 #include <algorithm>
 #include <functional>
 
-#include <iostream>
-
 
 namespace {
 
@@ -44,9 +42,7 @@ class HashTableQuadratic {
   enum EntryType {ACTIVE, EMPTY, DELETED};
 
   explicit HashTableQuadratic(size_t size = 101) : array_(NextPrime(size))
-    { std::cout << array_.size() << std::endl;
-      MakeEmpty();
-      std::cout << array_.size() << std::endl;}
+    { MakeEmpty();}
   
   bool Contains(const HashedObj & x) const {
     return IsActive(FindPos(x));
