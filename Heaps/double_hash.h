@@ -4,8 +4,9 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
-#include "quadratic_probing.h"
 
 template <typename HashedObj>
-class HashTableDouble: public HashTable {
+class HashTableDouble {
 };
+
+#endif

@@ -1,6 +1,7 @@
 // Parakram Basnet.
 
 #include "quadratic_probing.h"
+#include "linear_probing.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -23,8 +24,7 @@ void TestFunctionForHashTable(HashTableType &hash_table, const string &words_fil
 }
 
 // Sample main for program create_and_test_hash
-int
-main(int argc, char **argv) {
+int main(int argc, char **argv) {
   if (argc != 4) {
     cout << "Usage: " << argv[0] << " <wordsfilename> <queryfilename> <flag>" << endl;
     return 0;
@@ -35,8 +35,8 @@ main(int argc, char **argv) {
   const string param_flag(argv[3]);
 
   if (param_flag == "linear") {
-    // HashTableLinear<string> linear_probing_table;
-    // TestFunctionForHashTable(linear_probing_table, words_filename, query_filename);    
+    HashTableLinear<string> linear_probing_table;
+    TestFunctionForHashTable(linear_probing_table, words_filename, query_filename);    
   } 
   
   else if (param_flag == "quadratic") {
