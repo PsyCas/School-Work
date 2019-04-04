@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <functional>
 
+#include <iostream>
+
 
 namespace {
 
@@ -42,7 +44,9 @@ class HashTableQuadratic {
   enum EntryType {ACTIVE, EMPTY, DELETED};
 
   explicit HashTableQuadratic(size_t size = 101) : array_(NextPrime(size))
-    { MakeEmpty(); }
+    { std::cout << array_.size() << std::endl;
+      MakeEmpty();
+      std::cout << array_.size() << std::endl;}
   
   bool Contains(const HashedObj & x) const {
     return IsActive(FindPos(x));
@@ -54,9 +58,9 @@ class HashTableQuadratic {
       entry.info_ = EMPTY;
   }
 
-  bool Insert(const HashedObj & x) {
+  bool Insert(const HashedObj &x, int &collisions) {
     // Insert x as active
-    size_t current_pos = FindPos(x);
+    size_t current_pos = FindPos(x, collisions);
     if (IsActive(current_pos))
       return false;
     
@@ -65,13 +69,13 @@ class HashTableQuadratic {
     
     // Rehash; see Section 5.5
     if (++current_size_ > array_.size() / 2)
-      Rehash();    
+      Rehash(collisions);    
     return true;
   }
     
-  bool Insert(HashedObj && x) {
+  bool Insert(HashedObj && x, int &collisions) {
     // Insert x as active
-    size_t current_pos = FindPos(x);
+    size_t current_pos = FindPos(x, collisions);
     if (IsActive(current_pos))
       return false;
     
@@ -80,7 +84,7 @@ class HashTableQuadratic {
 
     // Rehash; see Section 5.5
     if (++current_size_ > array_.size() / 2)
-      Rehash();
+      Rehash(collisions);
 
     return true;
   }
@@ -92,6 +96,14 @@ class HashTableQuadratic {
 
     array_[current_pos].info_ = DELETED;
     return true;
+  }
+
+  size_t GetItemCount(){
+    return current_size_;
+  }
+
+  int GetTableSize(){
+    return array_.size();
   }
 
  private:        
@@ -113,13 +125,14 @@ class HashTableQuadratic {
   bool IsActive(size_t current_pos) const
   { return array_[current_pos].info_ == ACTIVE; }
 
-  size_t FindPos(const HashedObj & x) const {
+  virtual size_t FindPos(const HashedObj & x, int &collisions) const {
     size_t offset = 1;
     size_t current_pos = InternalHash(x);
       
     while (array_[current_pos].info_ != EMPTY && array_[current_pos].element_ != x) {
       current_pos += offset;  // Compute ith probe.
       offset += 2;
+      collisions++;
       if (current_pos >= array_.size()){
 	      current_pos -= array_.size();
       }
@@ -127,7 +140,7 @@ class HashTableQuadratic {
     return current_pos;
   }
 
-  void Rehash() {
+  void Rehash(int &collisions) {
     std::vector<HashEntry> old_array = array_;
 
     // Create new double-sized, empty table.
@@ -139,7 +152,7 @@ class HashTableQuadratic {
     current_size_ = 0;
     for (auto & entry :old_array)
       if (entry.info_ == ACTIVE)
-	  Insert(std::move(entry.element_));
+	  Insert(std::move(entry.element_), collisions);
   }
   
   // std::hash has overloaded operator () that calculates the hash

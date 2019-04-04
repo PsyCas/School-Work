@@ -7,19 +7,35 @@
 #include <string>
 using namespace std;
 
+template <typename HashTableType>
+int readWordAndCreateTable(HashTableType &hash_table, const string &words_filename){
+
+  ifstream fin(words_filename);
+  string word = "";
+  int collisionCounter = 0;
+  while(fin >> word){
+    hash_table.Insert(word, collisionCounter);
+  }
+
+  return collisionCounter;
+}
 
 template <typename HashTableType>
 void TestFunctionForHashTable(HashTableType &hash_table, const string &words_filename, const string &query_filename) {
   cout << "TestFunctionForHashTables..." << endl;
   cout << "Words filename: " << words_filename << endl;
   cout << "Query filename: " << query_filename << endl;
-  hash_table.MakeEmpty();  
+  hash_table.MakeEmpty();
   //..Insert your own code
+  int collisions = readWordAndCreateTable(hash_table, words_filename);
+  int itemCount = hash_table.GetItemCount();
+  int tableSize = hash_table.GetTableSize(); 
+  double loadFactor = itemCount/ double(tableSize);
 
-  cout << "Collisions: " << endl;
-  cout << "Number of items: " << endl;
-  cout << "Size of hash table: " << endl;
-  cout << "Load factor: " << endl;
+  cout << "Collisions: " << collisions << endl;
+  cout << "Number of items: " << itemCount <<endl;
+  cout << "Size of hash table: " << tableSize <<endl;
+  cout << "Load factor: " << loadFactor << endl;
   cout << "Avg. number of collisions: " << endl;
 }
 
