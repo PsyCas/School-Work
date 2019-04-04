@@ -1,47 +1,23 @@
-#ifndef QUADRATIC_PROBING_H
-#define QUADRATIC_PROBING_H
+#ifndef DOUBLE_HASH_H
+#define DOUBLE_HASH_H
 
 #include <vector>
 #include <algorithm>
 #include <functional>
 
-
-namespace {
-
-  // Internal method to test if a positive number is prime.
-  bool IsPrime(size_t n) {
-    if( n == 2 || n == 3 )
-      return true;
-    
-    if( n == 1 || n % 2 == 0 )
-      return false;
-    
-    for( size_t i = 3; i * i <= n; i += 2 )
-      if( n % i == 0 )
-        return false;
-    
-    return true;
-  }
-
-
-  // Internal method to return a prime number at least as large as n.
-  int NextPrime(size_t n) {
-    if (n % 2 == 0)
-      ++n;  
-    while (!IsPrime(n)) n += 2;  
-    return n;
-  }
-
-}  // namespace
+#include <iostream>
 
 // Quadratic probing implementation.
 template <typename HashedObj>
-class HashTableQuadratic {
+class HashTableDouble {
  public:
   enum EntryType {ACTIVE, EMPTY, DELETED};
 
-  explicit HashTableQuadratic(size_t size = 101) : array_(NextPrime(size)), collisionCounter(0)
-  { MakeEmpty();}
+  explicit HashTableDouble(size_t size = 101) : array_(NextPrime(size)), collisionCounter_(0)
+    {
+        MakeEmpty();
+        GetPrimeLessThanTableSize();
+    }
   
   bool Contains(const HashedObj & x) const {
     return IsActive(FindPos(x));
@@ -63,8 +39,9 @@ class HashTableQuadratic {
     array_[current_pos].info_ = ACTIVE;
     
     // Rehash; see Section 5.5
-    if (++current_size_ > array_.size() / 2)
+    if (++current_size_ > array_.size() / 2){
       Rehash();    
+    }
     return true;
   }
     
@@ -78,8 +55,9 @@ class HashTableQuadratic {
     array_[current_pos].info_ = ACTIVE;
 
     // Rehash; see Section 5.5
-    if (++current_size_ > array_.size() / 2)
+    if (++current_size_ > array_.size() / 2){
       Rehash();
+    }
 
     return true;
   }
@@ -100,9 +78,9 @@ class HashTableQuadratic {
   int GetTableSize(){
     return array_.size();
   }
-
+  
   int GetCollisions(){
-    return collisionCounter; 
+    return collisionCounter_; 
   }
 
  private:        
@@ -120,19 +98,25 @@ class HashTableQuadratic {
 
   std::vector<HashEntry> array_;
   size_t current_size_;
-  int collisionCounter;
+  int collisionCounter_;
+  int valueR_ = 0;
 
   bool IsActive(size_t current_pos) const
   { return array_[current_pos].info_ == ACTIVE; }
 
-  virtual size_t FindPos(const HashedObj & x){
-    size_t offset = 1;
+  virtual size_t FindPos(const HashedObj & x) {
+
+    std::hash<HashedObj> hf;
+    size_t hashedObj = hf(x);  
+    // std::cout << "Value of R is: " << valueR_ << " for table: " << array_.size() << std::endl; 
+    size_t offset = valueR_ - (hashedObj % valueR_);
     size_t current_pos = InternalHash(x);
+
+    // std::cout << "Value of offset is: " << offset << " for current pos: " << current_pos << std::endl; 
       
     while (array_[current_pos].info_ != EMPTY && array_[current_pos].element_ != x) {
       current_pos += offset;  // Compute ith probe.
-      offset += 2;
-      collisionCounter++;
+      collisionCounter_++;
       if (current_pos >= array_.size()){
 	      current_pos -= array_.size();
       }
@@ -145,14 +129,17 @@ class HashTableQuadratic {
 
     // Create new double-sized, empty table.
     array_.resize(NextPrime(2 * old_array.size()));
+    GetPrimeLessThanTableSize(); // get new value of R
+
     for (auto & entry : array_)
       entry.info_ = EMPTY;
     
     // Copy table over.
     current_size_ = 0;
     for (auto & entry :old_array)
-      if (entry.info_ == ACTIVE)
-	  Insert(std::move(entry.element_));
+      if (entry.info_ == ACTIVE){
+        Insert(std::move(entry.element_));
+      }
   }
   
   // std::hash has overloaded operator () that calculates the hash
@@ -160,6 +147,23 @@ class HashTableQuadratic {
     static std::hash<HashedObj> hf;
     return hf(x) % array_.size( );  // returns the position of the hashed value
   }
+
+    // Value of R
+  void GetPrimeLessThanTableSize(){
+      
+      size_t tableSizeTemp = array_.size() -1;
+      if (tableSizeTemp % 2 == 0) --tableSizeTemp;
+      while(tableSizeTemp > 0){
+        if(IsPrime(tableSizeTemp)){
+            valueR_ = tableSizeTemp;
+            return;
+        }
+        else tableSizeTemp = tableSizeTemp-2;
+      }
+  }
 };
 
-#endif  // QUADRATIC_PROBING_H
+
+
+
+#endif

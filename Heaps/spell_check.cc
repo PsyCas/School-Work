@@ -1,4 +1,4 @@
-// YOUR NAME.
+// Parakram Basnet
 
 #include "quadratic_probing.h"
 #include <iostream>
