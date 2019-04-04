@@ -36,8 +36,9 @@ class HashTableLinear {
     array_[current_pos].info_ = ACTIVE;
     
     // Rehash; see Section 5.5
-    if (++current_size_ > array_.size() / 2)
+    if (++current_size_ > array_.size() / 2){
       Rehash();    
+    }
     return true;
   }
     
@@ -51,8 +52,9 @@ class HashTableLinear {
     array_[current_pos].info_ = ACTIVE;
 
     // Rehash; see Section 5.5
-    if (++current_size_ > array_.size() / 2)
+    if (++current_size_ > array_.size() / 2){
       Rehash();
+    }
 
     return true;
   }
@@ -113,7 +115,7 @@ class HashTableLinear {
   }
 
   void Rehash() {
-      std::cout << "Rehashing... " << std::endl;
+    // std::cout << "Rehashing... " << std::endl;
     std::vector<HashEntry> old_array = array_;
 
     // Create new double-sized, empty table.
@@ -124,8 +126,9 @@ class HashTableLinear {
     // Copy table over.
     current_size_ = 0;
     for (auto & entry :old_array)
-      if (entry.info_ == ACTIVE)
-	  Insert(std::move(entry.element_));
+      if (entry.info_ == ACTIVE){
+        Insert(std::move(entry.element_));
+      }
   }
   
   // std::hash has overloaded operator () that calculates the hash

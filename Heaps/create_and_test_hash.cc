@@ -34,7 +34,7 @@ void TestFunctionForHashTable(HashTableType &hash_table, const string &words_fil
   cout << "Number of items: " << itemCount <<endl;
   cout << "Size of hash table: " << tableSize <<endl;
   cout << "Load factor: " << loadFactor << endl;
-  cout << "Avg. number of collisions: " << endl;
+  cout << "Avg. number of collisions: " << collisions/double(itemCount) << endl;
 }
 
 // Sample main for program create_and_test_hash
