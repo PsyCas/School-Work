@@ -16,7 +16,14 @@ Class:      CSCI 335
     NOTES*: 
         1) The values for Collision is about 150-200 less than "expected output" on Cygwin g++ 7.3.0.
         2) The values for number of probes for some words are not the same as "expected output" but "Found" and "Not Found" are correct.
-
+        3) For Part 3, I used multiple R values for double hash, some of them are,
+            
+            a) For table size 101, R = 97 (gets rehashed so value of R changes)
+            ...other R values...
+            b) For table size 6947, R = 6917 (gets rehashed so value of R changes)
+            ... other R values...
+            c) For table size 55609, R = 55603 (The final size of the table and final R value)
+            
 2)  To compile all files, type
 
         make clean
