@@ -11,7 +11,7 @@
 using namespace std;
 
 // AddCharacter is a helper function of CheckErrors(...)
-// Adds every letter in the alphabet to all possible positions in the word, searches them in the dictionary and saved potential corrections
+// Adds every letter in the alphabet to all possible positions in the word, searches them in the dictionary and saves potential corrections
 // in the vector correctedWords. 
 void AddCharacter(const string &word, vector<string> &correctedWords, HashTableDouble<string> &dictionaryTable){
 
@@ -32,8 +32,8 @@ void AddCharacter(const string &word, vector<string> &correctedWords, HashTableD
   }
 }
 
-// AddCharacter is a helper function of CheckErrors(...)
-// Adds every letter in the alphabet to all possible positions in the word, searches them in the dictionary and saved potential corrections
+// RemoveCharacter is a helper function of CheckErrors(...)
+// Removed every letter one by one in the word, searches them in the dictionary and saves potential corrections
 // in the vector correctedWords. 
 void RemoveCharacter(const string &word, vector<string> &correctedWords, HashTableDouble<string> &dictionaryTable){
 
@@ -43,16 +43,23 @@ void RemoveCharacter(const string &word, vector<string> &correctedWords, HashTab
   }
 }
 
+// SwapAdjacent is a helper function of CheckErrors(...)
+// Swaps every adjacent letter in the word, searches them in the dictionary and saves potential corrections
+// in the vector correctedWords. 
 void SwapAdjacent(const string &word, vector<string> &correctedWords, HashTableDouble<string> &dictionaryTable){
-  for(size_t i = 0; word.length() != 0 && i < word.length()-1; ++i){
+  for(size_t i = 0; word.length() != 0 && i < word.length()-1; ++i){  // short-circuit check for when i == 0
     string newWord = word;
     std::swap(newWord[i], newWord[i+1]);
     if(dictionaryTable.Find(newWord)) correctedWords.push_back(newWord);
   }
 }
 
+// CheckErrors is a helper function of SpellChecker
+// Checks all possible spelling corrections using three helper functions
+// Displays either "No suggestions found" or the potential corrections stores in vector correctedWords 
 void CheckErrors(const string &word, HashTableDouble<string> &dictionaryTable){
   vector<string> correctedWords;
+  
   AddCharacter(word, correctedWords,dictionaryTable);
   RemoveCharacter(word, correctedWords,dictionaryTable);
   SwapAdjacent(word, correctedWords,dictionaryTable);
@@ -69,7 +76,7 @@ void CheckErrors(const string &word, HashTableDouble<string> &dictionaryTable){
   cout << endl;
 }
 
-// converts all the letters to lowercase and removes punctuations
+// GetFormattedLetter converts all the letters to lowercase and removes punctuations
 string GetFromattedLetter(const string& word){
   string finalStr = "";
   for(char letter: word){
@@ -78,8 +85,12 @@ string GetFromattedLetter(const string& word){
   return finalStr;
 }
 
+// SpellChecker read in the dictionary and creates a hash table with all the words from the dictionary
+// It reads in the document being checked word by word, tries to find it in the dictionary hash table. If its found, the word is correct
+// If not, the word is sent to helper function CheckErrors(...)
 void SpellChecker(const string &document_filename, const string &dictionary_filename){
 
+  // creates hash table and inserts all the words from the dictionary
   HashTableDouble<string> dictionaryTable;
   ifstream fin(dictionary_filename);
   string word = "";
@@ -88,6 +99,7 @@ void SpellChecker(const string &document_filename, const string &dictionary_file
   }
   fin.close();
 
+  // reads the document line by line and checks for spelling errors
   fin.open(document_filename);
   cout << endl <<"The Corrections are: (duplicate words are skipped)" << endl << endl;
   vector<string> wordList;
@@ -95,6 +107,7 @@ void SpellChecker(const string &document_filename, const string &dictionary_file
   while(fin >> word){
     word = GetFromattedLetter(word);
 
+    // only displays unique words to avoid clutter
     bool isUnique = true;
     if(!dictionaryTable.Find(word)){
 
@@ -106,12 +119,14 @@ void SpellChecker(const string &document_filename, const string &dictionary_file
         }
       } 
 
-      if(isUnique){
+      if(isUnique){ 
         wordList.push_back(word);
         CheckErrors(word, dictionaryTable);
       }
     }
   } 
+
+  fin.close();
 }
 
 
@@ -129,9 +144,9 @@ int main(int argc, char **argv) {
   cout << "Input document filename is " << document_filename << endl;
   cout << "Input dictionary filename is " << dictionary_filename << endl;
 
-  SpellChecker(document_filename, dictionary_filename);
-
+  
   // Call functions implementing the assignment requirements.
+  SpellChecker(document_filename, dictionary_filename);
 
   return 0;
 }
