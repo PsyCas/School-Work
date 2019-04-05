@@ -13,7 +13,7 @@ class HashTableLinear {
  public:
   enum EntryType {ACTIVE, EMPTY, DELETED};
 
-  explicit HashTableLinear(size_t size = 101) : array_(NextPrime(size)), collisionCounter(0)
+  explicit HashTableLinear(size_t size = 101) : array_(NextPrime(size)), collisionCounter_(0)
     {MakeEmpty();}
   
   bool Contains(const HashedObj & x) const {
@@ -68,6 +68,23 @@ class HashTableLinear {
     return true;
   }
 
+  bool Find(const HashedObj &x){
+    probeCounter_ = 1;
+    size_t offset = 1;
+    size_t current_pos = InternalHash(x);
+      
+    while (array_[current_pos].info_ != EMPTY && array_[current_pos].element_ != x){
+      current_pos += offset;  // Compute ith probe.
+      probeCounter_++;
+      if (current_pos >= array_.size()){
+        current_pos -= array_.size();
+      }
+    } 
+    if(array_[current_pos].info_ == EMPTY) return false;
+    else if (array_[current_pos].element_ == x) return true;
+    return false;
+  }
+
   size_t GetItemCount(){
     return current_size_;
   }
@@ -77,7 +94,11 @@ class HashTableLinear {
   }
   
   int GetCollisions(){
-    return collisionCounter; 
+    return collisionCounter_; 
+  }
+
+  int GetProbes(){
+    return probeCounter_;
   }
 
  private:        
@@ -95,18 +116,19 @@ class HashTableLinear {
 
   std::vector<HashEntry> array_;
   size_t current_size_;
-  int collisionCounter;
+  mutable int collisionCounter_;
+  mutable int probeCounter_ = 1;
 
   bool IsActive(size_t current_pos) const
   { return array_[current_pos].info_ == ACTIVE; }
 
-  virtual size_t FindPos(const HashedObj & x) {
+  size_t FindPos(const HashedObj & x) {
     size_t offset = 1;
     size_t current_pos = InternalHash(x);
       
     while (array_[current_pos].info_ != EMPTY && array_[current_pos].element_ != x) {
       current_pos += offset;  // Compute ith probe.
-      collisionCounter++;
+      collisionCounter_++;
       if (current_pos >= array_.size()){
 	      current_pos -= array_.size();
       }
