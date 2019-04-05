@@ -1,3 +1,18 @@
+// Parakram Basnet
+// linear_probing creates a hash table using linear probing as its probing method.
+
+// Extra methods added:  
+// size_t GetItemCount(); <- returns the item count
+// int GetCollisions();  <- returns the number collissions
+// int GetTableSize();   <- returns the table size
+// int GetProbes();     <- returns the number of probes
+// bool Find(const HashedObj &x);  <- Looks for the object x in the hash table and returns True if found, else false
+
+// Extra data members:
+// int collisionCounter_; <- counter for the total number of collisions
+// int probeCounter_ = 1; <- counter for the number of probes
+
+
 #ifndef LINEAR_PROBING_H
 #define LINEAR_PROBING_H
 

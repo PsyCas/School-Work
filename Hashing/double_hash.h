@@ -1,3 +1,18 @@
+// Parakram Basnet
+// double_hash creates a hash table using double hash as its probing method
+
+// Extra methods added:  
+// size_t GetItemCount(); <- returns the item count
+// int GetCollisions();  <- returns the number collissions
+// int GetTableSize();   <- returns the table size
+// int GetProbes();     <- returns the number of probes
+// bool Find(const HashedObj &x);  <- Looks for the object x in the hash table and returns True if found, else false
+
+// Extra data members:
+// int collisionCounter_; <- counter for the total number of collisions
+// int valueR_ = 0;       <- counter for the R value
+// int probeCounter_ = 1; <- counter for the number of probes
+
 #ifndef DOUBLE_HASH_H
 #define DOUBLE_HASH_H
 
