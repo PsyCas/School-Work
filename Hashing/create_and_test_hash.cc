@@ -16,6 +16,27 @@ void readWordAndCreateTable(HashTableType &hash_table, const string &words_filen
   while(fin >> word){
     hash_table.Insert(word);
   }
+
+  fin.close();
+}
+
+template <typename HashTableType>
+void readQueryAndPrint(HashTableType &hash_table, const string &query_filename){
+
+  ifstream fin(query_filename);
+  string word = "";
+  cout << endl;
+
+  while(fin >> word){
+    if(hash_table.Find(word)){
+      cout << word << ": Found in " << hash_table.GetProbes() << " probes" << endl;
+    }
+    else{
+      cout << word << ": Not found in " << hash_table.GetProbes() << " probes" << endl;
+    }
+  }
+
+  fin.close();
 }
 
 template <typename HashTableType>
@@ -33,11 +54,12 @@ void TestFunctionForHashTable(HashTableType &hash_table, const string &words_fil
   int collisions = hash_table.GetCollisions(); 
   double loadFactor = itemCount/ double(tableSize);
   double avgCollisions = collisions/double(itemCount);
-  cout << "Collisions: " << collisions <<endl;
-  cout << "Number of items: " << itemCount <<endl;
-  cout << "Size of hash table: " << tableSize <<endl;
+  cout << "Collisions: " << collisions << endl;
+  cout << "Number of items: " << itemCount << endl;
+  cout << "Size of hash table: " << tableSize << endl;
   cout << "Load factor: " << loadFactor << endl;
   cout << "Avg. number of collisions: " << avgCollisions << endl;
+  readQueryAndPrint(hash_table, query_filename);
 }
 
 // Sample main for program create_and_test_hash

@@ -71,6 +71,27 @@ class HashTableDouble {
     return true;
   }
 
+  bool Find(const HashedObj &x){
+    probeCounter_ = 1;
+    std::hash<HashedObj> hf;
+    size_t hashedObj = hf(x);  
+    size_t offset = valueR_ - (hashedObj % valueR_);
+    size_t current_pos = InternalHash(x);
+      
+    while (array_[current_pos].info_ != EMPTY && array_[current_pos].element_ != x) {
+      current_pos += offset;  // Compute ith probe.
+      collisionCounter_++;
+      probeCounter_++;
+      if (current_pos >= array_.size()){
+	      current_pos -= array_.size();
+      }
+    }
+    if(array_[current_pos].info_ == EMPTY) return false;
+    else if (array_[current_pos].element_ == x) return true;
+
+    return false;
+  }
+
   size_t GetItemCount(){
     return current_size_;
   }
@@ -81,6 +102,10 @@ class HashTableDouble {
   
   int GetCollisions(){
     return collisionCounter_; 
+  }
+
+  int GetProbes(){
+    return probeCounter_;
   }
 
  private:        
@@ -100,12 +125,13 @@ class HashTableDouble {
   size_t current_size_;
   int collisionCounter_;
   int valueR_ = 0;
+  int probeCounter_ = 1;
 
   bool IsActive(size_t current_pos) const
   { return array_[current_pos].info_ == ACTIVE; }
 
-  virtual size_t FindPos(const HashedObj & x) {
-
+  size_t FindPos(const HashedObj & x) {
+    probeCounter_ = 0;
     std::hash<HashedObj> hf;
     size_t hashedObj = hf(x);  
     // std::cout << "Value of R is: " << valueR_ << " for table: " << array_.size() << std::endl; 
@@ -117,6 +143,7 @@ class HashTableDouble {
     while (array_[current_pos].info_ != EMPTY && array_[current_pos].element_ != x) {
       current_pos += offset;  // Compute ith probe.
       collisionCounter_++;
+      probeCounter_++;
       if (current_pos >= array_.size()){
 	      current_pos -= array_.size();
       }
