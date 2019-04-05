@@ -1,44 +1,53 @@
 // Parakram Basnet
+// spell_check.cc reads in text documents and a dictionary and provides suggestions for potential spelling errors.
+
 #include "quadratic_probing.h"  // for prime methods
-#include "double_hash.h"        // for double hashing 
+#include "double_hash.h"        // for double hashing
+
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 using namespace std;
 
-void AddCharacter(const string &word, vector<string> &correctedWord, HashTableDouble<string> &dictionaryTable){
+// AddCharacter is a helper function of CheckErrors(...)
+// Adds every letter in the alphabet to all possible positions in the word, searches them in the dictionary and saved potential corrections
+// in the vector correctedWords. 
+void AddCharacter(const string &word, vector<string> &correctedWords, HashTableDouble<string> &dictionaryTable){
 
   vector<string> alphabets = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
 
   for(string letter: alphabets){
     for (size_t i = 0; i < word.length()+1; ++i){
-      string newWord = "";      
-      // creating the word
-      if(i == 0) newWord = letter + word;  
-      else if (i == word.length()) newWord = word + letter;
-      else newWord = word.substr(0,i) + letter + word.substr(i);  
+      string newWord = "";
+
+      // creating the new word
+      if(i == 0) newWord = letter + word;  // edge case for the first letter
+      else if (i == word.length()) newWord = word + letter; // edge case for the last letter
+      else newWord = word.substr(0,i) + letter + word.substr(i);    
       
       // checking if the word exists in the hash table
-      if(dictionaryTable.Find(newWord)) correctedWord.push_back(newWord);
+      if(dictionaryTable.Find(newWord)) correctedWords.push_back(newWord);
     } 
   }
 }
 
-void RemoveCharacter(const string &word, vector<string> &correctedWord, HashTableDouble<string> &dictionaryTable){
+// AddCharacter is a helper function of CheckErrors(...)
+// Adds every letter in the alphabet to all possible positions in the word, searches them in the dictionary and saved potential corrections
+// in the vector correctedWords. 
+void RemoveCharacter(const string &word, vector<string> &correctedWords, HashTableDouble<string> &dictionaryTable){
 
   for(size_t i = 0; i < word.length(); ++i){
     string newWord = word.substr(0,i) + word.substr(i+1);
-    if(dictionaryTable.Find(newWord)) correctedWord.push_back(newWord);
+    if(dictionaryTable.Find(newWord)) correctedWords.push_back(newWord);
   }
 }
 
-void SwapAdjacent(const string &word, vector<string> &correctedWord, HashTableDouble<string> &dictionaryTable){
-
-  for(size_t i = 0; i < word.length()-1; ++i){
+void SwapAdjacent(const string &word, vector<string> &correctedWords, HashTableDouble<string> &dictionaryTable){
+  for(size_t i = 0; word.length() != 0 && i < word.length()-1; ++i){
     string newWord = word;
     std::swap(newWord[i], newWord[i+1]);
-    cout << newWord << endl;
+    if(dictionaryTable.Find(newWord)) correctedWords.push_back(newWord);
   }
 }
 
@@ -47,9 +56,15 @@ void CheckErrors(const string &word, HashTableDouble<string> &dictionaryTable){
   AddCharacter(word, correctedWords,dictionaryTable);
   RemoveCharacter(word, correctedWords,dictionaryTable);
   SwapAdjacent(word, correctedWords,dictionaryTable);
-  
-  for(string word: correctedWords){
-    cout << word << ", ";
+
+  cout << word << " => ";
+  if(correctedWords.size() == 0){
+    cout << "No suggestions found.";
+  }
+  else{
+    for(string word: correctedWords){
+      cout << word << " ";
+    }
   }
   cout << endl;
 }
@@ -74,14 +89,27 @@ void SpellChecker(const string &document_filename, const string &dictionary_file
   fin.close();
 
   fin.open(document_filename);
-  cout << "The Corrections are: " << endl << endl;
+  cout << endl <<"The Corrections are: (duplicate words are skipped)" << endl << endl;
+  vector<string> wordList;
 
   while(fin >> word){
     word = GetFromattedLetter(word);
-    
-    if(!dictionaryTable.Find(word)){ 
-      cout << word << " => ";
-      CheckErrors(word, dictionaryTable);
+
+    bool isUnique = true;
+    if(!dictionaryTable.Find(word)){
+
+      // eliminates duplicate words from the list
+      for(string listWord: wordList){
+        if (listWord == word){
+          isUnique = false;
+          break;
+        }
+      } 
+
+      if(isUnique){
+        wordList.push_back(word);
+        CheckErrors(word, dictionaryTable);
+      }
     }
   } 
 }
