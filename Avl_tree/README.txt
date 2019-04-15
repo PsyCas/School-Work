@@ -1,4 +1,3 @@
-Assignment 2
 Written by: Parakram Basnet
 Instructor: Ioannis Stamos
 Class:      CSCI 335

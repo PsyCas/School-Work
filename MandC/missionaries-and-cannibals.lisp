@@ -1,5 +1,3 @@
-;;; Parakram Basnet
-;;; Assignment 5, Part 3: Missionaries-And-Cannibals
 ;;; Solves the Missionaries and Cannibals using breadth first search.
 ;;; Output Answer: TAKE-2-CANNIBALS TAKE-1-CANNIBAL TAKE-2-CANNIBALS TAKE-1-CANNIBAL TAKE-2-MISSIONARIES TAKE-MISSIONARY-CANNIBAL TAKE-2-MISSIONARIES TAKE-1-CANNIBAL TAKE-2-CANNIBALS TAKE-1-MISSIONARY TAKE-MISSIONARY-CANNIBAL
 ;;; TAKE-2-CANNIBALS: Take 2 cannibals from the side the boat is currently on.
@@ -7,6 +5,8 @@
 ;;; TAKE-MISSIONARY-CANNIBAL: Take 1 missionary and 1 cannibal from the side the boat is currently on.
 ;;; TAKE-MISSIONARY: Take 1 missionary from the side the boat is currently on.
 ;;; TAKE-CANNIBAL: Take 1 cannibal from the side the boat is currently on.
+
+;;; This file needs to be run concurrently with the "breadth-first-search" file in order to work.
 
 
 ;; Defines the state of the two shores at any given time
