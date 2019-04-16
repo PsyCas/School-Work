@@ -154,12 +154,12 @@
      for response = (respond-to-guess self guess i)
      for win = (equal (first response) 'win)
      for time-is-up = (> (get-internal-run-time) stop-time)
-     ;do (print (list (get-internal-run-time) stop-time))
-     ;when win
-     ;do (format t "~%Win. Round over.")
-     ;else when response
-     ;do (format t "~%score ~a" response)
-     ;else do (format t "~%Invalid entry. Round over.")
+    ;;  do (print (list (get-internal-run-time) stop-time))
+     when win
+     do (format t "~%Win. Round over.")
+     else when response
+     do (format t "~%score ~a" response)
+     else do (format t "~%Invalid entry. Round over.")
      until (or win (null response) (= i game-cutoff) time-is-up)
      finally (return (cond (time-is-up '(0 0)) 
 			   ((null response) nil)
@@ -280,6 +280,7 @@
 ;;;*******************************************************************************************
 ;;Sample teams
 ;;;*******************************************************************************************
+
 ;this is a really dumb team... it makes random guesses
 (defun RandomFolks (board colors SCSA last-response)
   (declare (ignore SCSA last-response))
@@ -290,7 +291,20 @@
   (declare (ignore SCSA last-response))
     (make-list board :initial-element (random-chooser colors)))
 
+(defun enumerate (length colors)
+  (cond ((= 1 length)
+    (loop for color in colors
+           collect (list color)))
+    (t (loop for color in colors 
+        append (mapcar (lambda (l) (cons color l))
+               (enumerate (- length 1) colors))))))
 
-(Mastermind 7 5 'two-color-alternating)
-(play-tournament *Mastermind* 'RandomFolks 'two-color-alternating 25)
+;baseline #1 player for NilNewts team
+(defun NilNewts (board colors SCSA last-response)
+  (declare (ignore SCSA last-response))
+  (enumerate board colors))
+
+
+(Mastermind 7 5 'prefer-fewer)
+(play-tournament *Mastermind* 'NilNewts 'prefer-fewer 25)
 (describe *Mastermind*)
