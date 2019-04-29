@@ -39,10 +39,11 @@ PROGRAM_0= CreateGraphAndTest
 $(PROGRAM_0): $(ALL_OBJ0)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(ALL_OBJ0) $(INCLUDES) $(LIBS_ALL)
 
-# ALL_OBJ1=spell_check.o
-# PROGRAM_1=spell_check
-# $(PROGRAM_1): $(ALL_OBJ1)
-# 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(ALL_OBJ1) $(INCLUDES) $(LIBS_ALL)
+# SECOND PROGRAM 
+ALL_OBJ1= FindPaths.o
+PROGRAM_1= FindPaths
+$(PROGRAM_1): $(ALL_OBJ1)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(ALL_OBJ1) $(INCLUDES) $(LIBS_ALL)
 
 
 #Compiling all
@@ -55,8 +56,8 @@ all:
 runCreateGraphTest: 	
 		./$(PROGRAM_0) Graph1.txt AdjacencyQueries.txt
 
-# run1quadratic: 	
-# 		./$(PROGRAM_0) words.txt query_words.txt quadratic
+runFindPath: 	
+		./$(PROGRAM_1) words.txt query_words.txt <Starting Vertex>
 
 # run1double: 	
 # 		./$(PROGRAM_0) words.txt query_words.txt double
@@ -66,6 +67,7 @@ runCreateGraphTest:
 
 # run2: 	
 # 		./$(PROGRAM_1) document1.txt wordsEn.txt
+
 
 #Clean obj files
 
