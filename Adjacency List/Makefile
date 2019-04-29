@@ -67,8 +67,6 @@ runCreateGraphTest:
 # run2: 	
 # 		./$(PROGRAM_1) document1.txt wordsEn.txt
 
-
-
 #Clean obj files
 
 clean:
