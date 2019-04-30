@@ -57,7 +57,7 @@ runCreateGraphTest:
 		./$(PROGRAM_0) Graph1.txt AdjacencyQueries.txt
 
 runFindPath: 	
-		./$(PROGRAM_1) words.txt query_words.txt <Starting Vertex>
+		./$(PROGRAM_1) query_words.txt <Starting Vertex>
 
 # run1double: 	
 # 		./$(PROGRAM_0) words.txt query_words.txt double
