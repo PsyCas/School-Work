@@ -30,7 +30,7 @@ class BinaryHeap
     explicit BinaryHeap( const vector<Comparable> & items )
       : array( items.size( ) + 10 ), currentSize{ items.size( ) }
     {
-        for( int i = 0; i < items.size( ); ++i )
+        for( size_t i = 0; i < items.size( ); ++i )
             array[ i + 1 ] = items[ i ];
         buildHeap( );
     }
@@ -112,6 +112,8 @@ class BinaryHeap
 
     void makeEmpty( )
       { currentSize = 0; }
+
+      
 
   private:
     int                currentSize;  // Number of elements in heap
