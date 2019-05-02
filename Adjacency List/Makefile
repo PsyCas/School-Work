@@ -45,19 +45,17 @@ $(PROGRAM_1): $(ALL_OBJ1)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(ALL_OBJ1) $(INCLUDES) $(LIBS_ALL)
 
 
-# SECOND PROGRAM 
-ALL_OBJ1= TestRandomGraph.o
-PROGRAM_1= TestRandomGraph
-$(PROGRAM_1): $(ALL_OBJ1)
-	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(ALL_OBJ1) $(INCLUDES) $(LIBS_ALL)
-
-
+# THIRD PROGRAM 
+ALL_OBJ2= TestRandomGraph.o
+PROGRAM_2= TestRandomGraph
+$(PROGRAM_2): $(ALL_OBJ2)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(ALL_OBJ2) $(INCLUDES) $(LIBS_ALL)
 
 #Compiling all
 
 all: 	
-		make $(PROGRAM_0)
-		make $(PROGRAM_1)
+		# make $(PROGRAM_0)
+		# make $(PROGRAM_1)
 		make $(PROGRAM_2)
 
 

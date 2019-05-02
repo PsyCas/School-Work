@@ -32,4 +32,5 @@ class DisjSets
     vector<int> s;
 };
 
+#include "disjoint_sets.cc"
 #endif
