@@ -117,7 +117,7 @@ class BinaryHeap
       { currentSize = 0; }
 
 
-    // come back and overload this operator properly
+    // need to overload this operator properly
     bool operator< (const Comparable &x) const{
         return (this->distance_ < x.distance_);
     }
