@@ -3,6 +3,8 @@
 
 #include "dsexceptions.h"
 #include <vector>
+#include <iostream>
+
 using namespace std;
 
 // BinaryHeap class
@@ -53,16 +55,21 @@ class BinaryHeap
      * Insert item x, allowing duplicates.
      */
     void insert( const Comparable & x )
-    {
+    {   
         if( currentSize == array.size( ) - 1 )
             array.resize( array.size( ) * 2 );
 
             // Percolate up
         int hole = ++currentSize;
         Comparable copy = x;
-        
+
         array[ 0 ] = std::move( copy );
-        for( ; x < array[ hole / 2 ]; hole /= 2 )
+        
+        cout << array[0].nodeName_ << " " << array[0].distance_ << endl;
+        cout << array[hole/2].nodeName_ << " " << array[hole/2].distance_ << endl;
+
+
+        for( ; x.distance_ < array[ hole / 2 ].distance_; hole /= 2 )
             array[ hole ] = std::move( array[ hole / 2 ] );
         array[ hole ] = std::move( array[ 0 ] );
     }
@@ -78,7 +85,7 @@ class BinaryHeap
 
             // Percolate up
         int hole = ++currentSize;
-        for( ; hole > 1 && x < array[ hole / 2 ]; hole /= 2 )
+        for( ; hole > 1 && x.distance_ < array[ hole / 2 ].distance_; hole /= 2 )
             array[ hole ] = std::move( array[ hole / 2 ] );
         array[ hole ] = std::move( x );
     }
@@ -113,10 +120,15 @@ class BinaryHeap
     void makeEmpty( )
       { currentSize = 0; }
 
+
+    // come back and overload this operator properly
+    bool operator< (const Comparable &x) const{
+        return (this->distance_ < x.distance_);
+    }
       
 
   private:
-    int                currentSize;  // Number of elements in heap
+    int currentSize;  // Number of elements in heap
     vector<Comparable> array;        // The heap array
 
     /**
@@ -141,9 +153,9 @@ class BinaryHeap
         for( ; hole * 2 <= currentSize; hole = child )
         {
             child = hole * 2;
-            if( child != currentSize && array[ child + 1 ] < array[ child ] )
+            if( child != currentSize && array[ child + 1 ].distance_ < array[ child ].distance_ )
                 ++child;
-            if( array[ child ] < tmp )
+            if( array[ child ].distance_ < tmp.distance_ )
                 array[ hole ] = std::move( array[ child ] );
             else
                 break;

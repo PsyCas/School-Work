@@ -2,8 +2,8 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <climits> 
 
-#include "ListElement.h" 
 #include "BinaryHeap.h"
 
 using namespace std;
@@ -11,14 +11,30 @@ using namespace std;
 struct Vertex{
     string nodeName_;
     vector<Vertex> adjacent_;
-    bool known_;
-    double distance_;				
+    bool known_ = false;
+    double distance_ = INT_MAX;				
 	Vertex *previous_in_path_;
 };
 
-void getShortestPaths(const vector<ListElement<char>> &graph, const BinaryHeap<char> &heapStorage){
+void getShortestPaths(vector<Vertex> *graphPtr, Vertex *startingVertex){
 
-    return;
+    startingVertex -> distance_ = 0;
+    BinaryHeap<Vertex> pathfinder;
+
+    for(size_t i = 0; i < graphPtr -> size(); ++i){
+
+        cout << (*graphPtr)[i].nodeName_ << endl;
+        cout << (*graphPtr)[i].distance_ << endl;
+    }
+
+    pathfinder.insert(*startingVertex);
+        
+        // while(true){
+
+        //     if(pathfinder.)
+        // }
+
+
 }
 
 void parseAndCreateAdjacencyList(const string &line, Vertex &newVertex){
@@ -78,25 +94,20 @@ int main(int argc, char **argv){
     cout << "The starting vertex is: " << STARTING_VERTEX << endl; 
 
     vector<Vertex> graph = createNewGraph(GRAPH_FILENAME);
+    vector<Vertex> *graphPtr = &graph;
     
-    // for(Vertex newVert: graph){
+    Vertex *startingVertex = new Vertex;
 
-    //     cout << newVert.nodeName_ << " Adjacent: " << endl;
-    //     for(auto i = newVert.adjacent_.begin(); i !=  newVert.adjacent_.end(); ++i){
-    //         cout << i -> nodeName_ << " weight: " << i -> distance_ << endl;
-    //     }
-    //     cout << endl;
-    // }
+    for(size_t i = 0; i < graphPtr -> size(); ++i){
+    
+        if ((*graphPtr)[i].nodeName_ == STARTING_VERTEX){
+            startingVertex = &(*graphPtr)[i];
+            break;
+        }; 
+    }
 
 
-    // vector<char> nodeNames;
-    // for(ListElement<char> nodes: graph){
-    //     nodeNames.push_back(nodes.getElementName());
-    // }
-
-    // BinaryHeap<char> heapStorage(nodeNames);
-
-    // getShortestPaths(graph, heapStorage);
+    getShortestPaths(graphPtr, startingVertex);
 
     return 0;
 }
