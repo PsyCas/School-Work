@@ -35,7 +35,6 @@ LIBS_ALL =  -L/usr/lib -L/usr/local/lib $(MATH_LIBS)
 #ZEROTH PROGRAM
 ALL_OBJ0= CreateGraphAndTest.o
 PROGRAM_0= CreateGraphAndTest
-
 $(PROGRAM_0): $(ALL_OBJ0)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(ALL_OBJ0) $(INCLUDES) $(LIBS_ALL)
 
@@ -46,11 +45,20 @@ $(PROGRAM_1): $(ALL_OBJ1)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(ALL_OBJ1) $(INCLUDES) $(LIBS_ALL)
 
 
+# SECOND PROGRAM 
+ALL_OBJ1= TestRandomGraph.o
+PROGRAM_1= TestRandomGraph
+$(PROGRAM_1): $(ALL_OBJ1)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(ALL_OBJ1) $(INCLUDES) $(LIBS_ALL)
+
+
+
 #Compiling all
 
 all: 	
 		make $(PROGRAM_0)
 		make $(PROGRAM_1)
+		make $(PROGRAM_2)
 
 
 runCreateGraphTest: 	
@@ -59,8 +67,8 @@ runCreateGraphTest:
 runFindPath: 	
 		./$(PROGRAM_1) query_words.txt <Starting Vertex>
 
-# run1double: 	
-# 		./$(PROGRAM_0) words.txt query_words.txt double
+run1double: 	
+		./$(PROGRAM_2) <Maximum_number_of_nodes>
 
 # run2short: 	
 # 		./$(PROGRAM_1) document1_short.txt wordsEn.txt
