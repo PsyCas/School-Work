@@ -64,10 +64,6 @@ class BinaryHeap
         Comparable copy = x;
 
         array[ 0 ] = std::move( copy );
-        
-        cout << array[0].nodeName_ << " " << array[0].distance_ << endl;
-        cout << array[hole/2].nodeName_ << " " << array[hole/2].distance_ << endl;
-
 
         for( ; x.distance_ < array[ hole / 2 ].distance_; hole /= 2 )
             array[ hole ] = std::move( array[ hole / 2 ] );

@@ -3,6 +3,8 @@
 #include <sstream>
 #include <vector>
 #include <climits> 
+#include <stack>
+#include <iomanip>
 
 #include "BinaryHeap.h"
 
@@ -13,27 +15,84 @@ struct Vertex{
     vector<Vertex> adjacent_;
     bool known_ = false;
     double distance_ = INT_MAX;				
-	Vertex *previous_in_path_;
+	string previous_in_path_;
 };
+
+Vertex* getNode(vector<Vertex> *graphPtr, const string &nodeName){
+
+    for(size_t i = 0; i < graphPtr -> size(); ++i){
+        if((*graphPtr)[i].nodeName_ == nodeName) return &(*graphPtr)[i];
+    }
+}
+
+void printPaths(vector<Vertex> *graphPtr, const string &startingPoint){
+
+    for(size_t i = 0; i < graphPtr -> size(); ++i){
+
+        string finalOp = (*graphPtr)[i].nodeName_ + ":";
+        stack<string> pathStack;
+
+        string path = (*graphPtr)[i].previous_in_path_;
+        
+        if(path == ""){
+            path = startingPoint;
+            pathStack.push(path);
+        } 
+        else{
+            pathStack.push((*graphPtr)[i].nodeName_);
+            pathStack.push(path);
+        }
+
+        while(path != startingPoint){
+
+            Vertex *n = getNode(graphPtr, path);
+            path = n -> previous_in_path_;
+            pathStack.push(path);
+        }
+
+        while(!pathStack.empty()){
+            finalOp += pathStack.top() + ", ";
+            pathStack.pop();
+        }
+
+        cout << finalOp << "Cost: " << (*graphPtr)[i].distance_ << setprecision(1) << fixed << "." << endl;
+    }
+
+}
 
 void getShortestPaths(vector<Vertex> *graphPtr, Vertex *startingVertex){
 
     startingVertex -> distance_ = 0;
     BinaryHeap<Vertex> pathfinder;
 
-    for(size_t i = 0; i < graphPtr -> size(); ++i){
-
-        cout << (*graphPtr)[i].nodeName_ << endl;
-        cout << (*graphPtr)[i].distance_ << endl;
-    }
-
     pathfinder.insert(*startingVertex);
         
-        // while(true){
+    while(true){
 
-        //     if(pathfinder.)
-        // }
+        if(pathfinder.isEmpty()) break;
 
+        Vertex vNode = pathfinder.findMin();
+        pathfinder.deleteMin();
+        Vertex *v = getNode(graphPtr, vNode.nodeName_);
+
+        if(!v -> known_){
+            for(size_t i = 0; i < v ->adjacent_.size(); ++i){
+                if(!v-> adjacent_[i].known_){
+                    Vertex *w = getNode(graphPtr, v -> adjacent_[i].nodeName_);
+
+                    if(v -> distance_ + v -> adjacent_[i].distance_ < w -> distance_){
+                        w -> distance_ = v -> distance_ + v -> adjacent_[i].distance_;
+                        pathfinder.insert(*w);
+                        w -> previous_in_path_ = v -> nodeName_;
+                        v -> adjacent_[i].known_ = true;
+                    }
+                }
+            }
+        }
+        v -> known_ = true;
+    }
+
+    printPaths(graphPtr, startingVertex -> nodeName_);
 
 }
 
