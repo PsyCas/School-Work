@@ -79,14 +79,14 @@ int main(int argc, char **argv){
 
     vector<Vertex> graph = createNewGraph(GRAPH_FILENAME);
     
-    for(Vertex newVert: graph){
+    // for(Vertex newVert: graph){
 
-        cout << newVert.nodeName_ << " Adjacent: " << endl;
-        for(auto i = newVert.adjacent_.begin(); i !=  newVert.adjacent_.end(); ++i){
-            cout << i -> nodeName_ << " weight: " << i -> distance_ << endl;
-        }
-        cout << endl;
-    }
+    //     cout << newVert.nodeName_ << " Adjacent: " << endl;
+    //     for(auto i = newVert.adjacent_.begin(); i !=  newVert.adjacent_.end(); ++i){
+    //         cout << i -> nodeName_ << " weight: " << i -> distance_ << endl;
+    //     }
+    //     cout << endl;
+    // }
 
 
     // vector<char> nodeNames;
