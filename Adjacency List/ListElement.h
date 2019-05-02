@@ -6,6 +6,7 @@
 
 using namespace std;
 
+// class that stores individual element and their adjacent elements
 template <typename ElementType> 
 class ListElement{
 
