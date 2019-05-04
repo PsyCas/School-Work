@@ -27,10 +27,11 @@ int main(int argc, char **argv){
     
     srand(time(0));
     int counter = 0;
-    // while (true) {
-    //     const int random_variable = rand() % maximum_value + 1;
-    //     cout << random_variable << endl;
-    // }
+    while (counter < N) {
+        const int random_variable = rand() % N + 1;
+        cout << random_variable << endl;
+        counter++;
+    }
 
 
     return 0;
