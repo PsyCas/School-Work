@@ -15,7 +15,7 @@ DisjSets::DisjSets( int numElements ) : s( numElements, -1 )
  * root1 is the root of set 1.
  * root2 is the root of set 2.
  */
-void DisjSets::unionSets( int root1, int root2 )
+int DisjSets::unionSets( int root1, int root2, int N )
 {
     if( s[ root2 ] < s[ root1 ] )  // root2 is deeper
         s[ root1 ] = root2;        // Make root2 new root
@@ -25,6 +25,8 @@ void DisjSets::unionSets( int root1, int root2 )
             --s[ root1 ];          // Update height if same
         s[ root2 ] = root1;        // Make root1 new root
     }
+
+    return getEdgeNum();
 }
 
 
@@ -48,7 +50,7 @@ int DisjSets::find( int x ) const
  * Return the set containing x.
  */
 int DisjSets::find( int x )
-{
+{   
     if( s[ x ] < 0 )
         return x;
     else

@@ -26,7 +26,20 @@ class DisjSets
 
     int find( int x ) const;
     int find( int x );
-    void unionSets( int root1, int root2 );
+    int unionSets( int root1, int root2, int N );
+
+    vector<int> getVec(){
+      return s;
+    }
+
+    int getEdgeNum(){
+      int counter = 0;
+      for(int number: s){
+        if(number < 0) ++counter;
+      }
+
+      return counter;
+    }
 
   private:
     vector<int> s;
