@@ -129,7 +129,7 @@ int main(int argc, char **argv){
     averageOutDegree = averageOutDegree/ graph.size();
 
     // displaying the results
-    cout << "The total number of edges is: " << numberOfEdges << endl;
+    cout << "The total number of edges are: " << numberOfEdges << endl;
     cout << "The smallest out degree is: " << smallestOutDegree << endl;
     cout << "The largest out degree is: " << largestOutDegree << endl;
     cout << "The average out degree is: " << averageOutDegree << endl;
