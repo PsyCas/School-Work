@@ -5,7 +5,6 @@
 #include <climits> 
 #include <stack>
 #include <iomanip>
-#include <cctype>
 
 #include "BinaryHeap.h"
 
