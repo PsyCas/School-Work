@@ -1,3 +1,11 @@
+/*
+ * disjoint_sets.cc
+ * Modified by: Parakram Basnet
+ * Modification:
+ *              1) In function unionSets, added third parameter N that counts the number of sets in vector "s"
+*/
+
+
 #include "disjoint_sets.h"
 
 /**

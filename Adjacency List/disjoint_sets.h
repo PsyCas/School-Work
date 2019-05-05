@@ -1,3 +1,11 @@
+// disjoint_sets.h
+// Modified by: Parakram Basnet
+// Modification: Added include statement for disjoint_sets.cc as
+// my compiler was having issues importing it through the header file.
+
+/******* In case of a compile time error, remove #include "disjoint_sets.cc" and try again *******/ 
+
+
 #ifndef DISJ_SETS_H
 #define DISJ_SETS_H
 
@@ -28,22 +36,9 @@ class DisjSets
     int find( int x );
     int unionSets( int root1, int root2, int N );
 
-    vector<int> getVec(){
-      return s;
-    }
-
-    int getEdgeNum(){
-      int counter = 0;
-      for(int number: s){
-        if(number < 0) ++counter;
-      }
-
-      return counter;
-    }
-
   private:
     vector<int> s;
 };
 
-#include "disjoint_sets.cc"
+#include "disjoint_sets.cc"   // added this line 
 #endif

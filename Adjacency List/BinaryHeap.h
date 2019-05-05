@@ -1,3 +1,10 @@
+// BinaryHeap.h
+// Modified by: Parakram Basnet
+
+// Creates a binary heap that is used to store vertices that have a nodename and a weight
+// Operator < uses "distance" as its key to maintain the property of the binary heap 
+
+
 #ifndef BINARY_HEAP_H
 #define BINARY_HEAP_H
 
@@ -117,7 +124,6 @@ class BinaryHeap
       { currentSize = 0; }
 
 
-    // need to overload this operator properly
     bool operator< (const Comparable &x) const{
         return (this->distance_ < x.distance_);
     }
