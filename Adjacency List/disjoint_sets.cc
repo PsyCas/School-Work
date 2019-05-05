@@ -17,16 +17,21 @@ DisjSets::DisjSets( int numElements ) : s( numElements, -1 )
  */
 int DisjSets::unionSets( int root1, int root2, int N )
 {
-    if( s[ root2 ] < s[ root1 ] )  // root2 is deeper
-        s[ root1 ] = root2;        // Make root2 new root
+    if( s[ root2 ] < s[ root1 ] ){  // root2 is deeper
+        if(s[root1] < 0) N-=1;
+        s[ root1 ] = root2;
+        return N;      
+    }  // Make root2 new root
     else
     {
-        if( s[ root1 ] == s[ root2 ] )
+        if( s[ root1 ] == s[ root2 ] ){
+            if(s[root1] == 0) N += 1;
             --s[ root1 ];          // Update height if same
+        }
+        if(s[root2] < 0) N -= 1;
         s[ root2 ] = root1;        // Make root1 new root
+        return N;
     }
-
-    return getEdgeNum();
 }
 
 

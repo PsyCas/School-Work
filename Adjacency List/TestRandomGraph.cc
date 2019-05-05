@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <sstream>
+#include <climits>
 
 #include "ListElement.h"
 #include "disjoint_sets.h"
@@ -10,53 +11,15 @@
 using namespace std;
 
 void combineSets(DisjSets &newSet, int &N, const int &first, const int &second){
-
-    cout << "First Index: "<<  first -1  << endl;
-    cout << "Second Index: "<< second -1  << endl;
-
-
-    // // cout << "First: " << newSet.find(first) << endl; 
-    // // cout << "Second: " << newSet.find(second) << endl;
-    vector<int> printVec = newSet.getVec();
-    for(int num: printVec){
-        cout << num << " ";
-    }
-    cout << endl;
-
-    // // cout << "0: " << newSet.find(0) << endl; 
-    // // cout << "1: " << newSet.find(1) << endl; 
-    // // cout << "2: " << newSet.find(2) << endl; 
-    // // cout << "3: " << newSet.find(3) << endl; 
-    // // cout << "4: " << newSet.find(4) << endl; 
-    // // cout << "5: " << newSet.find(5) << endl; 
-
     N = newSet.unionSets(first-1, second-1, N);
-
-    printVec = newSet.getVec();
-    for(int num: printVec){
-        cout << num << " ";
-    }
-    cout << endl<< endl;
-
-    cout << "The value of N is: " << N << endl;
-
-    // N = newSet.getEdgeNum();
-
 }
 
 bool addEdges(vector<ListElement<int>> &graph, const int &first,const int &second){
-
-    // cout << "First: " << graph[first -1].getElementName() << "  ";
-    // cout << "First: " << first << endl;
-
-    // cout << "Second: " << graph[second -1].getElementName() << "  ";
-    // cout << "Second: " << second <<  endl << endl;
 
     bool isAdded = false;
 
     if(first != second){
 
-        // index for the number being added is -1 the numbers generated
         if(!graph[first-1].checkConnection(second)){
             graph[first-1].addElement(second, 1);
             isAdded = true;
@@ -73,6 +36,7 @@ bool addEdges(vector<ListElement<int>> &graph, const int &first,const int &secon
 
 
 int main(int argc, char **argv){
+
     // error handling for when the command is incomplete
     if(argc != 2){
         cout << "To implement, type: " << argv[0] << " <Maximum_number_of_nodes>";
@@ -99,24 +63,44 @@ int main(int argc, char **argv){
 
 
     srand(time(0));
-    int counter = N;    // limiter 
+    int counter = N;        // copy of N
+    int numberOfEdges = 0; 
 
-    while (N != 1) {           // while (N != 1)
+    while (N != 1) {
 
-        // cout << N << " ";
         const int first = rand() % counter + 1;    
         const int second = rand() % counter + 1;
         
 
         bool isAdded = addEdges(graph, first, second);
-        if(isAdded) combineSets(newSet, N, first, second); 
+        if(isAdded){
+            combineSets(newSet, N, first, second);
+            numberOfEdges++;
+        }  
     }
 
+    int smallestOutDegree = INT_MAX, largestOutDegree = INT_MIN;
+    double averageOutDegree = 0;
+    
     // displays individual relationships in the list
     for(size_t i = 0; i < graph.size(); ++i){
-        graph[i].displayList();
+        
+        int outDegree = graph[i].getListSize();
+        averageOutDegree += outDegree;
+
+        if(outDegree < smallestOutDegree) smallestOutDegree = outDegree;
+        if(outDegree > largestOutDegree) largestOutDegree = outDegree;
+
+        // *********** Uncomment this to display all the adjacent relationships ****************
+        // graph[i].displayList(); 
     }
 
+    averageOutDegree = averageOutDegree/ graph.size();
+
+    cout << "The total number of edges is: " << numberOfEdges << endl;
+    cout << "The smallest out degree is: " << smallestOutDegree << endl;
+    cout << "The largest out degree is: " << largestOutDegree << endl;
+    cout << "The average out degree is: " << averageOutDegree << endl;
 
     return 0;
 }
