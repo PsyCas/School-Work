@@ -52,10 +52,9 @@ $(PROGRAM_2): $(ALL_OBJ2)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(ALL_OBJ2) $(INCLUDES) $(LIBS_ALL)
 
 #Compiling all
-
 all: 	
-		# make $(PROGRAM_0)
-		# make $(PROGRAM_1)
+		make $(PROGRAM_0)
+		make $(PROGRAM_1)
 		make $(PROGRAM_2)
 
 
@@ -65,14 +64,8 @@ runCreateGraphTest:
 runFindPath: 	
 		./$(PROGRAM_1) query_words.txt <Starting Vertex>
 
-run1double: 	
+runRandomGraph: 	
 		./$(PROGRAM_2) <Maximum_number_of_nodes>
-
-# run2short: 	
-# 		./$(PROGRAM_1) document1_short.txt wordsEn.txt
-
-# run2: 	
-# 		./$(PROGRAM_1) document1.txt wordsEn.txt
 
 
 #Clean obj files

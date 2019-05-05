@@ -5,6 +5,7 @@
 #include <climits> 
 #include <stack>
 #include <iomanip>
+#include <cctype>
 
 #include "BinaryHeap.h"
 
@@ -55,7 +56,12 @@ void printPaths(vector<Vertex> *graphPtr, const string &startingPoint){
             pathStack.pop();
         }
 
-        cout << finalOp << "Cost: " << (*graphPtr)[i].distance_ << setprecision(1) << fixed << "." << endl;
+        if((*graphPtr)[i].distance_ == INT_MAX){
+            cout << finalOp << "Cost: " << (*graphPtr)[i].distance_ << setprecision(1) << fixed << ". NO PATH" << endl;            
+        }
+        else{
+            cout << finalOp << "Cost: " << (*graphPtr)[i].distance_ << setprecision(1) << fixed << "." << endl;
+        }
     }
 
 }
