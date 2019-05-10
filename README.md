@@ -6,3 +6,4 @@
 3. First bits from Freshmen year: Code from the first year of college.
 4. Hashing: Using Hash Table with linear, quadratic and double hash probing techniques to create a simple spell checker.
 5. Adjacency List: Creates a graphical representation using adjacency lists and implements Dijkstra's algorithm to find the shortest paths.
+6. Mastermind: Uses genetic algorithm to play the popular board game - Mastermind
