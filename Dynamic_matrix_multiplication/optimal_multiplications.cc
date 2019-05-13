@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void read_dimensions(const string &dimensions_file, vector<int>& dimensions){
+void readDimensions(const string &dimensions_file, vector<int>& dimensions){
 
     ifstream fin(dimensions_file);
     int dimensions_number = 0;
@@ -25,9 +25,11 @@ int main(int argc, char** argv){
     cout <<"The input file name is: " << dimensions_file << endl << endl;
 
     vector<int> dimensions;
-    read_dimensions(dimensions_file, dimensions);
+    readDimensions(dimensions_file, dimensions);   // reads the dimensions from the input file.
 
-    for(int newInt: dimensions){
-        cout << newInt << " ";
-    }
+    // for(int newInt: dimensions){
+    //     cout << newInt << " ";
+    // }
+
+
 }
