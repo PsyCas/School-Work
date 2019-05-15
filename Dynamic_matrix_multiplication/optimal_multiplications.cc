@@ -42,8 +42,7 @@ void optMatrix( const vector<int> &c, matrix<long> &m, matrix<int> &lastChange )
             }
         }
     }
-
-    cout << "Optimal matrix multiplication is: " << m[1][m.numrows()-1] << endl;
+    cout << "Optimal matrix multiplication is: " << m[1][c.size()-1] << endl;
 }
 
 void readDimensions(const string &dimensions_file, vector<int>& dimensions){
@@ -73,7 +72,7 @@ int main(int argc, char** argv){
     //     cout << newInt << " ";
     // }
 
-    int n = dimensions.size() -1;
+    int n = dimensions.size();
 
     matrix<long> m(n, n);
     matrix<int> lastChange(n, n);
