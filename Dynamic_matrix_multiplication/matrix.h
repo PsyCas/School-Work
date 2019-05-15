@@ -6,8 +6,8 @@
 using namespace std;
 
 template <typename Object>
-
 class matrix{
+    
     public:
         
         matrix( int rows, int cols ) : array( rows )

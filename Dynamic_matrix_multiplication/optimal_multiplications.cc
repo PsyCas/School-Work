@@ -3,6 +3,8 @@
 #include <vector>
 #include <climits> 
 
+#include "matrix.h"
+
 using namespace std;
 
 /**
@@ -40,6 +42,8 @@ void optMatrix( const vector<int> &c, matrix<long> &m, matrix<int> &lastChange )
             }
         }
     }
+
+    cout << "Optimal matrix multiplication is: " << m[1][m.numrows-1] << endl;
 }
 
 void readDimensions(const string &dimensions_file, vector<int>& dimensions){
@@ -69,5 +73,11 @@ int main(int argc, char** argv){
     //     cout << newInt << " ";
     // }
 
+    int n = dimensions.size() -1;
+
+    matrix<long> m(n, n);
+    matrix<int> lastChange(n, n);
+
+    optMatrix(dimensions, m, lastChange)
     
 }
