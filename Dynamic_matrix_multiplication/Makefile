@@ -29,8 +29,8 @@ LIBS_ALL =  -L/usr/lib -L/usr/local/lib $(MATH_LIBS)
 
 
 #ZEROTH PROGRAM
-ALL_OBJ0= optimal_multplications.o
-PROGRAM_0= optimal_multplications
+ALL_OBJ0= optimal_multiplications.o
+PROGRAM_0= optimal_multiplications
 $(PROGRAM_0): $(ALL_OBJ0)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(ALL_OBJ0) $(INCLUDES) $(LIBS_ALL)
 
