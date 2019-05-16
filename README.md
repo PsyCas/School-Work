@@ -7,3 +7,4 @@
 4. Hashing: Using Hash Table with linear, quadratic and double hash probing techniques to create a simple spell checker.
 5. Adjacency List: Creates a graphical representation using adjacency lists and implements Dijkstra's algorithm to find the shortest paths.
 6. Mastermind: Uses genetic algorithm to play the popular board game - Mastermind
+7. Dynamic_matrix_multiplication: Uses dynamic programming to figure out the optimal way to multiply matrices
