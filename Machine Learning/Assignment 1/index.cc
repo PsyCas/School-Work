@@ -151,7 +151,6 @@ void normalizeFeatures(vector<vector<float>> &data){
             float denominator =  minMaxVal[j].first - minMaxVal[j].second;
 
             data[i][j] = numerator/denominator; 
-
         }
     }
 }
@@ -202,7 +201,7 @@ int main(){
     data.push_back(vector<float> {6.0,2.2,5.0,1.4,'A'});
     data.push_back(vector<float> {6.9,3.2,5.7,9.3,'B'});
     data.push_back(vector<float> {5.6,2.2,4.6,2.0,'C'});
-    data.push_back(vector<float> {5.0,2.8,4.6,0.7,'X'});    // new instance that has an unknown class
+    data.push_back(vector<float> {5.0,2.8,4.6,0.7,'X'});    // new instance that has an unknown class and will be predicted by kNN
 
     
     printDataValues(data);
