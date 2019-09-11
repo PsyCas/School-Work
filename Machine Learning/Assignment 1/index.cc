@@ -14,8 +14,6 @@ void findEuclideanDistance(vector<vector<float>> &data, int kVal){
 
     for(size_t i = 0; i < data.size() - 1; i++){
         float distVal = pow((data[i][0] - newInstance[0]),2) + pow((data[i][1] - newInstance[1]),2) + pow((data[i][2] - newInstance[2]),2) + pow((data[i][3] - newInstance[3]),2); 
-        // cout << "distance: " << distVal << endl;
-        // cout << "data: " << data[i][4] << endl;
         distVal = sqrt(distVal);
         distances.push_back(pair<float, vector<float>> (distVal, data[i]));
     }
