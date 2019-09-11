@@ -3,26 +3,35 @@
 #include <climits>
 #include <cmath>
 #include <map>
+#include <algorithm>
 
 using namespace std;
 
 void findEuclideanDistance(vector<vector<float>> &data, int kVal){
 
-    map<float, vector<float>> distances;
+    vector<pair<float, vector<float>>> distances;
     vector<float> newInstance = data[data.size() - 1];
 
     for(size_t i = 0; i < data.size() - 1; i++){
         float distVal = pow((data[i][0] - newInstance[0]),2) + pow((data[i][1] - newInstance[1]),2) + pow((data[i][2] - newInstance[2]),2) + pow((data[i][3] - newInstance[3]),2); 
         // cout << "distance: " << distVal << endl;
         // cout << "data: " << data[i][4] << endl;
-        distances.insert(pair<float, vector<float>> (distVal, data[i]));
+        distVal = sqrt(distVal);
+        distances.push_back(pair<float, vector<float>> (distVal, data[i]));
     }
+
+    sort(distances.begin(), distances.end());
 
     int counter = 0;
     int aCount = 0, bCount = 0, cCount = 0;
 
     cout << "EUCLIDEAN DISTANCE: " << endl;
     cout << "==========================================" << endl << endl;
+
+    
+    for (auto line: distances){
+        cout << "Distance : " << line.first << "\tClass: " << char(line.second[4]) << endl;
+    }
 
     cout << "The k closest distances to the new example are: " << endl << endl;
     for(auto distance: distances){
@@ -59,21 +68,28 @@ void findEuclideanDistance(vector<vector<float>> &data, int kVal){
 
 void findManhattanDistance(vector<vector<float>> &data, int kVal){
 
-    map<float, vector<float>> distances;
+    vector<pair<float, vector<float>>> distances;
     vector<float> newInstance = data[data.size() - 1];
 
     for(size_t i = 0; i < data.size() - 1; i++){
         float distVal = abs(data[i][0] - newInstance[0]) + abs(data[i][1] - newInstance[1]) + abs(data[i][2] - newInstance[2]) + abs(data[i][3] - newInstance[3]); 
         // cout << "distance: " << distVal << endl;
         // cout << "data: " << data[i][4] << endl;
-        distances.insert(pair<float, vector<float>> (distVal, data[i]));
+        distances.push_back(pair<float, vector<float>> (distVal, data[i]));
     }
+
+    
+    sort(distances.begin(), distances.end());
 
     int counter = 0;
     int aCount = 0, bCount = 0, cCount = 0;
 
     cout << "MANHATTAN DISTANCE: " << endl;
     cout << "==========================================" << endl << endl;
+
+    for (auto line: distances){
+        cout << "Distance : " << line.first << "\tClass: " << char(line.second[4]) << endl;
+    }
 
     cout << "The k closest distances to the new example are: " << endl << endl;
     for(auto distance: distances){
@@ -166,7 +182,7 @@ void printDataValues(const vector<vector<float>> &data){
 
     for(auto line: data){
         string value = "";
-        if(char(line[4]) != 'X'){
+        // if(char(line[4]) != 'X'){
             for(float lineData: line){
                 if(lineData > 60){
                     value = value + char(lineData);
@@ -176,7 +192,7 @@ void printDataValues(const vector<vector<float>> &data){
                 }
             }
             cout << value << endl;
-        }
+        // }
         
     }
 
@@ -215,6 +231,7 @@ int main(){
 
 
     normalizeFeatures(data);
+    printDataValues(data);
     
     findEuclideanDistance(data, kVal);
     findManhattanDistance(data, kVal);
