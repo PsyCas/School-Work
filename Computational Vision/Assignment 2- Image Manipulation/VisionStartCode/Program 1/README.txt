@@ -40,6 +40,6 @@ Convert Grayscale Image to Binary Image
 
 4) Input Files and Output Files given,
 
-	Input 	:	There are three input examples in this folder, "objects.pgm", "many_objects_1.pgm" and "many_objects_2.pgm".
-	Output	:	There are three outputs in the Results folder. They are, "objectsBinary.pgm", "many_objects_1Binary.pgm" and "many_objects_2Binary.pgm".
+	Input 	:	There are four input examples in this folder, "objects.pgm", "many_objects_1.pgm", "many_objects_2.pgm" and "two_objects.pgm".
+	Output	:	There are four outputs in the Results folder. They are, "objectsBinary.pgm", "many_objects_1Binary.pgm", "many_objects_2Binary.pgm" and "two_objectsBinary.pgm".
 			* All the output files are generated with the threshold 127.

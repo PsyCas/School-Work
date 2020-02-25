@@ -40,16 +40,25 @@ $(PROGRAM_NAME): $(Cpp_OBJ)
 
 #Assignment Part 1 (BinaryImages)
 
-Cpp_OBJ1=image.o p1.o
+Cpp_OBJ1= image.o p1.o
 
 PROGRAM_NAME1=p1
 
 $(PROGRAM_NAME1): $(Cpp_OBJ1)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ1) $(INCLUDES) $(LIBS_ALL)
 
+#Assignment Part 2 (Labeling and Segmenting Binary Images)
+
+Cpp_OBJ2= image.o p2.o
+
+PROGRAM_NAME2=p1
+
+$(PROGRAM_NAME2): $(Cpp_OBJ2)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ2) $(INCLUDES) $(LIBS_ALL)
+
 
 all: 
-	make $(PROGRAM_NAME) $(PROGRAM_NAME1) 
+	make $(PROGRAM_NAME) $(PROGRAM_NAME1) $(PROGRAM_NAME2) 
 
 
 clean:
