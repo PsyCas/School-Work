@@ -61,5 +61,6 @@ int main(int argc, char **argv){
         return 0;
     }
 
-    cout << "completed successfully!\n";
+    cout << "Image Manipulation Completed Successfully!\n";
+    cout << "==========================================\n";
 }
