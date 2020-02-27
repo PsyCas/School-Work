@@ -51,7 +51,7 @@ $(PROGRAM_NAME1): $(Cpp_OBJ1)
 
 Cpp_OBJ2= image.o p2.o
 
-PROGRAM_NAME2=p1
+PROGRAM_NAME2=p2
 
 $(PROGRAM_NAME2): $(Cpp_OBJ2)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ2) $(INCLUDES) $(LIBS_ALL)
