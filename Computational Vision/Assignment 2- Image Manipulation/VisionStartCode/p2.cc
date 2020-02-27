@@ -38,18 +38,17 @@ void sequentialLabeling(Image &inputImage){
             // object exists
             if( pixel == 255){
                 // cout << "(" << i << ", " << j << ") " << endl;
-                // cout << "(" << i << ", " << j << ") " << pixel << " " << upperPixel << " " << leftPixel << endl;
-
+                cout << "(" << i << ", " << j << ") " << pixel << " " << upperPixel << " " << leftPixel << endl;
 
                 // pixel above is labeled
                 if(upperPixel != 0 && upperPixel != 255){
-                    // cout << "cond1" << endl;   
-                    inputImage.SetPixel(i, j, labelCounter);
+                    cout << "cond1" << endl;   
+                    inputImage.SetPixel(i, j, upperPixel);
 
                     // both above and left pixel are labeled 
                     if(leftPixel != 0 && leftPixel != 255 && leftPixel != upperPixel){  
-                        // cout << "cond1 if" << endl;
-                        int labelIndex = labelCounter-1;        //if label is 1, index is 0 and so on...
+                        cout << "cond1 if" << endl;
+                        int labelIndex = upperPixel-1;        //if label is 1, index is 0 and so on...
                         equivalencyTable[labelIndex].push_back(leftPixel);
                         // printTable(equivalencyTable);
                     }
@@ -57,19 +56,16 @@ void sequentialLabeling(Image &inputImage){
                 }
                 // left pixel is labeled
                 else if (leftPixel != 0 && leftPixel != 255){
-                    // cout << "cond2 elif" << " leftpx- " << leftPixel << endl;
-                    inputImage.SetPixel(i, j, labelCounter);
+                    cout << "cond2 elif" << " leftpx- " << leftPixel << endl;
+                    inputImage.SetPixel(i, j, leftPixel);
                 }
                 // neither top nor left pixel are labeled
                 else{
-                    cout << "(" << i << ", " << j << ") " << pixel << " " << upperPixel << " " << leftPixel << endl;
-
+                    // cout << "(" << i << ", " << j << ") " << pixel << " " << upperPixel << " " << leftPixel << endl;
+                    cout << "else"<< endl;
                     inputImage.SetPixel(i, j, labelCounter);
                     labelCounter++;
                     equivalencyTable.push_back(vector<int> {labelCounter});
-                    // printTable(equivalencyTable);
-                    // cout << "cond3 else, label updated to: " << labelCounter << endl;
-
                 }
             }
         }
@@ -79,21 +75,16 @@ void sequentialLabeling(Image &inputImage){
     // printTable(equivalencyTable);
 
     //second pass
-    // for(int i = 0; i < inputImage.num_rows(); ++i){
-    //     for(int j = 0; j < inputImage.num_columns(); ++j){
+    for(int i = 0; i < inputImage.num_rows(); ++i){
+        for(int j = 0; j < inputImage.num_columns(); ++j){
         
-    //         int pixel = inputImage.GetPixel(i, j);
-            
-    //         // precondition - no white (255) pixels
-    //         if(pixel != 0){
-    //             // the min label in the table will be the new label of the pixel
-    //             int minVal = *(std::min_element(equivalencyTable[pixel-1].begin(),equivalencyTable[pixel-1].end()));
-    //             if(minVal != pixel) {
-    //                 inputImage.SetPixel(i, j, minVal);
-    //             }
-    //         }
-    //     }
-    // }
+            int pixel = inputImage.GetPixel(i, j);
+            // precondition - no white (255) pixels
+            if(pixel != 0){
+                
+            }
+        }
+    }
 }
 
 
