@@ -62,6 +62,6 @@ all:
 
 
 clean:
-	(rm -f *.o; rm image_demo p1)
+	(rm -f *.o; rm image_demo p1 p2)
 
 (:

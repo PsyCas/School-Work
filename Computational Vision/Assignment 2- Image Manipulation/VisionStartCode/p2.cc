@@ -6,6 +6,37 @@
 using namespace std;
 using namespace ComputerVisionProjects;
 
+int findEquivalentLabel(const vector<vector<int>> table, const int &pixel){
+
+    int index = pixel - 1;
+    int newPixel = pixel;
+
+    for(int i = index-1; i >= 0; --i){
+        auto iter = find(table[i].begin(), table[i].end(), newPixel);
+        if(iter != table[i].end()){
+            newPixel = table[i][0];
+        } 
+    }
+
+    //second algorithm 
+    // bool flag = true;
+    // while(flag == true){
+    //     for(int i = 0; i < newPixel; i++){
+    //         auto iter = find(table[i].begin()+1, table[i].end(), newPixel);
+    //         if(iter != table[i].end()){
+    //             newPixel = table[i][0];
+    //             break;
+    //         }
+    //         else if(i == newPixel-1){
+    //             flag = false;
+    //         }
+    //     }
+    // }
+
+
+    return newPixel;
+}
+
 void printTable(const vector<vector<int>> table){
 
     for(int i = 0; i < table.size(); ++i){
@@ -38,31 +69,35 @@ void sequentialLabeling(Image &inputImage){
             // object exists
             if( pixel == 255){
                 // cout << "(" << i << ", " << j << ") " << endl;
-                cout << "(" << i << ", " << j << ") " << pixel << " " << upperPixel << " " << leftPixel << endl;
+                // cout << "(" << i << ", " << j << ") " << pixel << " " << upperPixel << " " << leftPixel << endl;
 
                 // pixel above is labeled
                 if(upperPixel != 0 && upperPixel != 255){
-                    cout << "cond1" << endl;   
+                    // cout << "cond1" << endl;   
                     inputImage.SetPixel(i, j, upperPixel);
 
-                    // both above and left pixel are labeled 
+                    // both above and left pixel are labeled different
                     if(leftPixel != 0 && leftPixel != 255 && leftPixel != upperPixel){  
-                        cout << "cond1 if" << endl;
+                        // cout << "cond1 if" << endl;
                         int labelIndex = upperPixel-1;        //if label is 1, index is 0 and so on...
-                        equivalencyTable[labelIndex].push_back(leftPixel);
+                        
+                        auto iter = find(equivalencyTable[labelIndex].begin(), equivalencyTable[labelIndex].end(), leftPixel); 
+                        if(iter == equivalencyTable[labelIndex].end()){
+                            equivalencyTable[labelIndex].push_back(leftPixel);
+                        } 
                         // printTable(equivalencyTable);
                     }
                     //unwritten else if condition means both left and up pixel have same lables.
                 }
                 // left pixel is labeled
                 else if (leftPixel != 0 && leftPixel != 255){
-                    cout << "cond2 elif" << " leftpx- " << leftPixel << endl;
+                    // cout << "cond2 elif" << " leftpx- " << leftPixel << endl;
                     inputImage.SetPixel(i, j, leftPixel);
                 }
                 // neither top nor left pixel are labeled
                 else{
                     // cout << "(" << i << ", " << j << ") " << pixel << " " << upperPixel << " " << leftPixel << endl;
-                    cout << "else"<< endl;
+                    // cout << "else"<< endl;
                     inputImage.SetPixel(i, j, labelCounter);
                     labelCounter++;
                     equivalencyTable.push_back(vector<int> {labelCounter});
@@ -70,9 +105,9 @@ void sequentialLabeling(Image &inputImage){
             }
         }
     }
-    cout << endl;
-    
-    // printTable(equivalencyTable);
+    // cout << endl;
+    equivalencyTable.pop_back();
+    printTable(equivalencyTable);
 
     //second pass
     for(int i = 0; i < inputImage.num_rows(); ++i){
@@ -81,7 +116,11 @@ void sequentialLabeling(Image &inputImage){
             int pixel = inputImage.GetPixel(i, j);
             // precondition - no white (255) pixels
             if(pixel != 0){
-                
+                // cout << "in label: " << pixel << endl; 
+                int label = findEquivalentLabel(equivalencyTable, pixel);
+                inputImage.SetPixel(i, j, label+10);
+                // cout << "out label: " << label << endl << endl; 
+
             }
         }
     }
