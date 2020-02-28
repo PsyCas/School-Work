@@ -11,31 +11,23 @@ using namespace ComputerVisionProjects;
 // print the values in the database to std output
 void printDatabase(const vector<vector<double>> &databaseVec){
 
-    cout << "The values in the database are as follows:" << endl;
-    // cout << "Label\t\t" << 
-    //         "Area\t\t" << 
-    //         "Row\t\t" << 
-    //         "Col\t\t" << 
-    //         "a\t\t\t" << 
-    //         "b\t\t\t" << 
-    //         "c\t\t       "<< 
-    //         "Theta\t\t" << 
-    //         "Moment\t\t" << 
-    //         "Orient\t\t" << endl;
+    cout << "\nThe values in the database are as follows:" << endl;
+    cout << "==========================================" << endl << endl;
 
     for(auto i: databaseVec){
         cout << std::fixed;
+        cout << "Label --> " << i[0] << endl;
+        cout << "Area --> " << i[1] << endl;
+        cout << "Row --> " << i[2] << endl;
+        cout << "Col --> " << i[3] << endl;
         cout << "a --> " << i[4] << endl;
         cout << "b --> " << i[5] << endl;
         cout << "c --> " << i[6] << endl;
-        cout << "theta --> " << i[7] << endl;
-        cout << "moment --> " << i[8] << endl;
+        cout << "Theta --> " << i[7] << endl;
+        cout << "Moment --> " << i[8] << endl;
+        cout << "Orientation --> " << i[9] << endl;
 
-
-        // for(auto j: i){
-            // cout << j << "\t\t";
-        // }
-        cout << endl;
+        cout << endl << endl;
     }
 }
 
@@ -105,9 +97,7 @@ void findMoment(Image& inputImage, vector<vector<double>> &databaseVec){
     for(int i = 0; i < databaseVec.size(); ++i){
         databaseVec[i][5] *= 2; // 2 * sum. Check formula for reference
 
-        int temp = (databaseVec[i][5])/(databaseVec[i][4] - databaseVec[i][6]);
-        databaseVec[i][7] = atan(temp)/2 * (180/M_PI);
-
+        databaseVec[i][7] = atan2(databaseVec[i][5], (databaseVec[i][4] - databaseVec[i][6]))/2;
         databaseVec[i][8] = databaseVec[i][4] * pow(sin(databaseVec[i][7]),2) - databaseVec[i][5] * sin(databaseVec[i][7]) * cos(databaseVec[i][7]) + databaseVec[i][6] * pow(cos(databaseVec[i][7]),2);         
     }                       
 
