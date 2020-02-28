@@ -130,7 +130,6 @@ void sequentialLabeling(Image &inputImage){
         setCounter++;
     }
     cout<< endl;
-
 }
 
 
