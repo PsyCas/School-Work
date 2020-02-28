@@ -109,15 +109,8 @@ void drawLineSegment(Image& inputImage, vector<vector<double>> &databaseVec, con
     for(auto i: databaseVec){
         if(i[1] == 1) continue;
 
-        double newX =  (radius*sin((90*M_PI/180)-i[7]));
-        double newY =  (radius*cos((90*M_PI/180)-i[7]));
-
-        cout << "before adding: " << newX << " " << newY << endl;
-        newX += i[2];
-        newY += i[3];
-
-        cout << "oldX: " << i[2] << " oldY: " << i[3] << " angle: " << i[7] <<  endl;
-        cout << "newX: " << newX << " newY: " << newY << " angle: " << i[7]* 180/M_PI << endl << endl;
+        double newX = i[2]+(radius*cos(i[7]));
+        double newY = i[3] +(radius*sin(i[7]));
         
         int colorVal = i[0] > 127? 68: 235;
         DrawLine(i[2], i[3], newX, newY, colorVal, &inputImage);
