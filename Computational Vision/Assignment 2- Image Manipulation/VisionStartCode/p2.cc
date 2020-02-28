@@ -118,7 +118,7 @@ void sequentialLabeling(Image &inputImage){
             // precondition - no white (255) pixels
             if(pixel != 0){
                 int label = findEquivalentLabel(equivalencyTable, pixel);
-                inputImage.SetPixel(i, j, label+10);
+                inputImage.SetPixel(i, j, label + 25);
                 labelDups.insert(label);
             }
         }
@@ -137,7 +137,7 @@ void sequentialLabeling(Image &inputImage){
 int main(int argc, char **argv){
 
     if (argc!=3) {
-        cout << "Usage: %s <input image> <output binary image>\n" << argv[0] << endl;
+        cout << "Usage: %s <input binary image> <output labeled image>\n" << argv[0] << endl;
         return 0;
     }
 
