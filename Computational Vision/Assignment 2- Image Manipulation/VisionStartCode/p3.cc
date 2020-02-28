@@ -23,7 +23,8 @@ void printDatabase(const vector<vector<double>> &databaseVec){
         cout << "a --> " << i[4] << endl;
         cout << "b --> " << i[5] << endl;
         cout << "c --> " << i[6] << endl;
-        cout << "Theta --> " << i[7] << endl;
+        cout << "Theta (Rad)--> " << i[7] << endl;
+        cout << "Theta (Degrees) --> " << i[7] * (180/M_PI) << endl;
         cout << "Moment --> " << i[8] << endl;
         cout << "Orientation --> " << i[9] << endl;
 
@@ -104,6 +105,25 @@ void findMoment(Image& inputImage, vector<vector<double>> &databaseVec){
     return;
 }
 
+void drawLineSegment(Image& inputImage, vector<vector<double>> &databaseVec, const int& radius){
+    for(auto i: databaseVec){
+        if(i[1] == 1) continue;
+
+        double newX =  (radius*sin((90*M_PI/180)-i[7]));
+        double newY =  (radius*cos((90*M_PI/180)-i[7]));
+
+        cout << "before adding: " << newX << " " << newY << endl;
+        newX += i[2];
+        newY += i[3];
+
+        cout << "oldX: " << i[2] << " oldY: " << i[3] << " angle: " << i[7] <<  endl;
+        cout << "newX: " << newX << " newY: " << newY << " angle: " << i[7]* 180/M_PI << endl << endl;
+        
+        int colorVal = i[0] > 127? 68: 235;
+        DrawLine(i[2], i[3], newX, newY, colorVal, &inputImage);
+    }
+}
+
 void createAndSaveDatabase(Image& inputImage){
 
     /* Indices:
@@ -122,6 +142,7 @@ void createAndSaveDatabase(Image& inputImage){
         
     findCenter(inputImage, databaseVec);
     findMoment(inputImage, databaseVec);
+    drawLineSegment(inputImage, databaseVec, 35);
     printDatabase(databaseVec);
 
     return;
@@ -151,10 +172,10 @@ int main(int argc, char **argv){
     createAndSaveDatabase(an_image);
 
     // saving the processed result to output file.
-    // if (!WriteImage(output_file, an_image)){
-    //     cout << "Can't write to file " << output_file << endl;
-    //     return 0;
-    // }
+    if (!WriteImage(output_file, an_image)){
+        cout << "Can't write to file " << output_file << endl;
+        return 0;
+    }
 
     cout << "\n\nImage Manipulation Completed Successfully!\n";
     cout << "==========================================\n\n";
