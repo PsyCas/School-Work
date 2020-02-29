@@ -1,9 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
+#include <fstream>
 #include "image.h"
-
-# define M_PI           3.14159265358979323846  /* pi */
 
 using namespace std;
 using namespace ComputerVisionProjects;
@@ -15,22 +14,11 @@ void printDatabase(const vector<vector<double>> &databaseVec){
     cout << "==========================================" << endl << endl;
 
     for(auto i: databaseVec){
-        cout << std::fixed;
-        cout << "Label --> " << i[0] << endl;
-        cout << "Area --> " << i[1] << endl;
-        cout << "Row --> " << i[2] << endl;
-        cout << "Col --> " << i[3] << endl;
-        cout << "a --> " << i[4] << endl;
-        cout << "b --> " << i[5] << endl;
-        cout << "c --> " << i[6] << endl;
-        cout << "Theta (Rad)--> " << i[7] << endl;
-        cout << "Theta (Degrees) --> " << i[7] * (180/M_PI) << endl;
-        cout << "Moment --> " << i[8] << endl;
-        cout << "Orientation --> " << i[9] << endl;
-
-        cout << endl << endl;
+        if(i[1] == 1) continue;
+        cout << fixed << i[0] << " " <<i[2] << " " <<i[3] << " " <<i[8] << " " << i[7] << "\n";
     }
-}
+    cout << endl;
+}   
 
 int getIndexFromLabel(const vector<vector<double>> &databaseVec, const int &pixel){
 
@@ -42,7 +30,7 @@ int getIndexFromLabel(const vector<vector<double>> &databaseVec, const int &pixe
 
 int createIndexForLabel(vector<vector<double>> &databaseVec, const int &pixel){
     double temp = pixel;
-    databaseVec.push_back(vector<double> {temp, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+    databaseVec.push_back(vector<double> {temp, 0, 0, 0, 0, 0, 0, 0, 0});
     return databaseVec.size()-1;
 }
 
@@ -129,7 +117,6 @@ void createAndSaveDatabase(Image& inputImage){
         6: c
         7: Theta
         8: Minimum Moment of Inertia
-        9: Orientation (angle in degrees) 
     */
     vector<vector<double>> databaseVec; 
         
@@ -138,6 +125,12 @@ void createAndSaveDatabase(Image& inputImage){
     drawLineSegment(inputImage, databaseVec, 35);
     printDatabase(databaseVec);
 
+    ofstream fout("db.txt");
+    for(auto i: databaseVec){
+        if(i[1] == 1) continue;
+        fout << fixed << i[0] << " " <<i[2] << " " <<i[3] << " " <<i[8] << " " << i[7] << "\n";
+    }
+    fout.close();
     return;
 }
 
