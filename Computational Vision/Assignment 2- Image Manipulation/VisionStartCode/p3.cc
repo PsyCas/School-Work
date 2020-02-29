@@ -105,7 +105,7 @@ void drawLineSegment(Image& inputImage, vector<vector<double>> &databaseVec, con
     }
 }
 
-void createAndSaveDatabase(Image& inputImage){
+void createAndSaveDatabase(Image& inputImage, const string& database){
 
     /* Indices:
         0: Label
@@ -124,8 +124,8 @@ void createAndSaveDatabase(Image& inputImage){
     findMoment(inputImage, databaseVec);
     drawLineSegment(inputImage, databaseVec, 35);
     printDatabase(databaseVec);
-
-    ofstream fout("db.txt");
+    
+    ofstream fout(database);
     for(auto i: databaseVec){
         if(i[1] == 1) continue;
         fout << fixed << i[0] << " " <<i[2] << " " <<i[3] << " " <<i[8] << " " << i[7] << "\n";
@@ -138,14 +138,15 @@ void createAndSaveDatabase(Image& inputImage){
 
 int main(int argc, char **argv){
 
-    if (argc!=3) {
-        cout << "Usage: %s <input labeled image> <output image name>\n" << argv[0] << endl;
+    if (argc!=4) {
+        cout << "Usage: %s <input labeled image> <database filename> <output image name>\n" << argv[0] << endl;
         return 0;
     }
 
     // file names for input and output file.
     const string input_file(argv[1]);
-    const string output_file(argv[2]);
+    const string database_name(argv[2]);
+    const string output_file(argv[3]);
 
     // input validation for input file.
     Image an_image;
@@ -155,7 +156,7 @@ int main(int argc, char **argv){
     }
 
     //make function call
-    createAndSaveDatabase(an_image);
+    createAndSaveDatabase(an_image, database_name);
 
     // saving the processed result to output file.
     if (!WriteImage(output_file, an_image)){
