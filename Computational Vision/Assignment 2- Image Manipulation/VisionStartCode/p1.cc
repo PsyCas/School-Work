@@ -1,3 +1,14 @@
+/*
+Assignment 2 - Program 1
+
+Written by:  Parakram Basnet
+Instructor:  Ioannis Stamos
+Class	  :  Computational Vision 
+
+Convert Grayscale Image to Binary Image
+====================================================================================================================
+*/
+
 #include <iostream>
 #include <string>
 #include "image.h"
@@ -5,6 +16,7 @@
 using namespace std;
 using namespace ComputerVisionProjects;
 
+//function that takes a greyscale image and a threshold as input and converts it to a binary image 
 void convertToBinary(Image &input_image, const int &threshold){
 
     for(int i = 0; i < input_image.num_rows(); ++i){
@@ -14,7 +26,7 @@ void convertToBinary(Image &input_image, const int &threshold){
     }
 }
 
-
+// main function that reads names from stdinput, makes calls to helper functions and reads and writes images. 
 int main(int argc, char **argv){
   
     if (argc!=4) {

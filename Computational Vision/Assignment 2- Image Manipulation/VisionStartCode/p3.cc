@@ -1,3 +1,14 @@
+/*
+Assignment 2 - Program 3
+
+Written by:  Parakram Basnet
+Instructor:  Ioannis Stamos
+Class	  :  Computational Vision 
+
+Add Orientation to the Labeled Image
+====================================================================================================================
+*/
+
 #include <iostream>
 #include <vector>
 #include <math.h>
@@ -42,6 +53,7 @@ int createIndexForLabel(vector<vector<double>> &databaseVec, const int &pixel){
 // helper function that finds the center of the givem image. 
 void findCenter(const Image& inputImage, vector<vector<double>> &databaseVec){
 
+    //loop through each pixel
     for(int i = 0; i < inputImage.num_rows(); ++i){
         for(int j = 0; j < inputImage.num_columns(); ++j){
     
@@ -66,7 +78,8 @@ void findCenter(const Image& inputImage, vector<vector<double>> &databaseVec){
 
     return;
 }
-
+ 
+// function that finds the minimum moment of inertia
 void findMoment(Image& inputImage, vector<vector<double>> &databaseVec){
 
     for(int i = 0; i < inputImage.num_rows(); ++i){
@@ -95,10 +108,9 @@ void findMoment(Image& inputImage, vector<vector<double>> &databaseVec){
         databaseVec[i][7] = atan2(databaseVec[i][5], (databaseVec[i][4] - databaseVec[i][6]))/2;
         databaseVec[i][8] = databaseVec[i][4] * pow(sin(databaseVec[i][7]),2) - databaseVec[i][5] * sin(databaseVec[i][7]) * cos(databaseVec[i][7]) + databaseVec[i][6] * pow(cos(databaseVec[i][7]),2);         
     }                       
-
-    return;
 }
 
+// Function that draws a line representing the orientation of the object. 
 void drawLineSegment(Image& inputImage, vector<vector<double>> &databaseVec, const int& radius){
     for(auto i: databaseVec){
         if(i[1] == 1) continue;
@@ -111,6 +123,11 @@ void drawLineSegment(Image& inputImage, vector<vector<double>> &databaseVec, con
     }
 }
 
+// main function that creates and saves database and makes calls to helper functions to:
+//  find center
+//  find moment
+//  draw line
+//  print dataset
 void createAndSaveDatabase(Image& inputImage, const string& database){
 
     /* Indices:
@@ -125,23 +142,23 @@ void createAndSaveDatabase(Image& inputImage, const string& database){
         8: Minimum Moment of Inertia
     */
     vector<vector<double>> databaseVec; 
-        
+    
+    // calling helper functions
     findCenter(inputImage, databaseVec);
     findMoment(inputImage, databaseVec);
     drawLineSegment(inputImage, databaseVec, 35);
     printDatabase(databaseVec);
-    
+
+    // saving the output to file
     ofstream fout(database);
     for(auto i: databaseVec){
         if(i[1] == 1) continue;
         fout << fixed << i[0] << " " <<i[2] << " " <<i[3] << " " <<i[8] << " " << i[7]*180/M_PI << "\n";
     }
     fout.close();
-    return;
 }
 
-
-
+// main function that reads names from stdinput, makes calls to helper functions and reads and writes images. 
 int main(int argc, char **argv){
 
     if (argc!=4) {

@@ -1,3 +1,14 @@
+/*
+Assignment 2 - Program 2
+
+Written by:  Parakram Basnet
+Instructor:  Ioannis Stamos
+Class	  :  Computational Vision 
+
+Convert Binary Image to Labeled Image
+====================================================================================================================
+*/
+
 #include <iostream>
 #include <vector> 
 #include <set> 
@@ -7,6 +18,7 @@
 using namespace std;
 using namespace ComputerVisionProjects;
 
+// function that takes a label as input and searches in the equivalence table for the smallest possible label equivalent to it.
 int findEquivalentLabel(const vector<vector<int>> table, const int &pixel){
 
     int index = pixel - 1;
@@ -20,24 +32,24 @@ int findEquivalentLabel(const vector<vector<int>> table, const int &pixel){
     }
 
     //Alternate algorithm 
-    // bool flag = true;
-    // while(flag == true){
-    //     for(int i = 0; i < newPixel; i++){
-    //         auto iter = find(table[i].begin()+1, table[i].end(), newPixel);
-    //         if(iter != table[i].end()){
-    //             newPixel = table[i][0];
-    //             break;
-    //         }
-    //         else if(i == newPixel-1){
-    //             flag = false;
-    //         }
-    //     }
-    // }
-
+    /*bool flag = true;
+    while(flag == true){
+        for(int i = 0; i < newPixel; i++){
+            auto iter = find(table[i].begin()+1, table[i].end(), newPixel);
+            if(iter != table[i].end()){
+                newPixel = table[i][0];
+                break;
+            }
+            else if(i == newPixel-1){
+                flag = false;
+            }
+        }
+    }*/
 
     return newPixel;
 }
 
+// prints the equivalence table
 void printTable(const vector<vector<int>> table){
 
     for(int i = 0; i < table.size(); ++i){
@@ -48,8 +60,11 @@ void printTable(const vector<vector<int>> table){
     }
 }
 
+// function that sequentially labels an image.
+// it visits every pixel, checks for labels in upper and left pixel. Then chooses the smallest as label and inserts the other into an equivalence table. 
 void sequentialLabeling(Image &inputImage){
 
+    // individual label counter
     int labelCounter = 1;
 
     // equivalency table where index [0] is the index label and [ 1-n ] are equivalent labels
@@ -106,8 +121,9 @@ void sequentialLabeling(Image &inputImage){
             }
         }
     }
-    equivalencyTable.pop_back();
+    equivalencyTable.pop_back(); // last element is excess
 
+    // to store and display final labels
     std::set<int> labelDups;
 
     //second pass
@@ -133,7 +149,7 @@ void sequentialLabeling(Image &inputImage){
 }
 
 
-
+// main function that reads names from stdinput, makes calls to helper functions and reads and writes images. 
 int main(int argc, char **argv){
 
     if (argc!=3) {

@@ -1,3 +1,14 @@
+/*
+Assignment 2 - Program 4
+
+Written by:  Parakram Basnet
+Instructor:  Ioannis Stamos
+Class	  :  Computational Vision 
+
+Recognize Images From Input Database
+====================================================================================================================
+*/
+
 #include <iostream>
 #include <vector>
 #include <math.h>
@@ -40,9 +51,13 @@ int createIndexForLabel(vector<vector<double>> &databaseVec, const int &pixel){
     return databaseVec.size()-1;
 }
 
-
+// function that recolors an object based on whether it was recognized or not.
+//  valid moment and orientation -> 255
+//  valid moment but different orientation --> 127
+//  not found --> 25 
 void recolorImage(Image& inputImage, vector<vector<double>> &databaseVec){
 
+    // visiting every pixel
     for(int i = 0; i < inputImage.num_rows(); ++i){
         for(int j = 0; j < inputImage.num_columns(); ++j){
     
@@ -63,6 +78,7 @@ void recolorImage(Image& inputImage, vector<vector<double>> &databaseVec){
     }
 }
 
+// Function that draws a line representing the orientation of the object. 
 void drawLineSegment(Image& inputImage, vector<vector<double>> &databaseVec, const int& radius){
 
     for(auto i: databaseVec){
@@ -106,6 +122,7 @@ void findCenter(const Image& inputImage, vector<vector<double>> &databaseVec){
     return;
 }
 
+// function that finds the minimum moment of inertia
 void findMoment(Image& inputImage, vector<vector<double>> &databaseVec){
 
     for(int i = 0; i < inputImage.num_rows(); ++i){
@@ -138,6 +155,8 @@ void findMoment(Image& inputImage, vector<vector<double>> &databaseVec){
     return;
 }
 
+// function that will extract data from the text document and compare it with the data extracted from the image.
+// after that, it sets conditions for similarity and checks it.
 void compareValues(Image& inputImage, vector<vector<double>> &databaseVec, const string& compareDatabase){
     
     vector<vector<double>> compareDatabaseVec;
@@ -188,6 +207,13 @@ void compareValues(Image& inputImage, vector<vector<double>> &databaseVec, const
     }
 }
 
+// main function that makes calls to helper functions to:
+//  find center
+//  find moment
+//  compare values
+//  recolor image
+//  draw line
+//  print dataset
 void compareImageAndDatabase(Image& inputImage, const string& database){
 
     /* Indices:
@@ -210,12 +236,10 @@ void compareImageAndDatabase(Image& inputImage, const string& database){
     recolorImage(inputImage, databaseVec);
     drawLineSegment(inputImage, databaseVec, 35);
     printDatabase(databaseVec);
-    
-    return;
 }
 
 
-
+// main function that reads names from stdinput, makes calls to helper functions and reads and writes images. 
 int main(int argc, char **argv){
 
     if (argc!=4) {
