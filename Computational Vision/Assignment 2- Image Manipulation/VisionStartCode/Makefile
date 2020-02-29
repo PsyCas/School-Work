@@ -61,14 +61,22 @@ PROGRAM_NAME3=p3
 $(PROGRAM_NAME3): $(Cpp_OBJ3)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ3) $(INCLUDES) $(LIBS_ALL)
 
+#Assignment Part 3 (Database)
+Cpp_OBJ4= image.o p4.o
+
+PROGRAM_NAME4=p4
+
+$(PROGRAM_NAME4): $(Cpp_OBJ4)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ4) $(INCLUDES) $(LIBS_ALL)
+
 
 
 
 all: 
-	make $(PROGRAM_NAME) $(PROGRAM_NAME1) $(PROGRAM_NAME2) $(PROGRAM_NAME3) 
+	make $(PROGRAM_NAME) $(PROGRAM_NAME1) $(PROGRAM_NAME2) $(PROGRAM_NAME3) $(PROGRAM_NAME4) 
 
 
 clean:
-	(rm -f *.o; rm image_demo p1 p2 p3)
+	(rm -f *.o; rm image_demo p1 p2 p3 p4)
 
 (:

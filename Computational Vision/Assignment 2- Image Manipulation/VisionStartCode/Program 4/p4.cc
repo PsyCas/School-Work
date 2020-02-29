@@ -161,8 +161,8 @@ void compareValues(Image& inputImage, vector<vector<double>> &databaseVec, const
 
     // comparison
     // since different images, cannot compare labels and centers.
-    // take 0.88 <= ratio of moment < 1.12 and difference of degrees <= 10 will be considered similar --> color 255
-    // else if 0.88 <= ratio of moment < 1.12  but difference of degrees > 10, similar but different orientation --> color 127
+    // take 0.85 <= ratio of moment < 1.25 and difference of degrees <= 10 will be considered similar --> color 255
+    // else if 0.85 <= ratio of moment < 1.25  but difference of degrees > 10, similar but different orientation --> color 127
     // else not similar --> color -> 25
     for(auto comparisonDatabase: compareDatabaseVec){
         for(int i = 0; i < databaseVec.size(); ++i){
@@ -171,10 +171,10 @@ void compareValues(Image& inputImage, vector<vector<double>> &databaseVec, const
             double momentRatio = databaseVec[i][8]/comparisonDatabase[3];  
             double degreeDifference =  comparisonDatabase[4] - databaseVec[i][7]*180/M_PI;
 
-            if(momentRatio >= 0.88 && momentRatio < 1.12 && degreeDifference <= 10 && degreeDifference > 0){
+            if(momentRatio >= 0.85 && momentRatio < 1.25 && degreeDifference <= 10 && degreeDifference > 0){
                 databaseVec[i][9] = 1;     // same
             }
-            else if(momentRatio >= 0.88 && momentRatio < 1.12 && (degreeDifference > 10 || degreeDifference < 0)){
+            else if(momentRatio >= 0.85 && momentRatio < 1.25 && (degreeDifference > 10 || degreeDifference < 0)){
                 if(databaseVec[i][9] == 0 || databaseVec[i][9] == 3){
                     databaseVec[i][9] = 2;
                 }
