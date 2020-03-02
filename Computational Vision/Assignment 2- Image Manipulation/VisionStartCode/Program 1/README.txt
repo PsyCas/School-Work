@@ -13,6 +13,7 @@ Convert Grayscale Image to Binary Image
 	b) p1.cc		: 	File that takes a greyscale image, a greyscale threshold and an output file name. Then it converts
 					the input file to binary image and saves it as the output file name.
 	c) Makefile		: 	Makefile modified for this part of the assignment.	
+	d) ./Results	: 	Contains the results I obtained from this program. 
 
 2) To compile all files, type
 	
@@ -34,9 +35,9 @@ Convert Grayscale Image to Binary Image
 	
 	For example, you can type
 		
-		./p1 objects.pgm 127 outputObjects.pgm
+		./p1 two_objects.pgm 127 two_objectsBinary.pgm
 		
-		* This will convert the image "objects.pgm" to a binary image using threshold value 127 and save it as "outputObjects.pgm" 	 
+		* This will convert the image "two_objects.pgm" to a binary image using threshold value 127 and save it as "two_objectsBinary.pgm" 	 
 
 4) Input Files and Output Files given,
 
