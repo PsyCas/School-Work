@@ -36,12 +36,12 @@ $(PROGRAM_NAME1): $(Cpp_OBJ1)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ1) $(INCLUDES) $(LIBS_ALL)
 
 # #Assignment Part 2 (Labeling and Segmenting Binary Images)
-# Cpp_OBJ2= image.o p2.o
+Cpp_OBJ2= image.o h2.o
 
-# PROGRAM_NAME2=p2
+PROGRAM_NAME2=h2
 
-# $(PROGRAM_NAME2): $(Cpp_OBJ2)
-# 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ2) $(INCLUDES) $(LIBS_ALL)
+$(PROGRAM_NAME2): $(Cpp_OBJ2)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ2) $(INCLUDES) $(LIBS_ALL)
 
 # #Assignment Part 3 (Database)
 # Cpp_OBJ3= image.o p3.o
@@ -67,6 +67,6 @@ all:
 
 
 clean:
-	(rm -f *.o; rm h1)
+	(rm -f *.o; rm h1 h2)
 
 (:

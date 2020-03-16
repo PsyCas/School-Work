@@ -37,7 +37,7 @@ void calculateImage(const Image& input_image, const vector<vector<int>> kernel, 
       bottom = bottom * kernel[2][1];
       bottomRight = bottomRight * kernel[2][2];
 
-      int sum = (topLeft + top + topRight + left + center + right + bottomLeft + bottom + bottomRight)/9;
+      int sum = topLeft + top + topRight + left + center + right + bottomLeft + bottom + bottomRight;
       return_img.SetPixel(i, j, sum);
     }
   }
@@ -74,9 +74,8 @@ int main(int argc, char** argv){
   
   
   // kernel for sobel operator, x and y axis
-  // vector<vector<int>> kernelX = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
-  // vector<vector<int>> kernelY = {{1, 2, 1}, {0, 0, 0}, {-1, -2, -1}};
-  vector<vector<int>> kernelX = {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
+  vector<vector<int>> kernelX = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
+  vector<vector<int>> kernelY = {{1, 2, 1}, {0, 0, 0}, {-1, -2, -1}};
 
   Image xImg, yImg;
   if (!ReadImage(input_file, &xImg)) {
@@ -89,32 +88,18 @@ int main(int argc, char** argv){
   }
 
   calculateImage(an_image, kernelX, xImg); // x kernel 
-  // calculateImage(an_image, kernelY, yImg); // y kernel
+  calculateImage(an_image, kernelY, yImg); // y kernel
   
-  // getFinalImage(an_image, xImg, yImg);  //final Image
-
-  /*
-  // saving the processed result to output file.
-  if (!WriteImage("Ximg.pgm", xImg)){
-      cout << "Can't write to file " << output_file << endl;
-      return 0;
-  }
+  getFinalImage(an_image, xImg, yImg);  //final Image
 
   // saving the processed result to output file.
-  if (!WriteImage("Yimg.pgm", yImg)){
-      cout << "Can't write to file " << output_file << endl;
-      return 0;
-  }*/
-
-  // saving the processed result to output file.
-  if (!WriteImage(output_file, xImg)){
+  if (!WriteImage(output_file, an_image)){
       cout << "Can't write to file " << output_file << endl;
       return 0;
   }
 
   cout << "Image Manipulation Completed Successfully!\n";
   cout << "==========================================\n";
-
 
   return 0;
 }
