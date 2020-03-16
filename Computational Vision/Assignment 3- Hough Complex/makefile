@@ -28,9 +28,9 @@ INCLUDES=  -I.
 LIBS_ALL =  -L/usr/lib -L/usr/local/lib 
 
 #Assignment Part 1 (BinaryImages)
-Cpp_OBJ1= image.o p1.o
+Cpp_OBJ1= image.o h1.o
 
-PROGRAM_NAME1=p1
+PROGRAM_NAME1=h1
 
 $(PROGRAM_NAME1): $(Cpp_OBJ1)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ1) $(INCLUDES) $(LIBS_ALL)
@@ -67,6 +67,6 @@ all:
 
 
 clean:
-	(rm -f *.o; rm p1)
+	(rm -f *.o; rm h1)
 
 (:
