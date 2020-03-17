@@ -4,7 +4,11 @@
 using namespace std;
 using namespace ComputerVisionProjects;
 
+void createHoughImage(const string& input_file, const string& output_file, const string& output_array){
 
+  
+
+}
 
 
 
@@ -20,6 +24,24 @@ int main(int argc, char **argv){
   const string output_array(argv[3]);
 
   cout << input_file << " " << output_file << " " << output_array << endl;
+
+  Image an_image;
+  if(!ReadImage(input_file, &an_image)){
+    cout << "Can't open file " << input_file << endl;
+    return 0;
+  }
+
+  createHoughImage(input_file, output_file,output_array);
+
+  // UNCOMMENT THIS LATER
+
+  // if(!WriteImage(output_file, an_image)){
+  //   cout << "Can't write to file " << output_file << endl;
+  //   return 0;
+  // }
+
+  cout << "Image manipulation Completed Successfully!\n";
+  cout << "==========================================\n";
 
   return 0;
 }
