@@ -44,14 +44,14 @@ $(PROGRAM_NAME2): $(Cpp_OBJ2)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ2) $(INCLUDES) $(LIBS_ALL)
 
 # #Assignment Part 3 (Database)
-# Cpp_OBJ3= image.o p3.o
+Cpp_OBJ3= image.o h3.o
 
-# PROGRAM_NAME3=p3
+PROGRAM_NAME3= h3
 
-# $(PROGRAM_NAME3): $(Cpp_OBJ3)
-# 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ3) $(INCLUDES) $(LIBS_ALL)
+$(PROGRAM_NAME3): $(Cpp_OBJ3)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ3) $(INCLUDES) $(LIBS_ALL)
 
-# #Assignment Part 3 (Database)
+# #Assignment Part 4 (Database)
 # Cpp_OBJ4= image.o p4.o
 
 # PROGRAM_NAME4=p4
@@ -67,6 +67,6 @@ all:
 
 
 clean:
-	(rm -f *.o; rm h1 h2)
+	(rm -f *.o; rm h1 h2 h3)
 
 (:
