@@ -1,8 +1,50 @@
 #include <iostream>
+#include <vector>
+#include <fstream>
 #include "binaryImages.h"
 #include "image.h"
 
 using namespace std;
+
+void findCenter(const Image &an_image, vector<int> &center){
+  int area = 0;
+
+  for(int i = 0; i < an_image.num_rows(); ++i){
+    for(int j = 0; j < an_image.num_columns(); ++j){
+
+      if(an_image.GetPixel(i, j) != 0){
+        area++;
+        center[0] += i;
+        center[1] += j;
+      }
+
+    } // j
+  } //i
+  
+  center[0] = center[0]/area;
+  center[1] = center[1]/area;
+}
+
+int findRadius(const Image &an_image, vector<int> center){
+
+  int radius = 0, avgRow = 0, avgCol = 0;
+
+  for(int i = 0; i < an_image.num_rows(); ++i){
+    if(an_image.GetPixel(i, center[1]) != 0){
+      avgRow++;
+    }
+  }
+
+  for(int i = 0; i < an_image.num_columns(); ++i){
+    if(an_image.GetPixel(center[0], i) != 0){
+      avgCol++;
+    }
+  }
+
+  radius = (avgRow+avgCol)/4; // div by 2 for average, div by 2 again to convert diameter to radius
+
+  return radius;
+}
 
 
 int main(int argc, char** argv){
@@ -40,13 +82,21 @@ int main(int argc, char** argv){
     anImage.convertToBinary(gray_level_threshold);
     binary_image = anImage.getOutputImage();
 
-    // saving the processed result to output file.
-    if (!WriteImage(output_file, *binary_image)){
-        cout << "Can't write to file " << output_file << endl;
-        return 0;
-    }
+    vector<int> center{0, 0};
+    findCenter(*binary_image, center);
 
-    cout << "Image Manipulation Completed Successfully!\n";
+    int radius = findRadius(*binary_image, center);
+
+    cout  << "X: " << center[0] << " " 
+          << "Y: " << center[1] << " " 
+          << "\nRadius: " << radius << endl << endl;
+
+    //writing to file    
+    ofstream out(output_file);
+    out << center[0] << " " << center[1] << " " << radius << endl;
+    out.close();
+    
+    cout << "File Successfully Written!\n";
     cout << "==========================================\n";
 
 }

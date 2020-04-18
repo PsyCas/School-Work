@@ -28,8 +28,7 @@ INCLUDES=  -I.
 LIBS_ALL =  -L/usr/lib -L/usr/local/lib 
 
 
-
-#Assignment Part 1 (BinaryImages)
+#Assignment Part 1 (Center and Radius)
 Cpp_OBJ1= image.o binaryImages.o s1.o
 
 PROGRAM_NAME1=s1
@@ -43,6 +42,6 @@ all:
 
 
 clean:
-	(rm -f *.o; rm image_demo s1)
+	(rm -f *.o; rm s1)
 
 (:
