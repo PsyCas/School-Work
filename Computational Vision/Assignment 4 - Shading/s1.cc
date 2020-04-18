@@ -87,13 +87,13 @@ int main(int argc, char** argv){
 
     int radius = findRadius(*binary_image, center);
 
-    cout  << "X: " << center[0] << " " 
-          << "Y: " << center[1] << " " 
+    cout  << "X: " << center[1] << " " 
+          << "Y: " << center[0] << " " 
           << "\nRadius: " << radius << endl << endl;
 
     //writing to file    
     ofstream out(output_file);
-    out << center[0] << " " << center[1] << " " << radius << endl;
+    out << center[1] << " " << center[0] << " " << radius << endl;
     out.close();
     
     cout << "File Successfully Written!\n";
