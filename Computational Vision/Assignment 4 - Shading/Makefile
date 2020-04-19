@@ -37,11 +37,20 @@ $(PROGRAM_NAME1): $(Cpp_OBJ1)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ1) $(INCLUDES) $(LIBS_ALL)
 
 
+#Assignment Part 2 (Normal and Source)
+Cpp_OBJ2= image.o s2.o
+
+PROGRAM_NAME2=s2
+
+$(PROGRAM_NAME2): $(Cpp_OBJ2)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ2) $(INCLUDES) $(LIBS_ALL)
+
+
 all: 
-	make $(PROGRAM_NAME1) 
+	make $(PROGRAM_NAME1) $(PROGRAM_NAME2) 
 
 
 clean:
-	(rm -f *.o; rm s1)
+	(rm -f *.o; rm s1 s2)
 
 (:
