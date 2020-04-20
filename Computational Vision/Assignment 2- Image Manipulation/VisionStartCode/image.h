@@ -54,6 +54,7 @@ class Image {
     return pixels_[i][j];
   }
 
+
  private:
   void DeallocateSpace();
 
