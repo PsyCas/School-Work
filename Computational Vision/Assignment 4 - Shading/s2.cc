@@ -1,13 +1,34 @@
 #include <iostream>
 #include <fstream>
+#include <cmath>
 #include <vector>
 #include"image.h"
 
 using namespace ComputerVisionProjects;
 
-void findBrightestPoint(std::vector<std::pair<int, int>> &bpDatabase, const Image& image, const int& imageId){  
+void findNormal(std::vector<std::vector<int>> &normalDatabase, const std::vector<std::vector<int>> &bpDatabase, const std::string& input_param_file){
 
-  bpDatabase.push_back(std::pair<int, int> {0, 0});
+  int centerX, centerY, radius;
+  std::ifstream fin(input_param_file);
+  fin >> centerX >> centerY >> radius;
+  fin.close();
+
+  std::cout << centerX << " " << centerY << " " << radius << std::endl;
+
+  for(int i = 0; i < 3; ++i){
+
+    normalDatabase.push_back(std::vector<int> {0, 0, 0});
+
+    int zValue = pow(radius, 2) - pow(bpDatabase[i][0] - centerX, 2) - pow(bpDatabase[i][1] - centerY, 2); // formula of sphere
+    zValue = sqrt(zValue);
+
+    normalDatabase[i] = {bpDatabase[i][0] - centerX, bpDatabase[i][1] - centerY, zValue};  
+  }  
+}
+
+void findBrightestPoint(std::vector<std::vector<int>> &bpDatabase, const Image& image, const int& imageId){  
+
+  bpDatabase.push_back(std::vector<int> {0, 0, 0});
   int maxBrightness = -1;
 
   for(int i = 0; i < image.num_rows(); ++i){
@@ -17,13 +38,13 @@ void findBrightestPoint(std::vector<std::pair<int, int>> &bpDatabase, const Imag
       if( pixelValue != 0 && pixelValue > maxBrightness){
         
         maxBrightness = pixelValue;
-        bpDatabase[imageId].first = j; 
-        bpDatabase[imageId].second = i; 
+        bpDatabase[imageId][0] = j; 
+        bpDatabase[imageId][1] = i; 
       }
     }
   }
-
-  std::cout << "X: " << bpDatabase[imageId].first << " Y: " << bpDatabase[imageId].second << " Brightness: " << maxBrightness << std::endl;
+  bpDatabase[imageId][2] = maxBrightness;
+  std::cout << "X: " << bpDatabase[imageId][0] << " Y: " << bpDatabase[imageId][1] << " Brightness: " << bpDatabase[imageId][2] << std::endl;
 }
 
 int main(int argc, char** argv){
@@ -40,10 +61,11 @@ int main(int argc, char** argv){
   const std::string image3(argv[4]);
   const std::string output_file(argv[5]);
 
-  std::vector<std::pair<int, int>> bpDatabase;
+  std::vector<std::vector<int>> bpDatabase;
 
   Image image_obj_1, image_obj_2, image_obj_3;
 
+  // read in all three images
   if(!ReadImage(image1, &image_obj_1)){
     std::cout << "Cannot open file " << image1 << std::endl;
     return 0;
@@ -59,9 +81,20 @@ int main(int argc, char** argv){
     return 0;
   }
 
+  //find brightest point for all three images
   findBrightestPoint(bpDatabase, image_obj_1, 0);
   findBrightestPoint(bpDatabase, image_obj_2, 1);
   findBrightestPoint(bpDatabase, image_obj_3, 2);
 
+  //find the normal for all three images
+  std::vector<std::vector<int>> normalDatabase;
+ 
+  findNormal(normalDatabase, bpDatabase, input_param_file); 
+ 
+  for(auto value: normalDatabase){
+    std::cout << "X: " << value[0] << " Y: " << value[1] << " Z: " << value[2] << std::endl;
+  }
+
+ 
   return 0;
 }
