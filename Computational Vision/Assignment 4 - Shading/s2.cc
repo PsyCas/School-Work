@@ -19,10 +19,11 @@ void findNormal(std::vector<std::vector<int>> &normalDatabase, const std::vector
 
     normalDatabase.push_back(std::vector<int> {0, 0, 0});
 
-    int zValue = pow(radius, 2) - pow(bpDatabase[i][0] - centerX, 2) - pow(bpDatabase[i][1] - centerY, 2); // formula of sphere
-    zValue = sqrt(zValue);
+    int nx = bpDatabase[i][0] - centerX, ny = -(bpDatabase[i][1] - centerY);
+    int nz = pow(radius, 2) - pow(nx, 2) - pow(ny, 2); // formula of sphere
+    nz = sqrt(nz);
 
-    normalDatabase[i] = {bpDatabase[i][0] - centerX, bpDatabase[i][1] - centerY, zValue};  
+    normalDatabase[i] = {nx, ny, nz};  
   }  
 }
 
@@ -88,9 +89,30 @@ int main(int argc, char** argv){
 
   //find the normal for all three images
   std::vector<std::vector<int>> normalDatabase;
- 
+  std::vector<std::vector<int>> directionsDatabase;
+  std::vector<int> R{0, 0, 1};
+  
+  //find the normals
   findNormal(normalDatabase, bpDatabase, input_param_file); 
- 
+  
+  //find the directions
+  for(int i = 0; i < normalDatabase.size(); ++i){
+
+    std::cout << normalDatabase[i][0] << " " <<normalDatabase[i][1] << " " << normalDatabase[i][2] << std::endl; 
+    int nr = normalDatabase[i][0] * R[0] + normalDatabase[i][1] * R[1] + normalDatabase[i][2] * R[2];
+    
+    directionsDatabase.push_back(
+      { 
+        2*nr*normalDatabase[i][0] - R[0],
+        2*nr*normalDatabase[i][1] - R[1],
+        2*nr*normalDatabase[i][2] - R[2]
+      }
+    );
+
+    std::cout << "X: "<< directionsDatabase[i][0] << " Y: " << directionsDatabase[i][1] << " Z: " << directionsDatabase[i][2] << std::endl;
+  }
+
+
   for(auto value: normalDatabase){
     std::cout << "X: " << value[0] << " Y: " << value[1] << " Z: " << value[2] << std::endl;
   }
