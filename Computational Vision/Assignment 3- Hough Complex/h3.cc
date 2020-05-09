@@ -45,11 +45,14 @@ void createHoughImage(Image& input_image, Image& output_image, const string& out
 
   double acc_rhoMin = limitVal * -1;
   double acc_rhoMax = limitVal;
-  
-  int acc_rhoVal = 1800;
+
+  //modify value to change the output of the hough image. Default set to size of image  
+  int acc_rhoVal = h;
+  int acc_thetaVal = w;
+
   // int acc_rhoVal = sqrt(2.0) * (h>w? h : w);
   // int acc_thetaVal = 180;
-  int acc_thetaVal = 1800;
+
   double maxVal = 1;
 
   // cout << "thetamin" << acc_thetaMin << endl;
