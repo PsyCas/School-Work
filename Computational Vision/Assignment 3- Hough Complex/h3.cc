@@ -1,39 +1,64 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <math.h>
 #include "image.h"
 
-#define PI 3.14159265
-const double DEG_TO_RAD = 180/PI;
+const double PI = 3.14159265358979323846;
 
 using namespace std;
 using namespace ComputerVisionProjects;
 
-void drawImageWithThreshold(Image& output_image,  vector<vector<int>> accumulator, const int& threshold){
+void createOutputVotingArray(vector<vector<double>> accumulator, const string& output_file){
+
+  ofstream fout(output_file);
 
   for(int i = 0; i < accumulator.size(); ++i){
     for(int j= 0; j < accumulator[i].size(); ++j){
-      if(accumulator[i][j] >= threshold && i < output_image.num_rows() && j < output_image.num_columns()){
-        output_image.SetPixel(i, j, accumulator[i][j]>255? 255: accumulator[i][j]);
-        // cout << "here" << " " << accumulator[i][j] << endl;
-      }
+      fout << "p: " << i << ", t: " << j << ", votes: " << accumulator[i][j] << "\n";
+    }
+  }
+  fout.close();
+}
+
+void drawImageWithThreshold(Image& output_image,  vector<vector<double>> accumulator, const int& threshold){
+
+  output_image.AllocateSpaceAndSetSize(accumulator.size(), accumulator[0].size());
+  output_image.SetNumberGrayLevels(255);
+
+  for(int i = 0; i < accumulator.size(); ++i){
+    for(int j= 0; j < accumulator[i].size(); ++j){
+      // if(accumulator[i][j] >= threshold && i < output_image.num_rows() && j < output_image.num_columns()){
+        output_image.SetPixel(i, j, (int)(accumulator[i][j]>255? 255: accumulator[i][j]));
+      // }
     }
   }
 }
 
-void createHoughImage(Image& input_image, Image& output_image){
+void createHoughImage(Image& input_image, Image& output_image, const string& output_array){
 
   int h = input_image.num_rows(), w = input_image.num_columns();
-  int acc_thetaVal = 180;
-  int acc_rhoVal = sqrt(2.0) * (h>w? h : w);
+  double limitVal = sqrt(pow(h, 2) + pow(w, 2));
 
-  //remove later
-  cout << acc_rhoVal << endl;
+  double acc_thetaMin = 0;
+  double acc_thetaMax = PI;
 
-  int center_row = h/2, center_col = w/2;
+  double acc_rhoMin = limitVal * -1;
+  double acc_rhoMax = limitVal;
+  
+  int acc_rhoVal = 1800;
+  // int acc_rhoVal = sqrt(2.0) * (h>w? h : w);
+  // int acc_thetaVal = 180;
+  int acc_thetaVal = 1800;
+  double maxVal = 1;
+
+  // cout << "thetamin" << acc_thetaMin << endl;
+  // cout << "thetamax" << acc_thetaMax << endl;
+  // cout << "rhoMin" << acc_rhoMin << endl;
+  // cout << "rhoMax" << acc_rhoMax << endl;
 
   // creating accumulator dataset
-  vector<vector<int>> accumulator(acc_rhoVal, vector<int> (acc_thetaVal, 0));
+  vector<vector<double>> accumulator(acc_rhoVal, vector<double> (acc_thetaVal, 0));
 
   for(int i = 0; i < h; ++i){
     for(int j = 0; j < w; ++j){
@@ -43,22 +68,29 @@ void createHoughImage(Image& input_image, Image& output_image){
       output_image.SetPixel(i, j, 0);
 
       //hough transform logic
-      if(pixel == 255){
+      if(pixel > 0){
         
-        for(int k = 0; k < 180; ++k){         
-          int r = round(((i - center_row) * sin(k * DEG_TO_RAD)) + ((j - center_col) * cos(k * DEG_TO_RAD)));
+        for(int k = 0; k < acc_thetaVal; ++k){
+          
+          double thetaVal = acc_thetaMin + k * (acc_thetaMax - acc_thetaMin) / acc_thetaVal;
+          double r = j * std::sin(thetaVal) + i * std::cos(thetaVal);
 
-          // cout << 905/2 + r << endl;
-          // r = abs(r);
-          r = r + acc_rhoVal/2;
-          if(r <= acc_rhoVal){
-            accumulator[r][k] = accumulator[r][k]+ 1;
-          }
+          r = (r - acc_rhoMin) * acc_rhoVal / (acc_rhoMax - acc_rhoMin);
+          
+          accumulator[(int)r][k] = accumulator[(int)r][k] + 1;
+          maxVal = accumulator[(int)r][k] > maxVal? accumulator[(int)r][k]: maxVal; 
         }
       }
     }
   }
 
+  for(int i = 0; i < accumulator.size(); ++i){
+    for(int j = 0; j < accumulator[i].size(); ++j){
+      accumulator[i][j] *= 255 / maxVal;
+    }
+  }
+
+  createOutputVotingArray(accumulator, output_array);
   drawImageWithThreshold(output_image, accumulator, 80);      
 
   return;
@@ -84,7 +116,7 @@ int main(int argc, char **argv){
     return 0;
   }
 
-  createHoughImage(an_image, hough_image);
+  createHoughImage(an_image, hough_image, output_array);
 
   if(!WriteImage(output_file, hough_image)){
     cout << "Can't write to file " << output_file << endl;
