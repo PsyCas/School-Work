@@ -12,25 +12,27 @@ using namespace ComputerVisionProjects;
 void createOutputVotingArray(vector<vector<double>> accumulator, const string& output_file){
 
   ofstream fout(output_file);
+  if(fout.fail()){
+    cout << "Failed to open file: " << output_file <<  endl;
+    return;
+  }
 
   for(int i = 0; i < accumulator.size(); ++i){
     for(int j= 0; j < accumulator[i].size(); ++j){
-      fout << "p: " << i << ", t: " << j << ", votes: " << accumulator[i][j] << "\n";
+      fout << "rho: " << i << " theta: " << j << " votes: " << accumulator[i][j] << "\n";
     }
   }
   fout.close();
 }
 
-void drawImageWithThreshold(Image& output_image,  vector<vector<double>> accumulator, const int& threshold){
+void drawImage(Image& output_image,  vector<vector<double>> accumulator){
 
   output_image.AllocateSpaceAndSetSize(accumulator.size(), accumulator[0].size());
   output_image.SetNumberGrayLevels(255);
 
   for(int i = 0; i < accumulator.size(); ++i){
     for(int j= 0; j < accumulator[i].size(); ++j){
-      // if(accumulator[i][j] >= threshold && i < output_image.num_rows() && j < output_image.num_columns()){
         output_image.SetPixel(i, j, (int)(accumulator[i][j]>255? 255: accumulator[i][j]));
-      // }
     }
   }
 }
@@ -54,11 +56,6 @@ void createHoughImage(Image& input_image, Image& output_image, const string& out
   // int acc_thetaVal = 180;
 
   double maxVal = 1;
-
-  // cout << "thetamin" << acc_thetaMin << endl;
-  // cout << "thetamax" << acc_thetaMax << endl;
-  // cout << "rhoMin" << acc_rhoMin << endl;
-  // cout << "rhoMax" << acc_rhoMax << endl;
 
   // creating accumulator dataset
   vector<vector<double>> accumulator(acc_rhoVal, vector<double> (acc_thetaVal, 0));
@@ -94,7 +91,7 @@ void createHoughImage(Image& input_image, Image& output_image, const string& out
   }
 
   createOutputVotingArray(accumulator, output_array);
-  drawImageWithThreshold(output_image, accumulator, 80);      
+  drawImage(output_image, accumulator);      
 
   return;
 }
