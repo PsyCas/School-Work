@@ -6,7 +6,7 @@
 
 using namespace ComputerVisionProjects;
 
-void findNormal(std::vector<std::vector<int>> &normalDatabase, const std::vector<std::vector<int>> &bpDatabase, const std::string& input_param_file){
+void findNormal(std::vector<std::vector<double>> &normalDatabase, const std::vector<std::vector<int>> &bpDatabase, const std::string& input_param_file){
 
   int centerX, centerY, radius;
   std::ifstream fin(input_param_file);
@@ -17,13 +17,14 @@ void findNormal(std::vector<std::vector<int>> &normalDatabase, const std::vector
 
   for(int i = 0; i < 3; ++i){
 
-    normalDatabase.push_back(std::vector<int> {0, 0, 0});
+    normalDatabase.push_back(std::vector<double> {0, 0, 0});
 
-    int nx = bpDatabase[i][0] - centerX, ny = -(bpDatabase[i][1] - centerY);
-    int nz = pow(radius, 2) - pow(nx, 2) - pow(ny, 2); // formula of sphere
-    nz = sqrt(nz);
+    double nx = (bpDatabase[i][0] - centerX)/sqrt(-1 * pow(bpDatabase[i][0] - centerX, 2) - pow(bpDatabase[i][1] - centerY, 2) + pow(radius, 2));
+    double ny = -(bpDatabase[i][1] - centerY)/sqrt(-1 * pow(bpDatabase[i][0] - centerX, 2) - pow(bpDatabase[i][1] - centerY, 2) + pow(radius, 2));
+    
+    double nz = sqrt(pow(nx, 2) + pow(ny, 2) + 1); // formula of sphere
 
-    normalDatabase[i] = {nx, ny, nz};  
+    normalDatabase[i] = {(nx/nz)*bpDatabase[i][2], (ny/nz)*bpDatabase[i][2], (1/nz)*bpDatabase[i][2]};  
   }  
 }
 
@@ -45,7 +46,6 @@ void findBrightestPoint(std::vector<std::vector<int>> &bpDatabase, const Image& 
     }
   }
   bpDatabase[imageId][2] = maxBrightness;
-  std::cout << "X: " << bpDatabase[imageId][0] << " Y: " << bpDatabase[imageId][1] << " Brightness: " << bpDatabase[imageId][2] << std::endl;
 }
 
 int main(int argc, char** argv){
@@ -88,35 +88,44 @@ int main(int argc, char** argv){
   findBrightestPoint(bpDatabase, image_obj_3, 2);
 
   //find the normal for all three images
-  std::vector<std::vector<int>> normalDatabase;
-  std::vector<std::vector<int>> directionsDatabase;
-  std::vector<int> R{0, 0, 1};
+  std::vector<std::vector<double>> normalDatabase;
   
   //find the normals
   findNormal(normalDatabase, bpDatabase, input_param_file); 
   
-  //find the directions
-  for(int i = 0; i < normalDatabase.size(); ++i){
+  // //find the directions
+  // for(int i = 0; i < normalDatabase.size(); ++i){
 
-    std::cout << normalDatabase[i][0] << " " <<normalDatabase[i][1] << " " << normalDatabase[i][2] << std::endl; 
-    int nr = normalDatabase[i][0] * R[0] + normalDatabase[i][1] * R[1] + normalDatabase[i][2] * R[2];
+  //   std::cout << normalDatabase[i][0] << " " <<normalDatabase[i][1] << " " << normalDatabase[i][2] << std::endl; 
+  //   int nr = normalDatabase[i][0] * R[0] + normalDatabase[i][1] * R[1] + normalDatabase[i][2] * R[2];
     
-    directionsDatabase.push_back(
-      { 
-        2*nr*normalDatabase[i][0] - R[0],
-        2*nr*normalDatabase[i][1] - R[1],
-        2*nr*normalDatabase[i][2] - R[2]
-      }
-    );
+  //   directionsDatabase.push_back(
+  //     { 
+  //       2*nr*normalDatabase[i][0] - R[0],
+  //       2*nr*normalDatabase[i][1] - R[1],
+  //       2*nr*normalDatabase[i][2] - R[2]
+  //     }
+  //   );
 
-    std::cout << "X: "<< directionsDatabase[i][0] << " Y: " << directionsDatabase[i][1] << " Z: " << directionsDatabase[i][2] << std::endl;
+  //   std::cout << "X: "<< directionsDatabase[i][0] << " Y: " << directionsDatabase[i][1] << " Z: " << directionsDatabase[i][2] << std::endl;
+  // }
+
+
+  // for(auto value: normalDatabase){
+  //   std::cout << "X: " << value[0] << " Y: " << value[1] << " Z: " << value[2] << std::endl;
+  // }
+
+
+  std::ofstream fout(output_file);
+  if(fout.fail()){
+    std::cout << "Cannot open file " << output_file << std::endl;
+    return 0;
   }
 
-
-  for(auto value: normalDatabase){
-    std::cout << "X: " << value[0] << " Y: " << value[1] << " Z: " << value[2] << std::endl;
+  for(int i = 0; i < 3; ++i){
+    fout << normalDatabase[i][0] << " " << normalDatabase[i][1] << " " << normalDatabase[i][2] << "\n";
   }
-
+  fout.close(); 
  
   return 0;
 }
