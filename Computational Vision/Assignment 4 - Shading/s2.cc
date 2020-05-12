@@ -78,7 +78,7 @@ int main(int argc, char** argv){
   }
 
   if(!ReadImage(image3, &image_obj_3)){
-    std::cout << "Cannot open file " << image1 << std::endl;
+    std::cout << "Cannot open file " << image3 << std::endl;
     return 0;
   }
 

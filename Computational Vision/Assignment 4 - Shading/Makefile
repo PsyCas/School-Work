@@ -46,9 +46,26 @@ $(PROGRAM_NAME2): $(Cpp_OBJ2)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ2) $(INCLUDES) $(LIBS_ALL)
 
 
-all: 
-	make $(PROGRAM_NAME1) $(PROGRAM_NAME2) 
+#Assignment Part 3 (Find normals)
+Cpp_OBJ3= image.o s3.o
 
+PROGRAM_NAME3=s3
+
+$(PROGRAM_NAME3): $(Cpp_OBJ3)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ3) $(INCLUDES) $(LIBS_ALL)
+
+
+all: 
+	make $(PROGRAM_NAME1) $(PROGRAM_NAME2) $(PROGRAM_NAME3) 
+
+part1:
+	make $(PROGRAM_NAME1)
+
+part2:
+	make $(PROGRAM_NAME2)
+
+part3:
+	make $(PROGRAM_NAME3)
 
 clean:
 	(rm -f *.o; rm s1 s2)
