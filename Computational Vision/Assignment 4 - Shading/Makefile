@@ -46,7 +46,7 @@ $(PROGRAM_NAME2): $(Cpp_OBJ2)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ2) $(INCLUDES) $(LIBS_ALL)
 
 
-#Assignment Part 3 (Find normals)
+#Assignment Part 3 (Find needlemap)
 Cpp_OBJ3= image.o s3.o
 
 PROGRAM_NAME3=s3
@@ -54,9 +54,17 @@ PROGRAM_NAME3=s3
 $(PROGRAM_NAME3): $(Cpp_OBJ3)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ3) $(INCLUDES) $(LIBS_ALL)
 
+#Assignment Part 4 (Find surface albeo)
+Cpp_OBJ4= image.o s4.o
+
+PROGRAM_NAME4=s4
+
+$(PROGRAM_NAME4): $(Cpp_OBJ4)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ4) $(INCLUDES) $(LIBS_ALL)
+
 
 all: 
-	make $(PROGRAM_NAME1) $(PROGRAM_NAME2) $(PROGRAM_NAME3) 
+	make $(PROGRAM_NAME1) $(PROGRAM_NAME2) $(PROGRAM_NAME3) $(PROGRAM_NAME4) 
 
 part1:
 	make $(PROGRAM_NAME1)
@@ -67,7 +75,10 @@ part2:
 part3:
 	make $(PROGRAM_NAME3)
 
+part4:
+	make $(PROGRAM_NAME4)
+
 clean:
-	(rm -f *.o; rm s1 s2)
+	(rm -f *.o; rm s1 s2 s3 s4)
 
 (:

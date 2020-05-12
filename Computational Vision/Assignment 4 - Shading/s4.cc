@@ -7,58 +7,6 @@
 
 using namespace ComputerVisionProjects;
 
-void createNeedleImage(const std::vector<std::vector<double>>& inverseVec, const Image& sphere1, const Image& sphere2, const Image& sphere3, Image& needle_image, const int&threshold, const int& step){
-
-  std::vector<double> intensity = {-1, -1, -1};
-
-  for(int i = 0; i < sphere1.num_rows(); i += step){
-    for(int j = 0; j < sphere1.num_columns(); j += step){
-      
-      int sphere1_intensity = sphere1.GetPixel(i, j);
-      int sphere2_intensity = sphere2.GetPixel(i, j);
-      int sphere3_intensity = sphere3.GetPixel(i, j);
-
-      if(sphere1_intensity >= threshold && sphere2_intensity >= threshold && sphere3_intensity >= threshold){
-        intensity[0] = sphere1_intensity;
-        intensity[1] = sphere2_intensity;
-        intensity[2] = sphere3_intensity;
-
-        vector<double> normal = {0, 0 , 0};
-        double normScalar = 0;
-
-        // matrix multiplication
-        for(int k = 0; k < inverseVec.size(); ++k){
-          normal[0] += inverseVec[0][k] * intensity[k]; 
-          normal[1] += inverseVec[1][k] * intensity[k]; 
-          normal[2] += inverseVec[2][k] * intensity[k]; 
-        }
-
-        // MAGNITUDE
-        for(int k = 0; k < normal.size(); ++k){
-          normScalar += pow(normal[k], 2);
-        }
-        normScalar = sqrt(normScalar);
-        
-        //ORIENTATION
-        for(int k = 0; k < normal.size(); ++k){
-          normal[k] /= normScalar;
-        }
-
-        // create circle
-				needle_image.SetPixel(i - 1, j, 255);
-				needle_image.SetPixel(i, j - 1, 255);
-				needle_image.SetPixel(i + 1, j, 255);
-				needle_image.SetPixel(i, j + 1, 255);
-
-        DrawLine(i, j, i + normal[1] *10, j + normal[0] * 10, 255, &needle_image);
-        needle_image.SetPixel(i, j, 0);
-      }
-    }
-  }
-
-}
-
-
 void getDirectionsFromFile(std::vector<std::vector<double>> &directionsVec, const std::string& file){
 
   std::ifstream fin(file);
@@ -74,9 +22,55 @@ void getDirectionsFromFile(std::vector<std::vector<double>> &directionsVec, cons
 }
 
 
+void findAlbedo(const std::vector<std::vector<double>>& inverseVec, const Image& sphere1, const Image& sphere2, const Image& sphere3, Image& output_image, const int&threshold){
+
+  std::vector<double> intensity = {0, 0, 0};
+  std::vector<std::vector<double>> outputVec(output_image.num_rows(), (std::vector<double>(output_image.num_columns(), 0)));
+  double maxVal = -1;
+
+  for(int i = 0; i < sphere1.num_rows(); ++i){
+    for(int j = 0; j < sphere1.num_columns(); ++j){
+      
+      int sphere1_intensity = sphere1.GetPixel(i, j);
+      int sphere2_intensity = sphere2.GetPixel(i, j);
+      int sphere3_intensity = sphere3.GetPixel(i, j);
+
+      if(sphere1_intensity >= threshold && sphere2_intensity >= threshold && sphere3_intensity >= threshold){
+        intensity[0] = sphere1_intensity;
+        intensity[1] = sphere2_intensity;
+        intensity[2] = sphere3_intensity;
+
+        vector<double> normal = {0, 0 , 0};
+        double normScalar = 0;
+
+        for(int k = 0; k < inverseVec.size(); ++k){
+          normal[0] += inverseVec[0][k] * intensity[k]; 
+          normal[1] += inverseVec[1][k] * intensity[k]; 
+          normal[2] += inverseVec[2][k] * intensity[k]; 
+        }
+
+        for(int k = 0; k < normal.size(); ++k){
+          normScalar += pow(normal[k], 2);
+        }
+        normScalar = sqrt(normScalar);
+        outputVec[i][j] = normScalar;
+        maxVal = maxVal > normScalar? maxVal: normScalar;
+      }
+    }
+  }
+
+  for(int i = 0; i < sphere1.num_rows(); ++i){
+    for(int j = 0; j < sphere1.num_columns(); ++j){
+      output_image.SetPixel(i, j, (outputVec[i][j] * 255)/ maxVal);
+    }
+  }
+
+}
+
+
 int main(int argc, char** argv){
 
-  if(argc != 8){
+  if(argc != 7){
     std::cout << "Usage: %s <input directions> <image 1> <image 2> <image 3> <step> <threshold> <output>\n" << argv[0] << std::endl;
     return 0;
   }
@@ -86,13 +80,11 @@ int main(int argc, char** argv){
   const std::string image1(argv[2]);
   const std::string image2(argv[3]);
   const std::string image3(argv[4]);
-  const std::string step_str(argv[5]);
-  const std::string threshold_str(argv[6]);
-  const std::string output_image(argv[7]);
+  const std::string threshold_str(argv[5]);
+  const std::string output_image_str(argv[6]);
 
   int step, threshold;
   try{
-    step = std::stoi(step_str);
     threshold = std::stoi(threshold_str);
   }
   catch(int e){
@@ -100,15 +92,10 @@ int main(int argc, char** argv){
     return 0;
   }
 
-  Image image_obj_1, image_obj_2, image_obj_3, needle_image;
+  Image image_obj_1, image_obj_2, image_obj_3, output_image;
 
   // read in all three images and the needle 
   if(!ReadImage(image1, &image_obj_1)){
-    std::cout << "Cannot open file " << image1 << std::endl;
-    return 0;
-  }
-
-  if(!ReadImage(image1, &needle_image)){
     std::cout << "Cannot open file " << image1 << std::endl;
     return 0;
   }
@@ -123,16 +110,25 @@ int main(int argc, char** argv){
     return 0;
   }
 
+  if(!ReadImage(image1, &output_image)){
+    std::cout << "Cannot open file " << image1 << std::endl;
+    return 0;
+  }
+
+  // get directions from input file
   std::vector<std::vector<double>> directionsVec;
   getDirectionsFromFile(directionsVec, input_directions);
+
+  //find inverse
   std::vector<std::vector<double>> inverseVec(directionsVec.size(), std::vector<double>(directionsVec[0].size(), 0));
   inverse(directionsVec, inverseVec, directionsVec.size());
   inverseVec[1][0] *= -1;  
   inverseVec[1][1] *= -1;  
   inverseVec[1][2] *= -1;  
-  createNeedleImage(inverseVec, image_obj_1, image_obj_2, image_obj_3, needle_image, threshold, step);
 
-  if(!WriteImage(output_image, needle_image)){  
+  findAlbedo(inverseVec, image_obj_1, image_obj_2, image_obj_3, output_image, threshold);
+
+  if(!WriteImage(output_image_str, output_image)){  
     std::cout << "Cannout write to output file." << endl;
     return 0;
   }

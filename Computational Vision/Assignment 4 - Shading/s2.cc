@@ -93,29 +93,6 @@ int main(int argc, char** argv){
   //find the normals
   findNormal(normalDatabase, bpDatabase, input_param_file); 
   
-  // //find the directions
-  // for(int i = 0; i < normalDatabase.size(); ++i){
-
-  //   std::cout << normalDatabase[i][0] << " " <<normalDatabase[i][1] << " " << normalDatabase[i][2] << std::endl; 
-  //   int nr = normalDatabase[i][0] * R[0] + normalDatabase[i][1] * R[1] + normalDatabase[i][2] * R[2];
-    
-  //   directionsDatabase.push_back(
-  //     { 
-  //       2*nr*normalDatabase[i][0] - R[0],
-  //       2*nr*normalDatabase[i][1] - R[1],
-  //       2*nr*normalDatabase[i][2] - R[2]
-  //     }
-  //   );
-
-  //   std::cout << "X: "<< directionsDatabase[i][0] << " Y: " << directionsDatabase[i][1] << " Z: " << directionsDatabase[i][2] << std::endl;
-  // }
-
-
-  // for(auto value: normalDatabase){
-  //   std::cout << "X: " << value[0] << " Y: " << value[1] << " Z: " << value[2] << std::endl;
-  // }
-
-
   std::ofstream fout(output_file);
   if(fout.fail()){
     std::cout << "Cannot open file " << output_file << std::endl;
