@@ -1,11 +1,62 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <cmath>
 #include "image.h"
+#include "matrixOperations.cc"
 
 using namespace ComputerVisionProjects;
 
-void getDirectionsFromFile(std::vector<std::vector<double>> &directionsVec, const string& file){
+void createNeedleImage(const std::vector<std::vector<double>>& inverseVec, const Image& sphere1, const Image& sphere2, const Image& sphere3, Image& needle_image, const int&threshold, const int& step){
+
+  std::vector<double> intensity = {-1, -1, -1};
+
+  for(int i = 0; i < sphere1.num_rows(); i += step){
+    for(int j = 0; j < sphere1.num_columns(); j += step){
+      
+      int sphere1_intensity = sphere1.GetPixel(i, j);
+      int sphere2_intensity = sphere2.GetPixel(i, j);
+      int sphere3_intensity = sphere3.GetPixel(i, j);
+
+      if(sphere1_intensity >= threshold && sphere2_intensity >= threshold && sphere3_intensity >= threshold){
+        intensity[0] = sphere1_intensity;
+        intensity[1] = sphere2_intensity;
+        intensity[2] = sphere3_intensity;
+
+        vector<double> normal = {0, 0 , 0};
+        double normScalar = 0;
+
+        for(int k = 0; k < inverseVec.size(); ++k){
+          normal[0] += inverseVec[0][k] * intensity[k]; 
+          normal[1] += inverseVec[1][k] * intensity[k]; 
+          normal[2] += inverseVec[2][k] * intensity[k]; 
+        }
+
+        for(int k = 0; k < normal.size(); ++k){
+          normScalar += pow(normal[k], 2);
+        }
+        normScalar = sqrt(normScalar);
+        
+        for(int k = 0; k < normal.size(); ++k){
+          normal[k] /= normScalar;
+        }
+
+        // create circle
+				needle_image.SetPixel(i - 1, j, 255);
+				needle_image.SetPixel(i, j - 1, 255);
+				needle_image.SetPixel(i + 1, j, 255);
+				needle_image.SetPixel(i, j + 1, 255);
+
+        DrawLine(i, j, i + normal[1] *10, j + normal[0] * 10, 255, &needle_image);
+        needle_image.SetPixel(i, j, 0);
+      }
+    }
+  }
+
+}
+
+
+void getDirectionsFromFile(std::vector<std::vector<double>> &directionsVec, const std::string& file){
 
   std::ifstream fin(file);
   if(fin.fail()){
@@ -19,6 +70,7 @@ void getDirectionsFromFile(std::vector<std::vector<double>> &directionsVec, cons
   return;
 }
 
+
 int main(int argc, char** argv){
 
   if(argc != 8){
@@ -31,9 +83,19 @@ int main(int argc, char** argv){
   const std::string image1(argv[2]);
   const std::string image2(argv[3]);
   const std::string image3(argv[4]);
-  const std::string step(argv[5]);
-  const std::string threshold(argv[6]);
+  const std::string step_str(argv[5]);
+  const std::string threshold_str(argv[6]);
   const std::string output_image(argv[7]);
+
+  int step, threshold;
+  try{
+    step = std::stoi(step_str);
+    threshold = std::stoi(threshold_str);
+  }
+  catch(int e){
+    std::cout << "Invalid input for threshold or step";
+    return 0;
+  }
 
   Image image_obj_1, image_obj_2, image_obj_3, needle_image;
 
@@ -43,7 +105,7 @@ int main(int argc, char** argv){
     return 0;
   }
 
-  if(!ReadImage(image1, &image_obj_1)){
+  if(!ReadImage(image1, &needle_image)){
     std::cout << "Cannot open file " << image1 << std::endl;
     return 0;
   }
@@ -61,7 +123,19 @@ int main(int argc, char** argv){
   std::vector<std::vector<double>> directionsVec;
   getDirectionsFromFile(directionsVec, input_directions);
   std::vector<std::vector<double>> inverseVec(directionsVec.size(), std::vector<double>(directionsVec[0].size(), 0));
-  
+  inverse(directionsVec, inverseVec, directionsVec.size());
+  inverseVec[1][0] *= -1;  
+  inverseVec[1][1] *= -1;  
+  inverseVec[1][2] *= -1;  
+  createNeedleImage(inverseVec, image_obj_1, image_obj_2, image_obj_3, needle_image, threshold, step);
+
+  if(!WriteImage(output_image, needle_image)){  
+    std::cout << "Cannout write to output file." << endl;
+    return 0;
+  }
+
+  std::cout << "Image manipulation completed successfully" << endl;
+  std::cout << "=========================================" << endl;
 
   return 0;
 }

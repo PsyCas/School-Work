@@ -8,11 +8,23 @@
 #include <vector>
 using namespace std; 
 
-const int N = 4;
+
+// Generic function to display the matrix.  We use it to display 
+// both adjoin and inverse. adjoin is integer matrix and inverse 
+// is a float. 
+void display(vector<vector<double>> A, const int& N) 
+{ 
+    for (int i=0; i<N; i++) 
+    { 
+        for (int j=0; j<N; j++) 
+            cout << A[i][j] << " "; 
+        cout << endl; 
+    } 
+} 
 
 // Function to get cofactor of A[p][q] in temp[][]. n is current 
 // dimension of A[][] 
-void getCofactor(vector<vector<double>> A, vector<vector<double>> temp, int p, int q, int n) 
+void getCofactor(vector<vector<double>> A, vector<vector<double>> &temp, int p, int q, int n) 
 { 
     int i = 0, j = 0; 
   
@@ -58,6 +70,7 @@ int determinant(const vector<vector<double>> &A, int n, const int &N)
     { 
         // Getting Cofactor of A[0][f] 
         getCofactor(A, temp, 0, f, n); 
+        
         D += sign * A[0][f] * determinant(temp, n - 1, N); 
   
         // terms are to be added with alternate sign 
@@ -79,7 +92,7 @@ void adjoint(const vector<vector<double>> &A, vector<vector<double>> &adj, const
     // temp is used to store cofactors of A[][] 
     int sign = 1;
     vector<vector<double>> temp(N, vector<double>(N, 0)); 
-  
+      
     for (int i=0; i<N; i++) 
     { 
         for (int j=0; j<N; j++) 
@@ -122,16 +135,31 @@ bool inverse(const vector<vector<double>> &A, vector<vector<double>> &inverse, c
     return true; 
 } 
   
-// Generic function to display the matrix.  We use it to display 
-// both adjoin and inverse. adjoin is integer matrix and inverse 
-// is a float. 
-template<class T> 
-void display(T A[N][N]) 
-{ 
-    for (int i=0; i<N; i++) 
-    { 
-        for (int j=0; j<N; j++) 
-            cout << A[i][j] << " "; 
-        cout << endl; 
-    } 
-} 
+
+
+// Driver program 
+// int main() 
+// { 
+//     vector<vector<double>> A= { {5, -2, 2, 7}, 
+//                     {1, 0, 0, 3}, 
+//                     {-3, 1, 5, 0}, 
+//                     {3, -1, -9, 4}}; 
+
+//     const int N = A.size();
+  
+//     vector<vector<double>> adj(N, (vector<double> (N, 0)));
+//     vector<vector<double>> inv(N, (vector<double> (N, 0)));
+  
+//     cout << "Input matrix is :\n"; 
+//     display(A, N); 
+  
+//     cout << "\nThe Adjoint is :\n"; 
+//     adjoint(A, adj, N); 
+//     display(adj, N); 
+  
+//     cout << "\nThe Inverse is :\n"; 
+//     if (inverse(A, inv, N)) 
+//         display(inv, N); 
+  
+//     return 0; 
+// } 
