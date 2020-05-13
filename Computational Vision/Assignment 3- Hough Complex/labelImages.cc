@@ -1,3 +1,14 @@
+/*
+Assignment 3 - Helper Function Fi
+
+Written by:  Parakram Basnet
+Instructor:  Ioannis Stamos
+Class	  :  Computational Vision 
+
+Contains functions that are required to perform the sequential labeling algorithm logic.
+====================================================================================================================
+*/
+
 #include <iostream>
 #include <vector> 
 #include <set> 
@@ -7,6 +18,7 @@
 using namespace std;
 using namespace ComputerVisionProjects;
 
+// function that takes a label as input and searches in the equivalence table for the smallest possible label equivalent to it.
 int findEquivalentLabel(const vector<vector<int>> table, const int &pixel){
 
     int index = pixel - 1;
@@ -38,6 +50,7 @@ int findEquivalentLabel(const vector<vector<int>> table, const int &pixel){
     return newPixel;
 }
 
+// prints the equivalence table
 void printTable(const vector<vector<int>> table){
 
     cout << "here";
@@ -50,6 +63,8 @@ void printTable(const vector<vector<int>> table){
     }
 }
 
+// function that sequentially labels an image.
+// it visits every pixel, checks for labels in upper and left pixel. Then chooses the smallest as label and inserts the other into an equivalence table. 
 void sequentialLabeling(Image &inputImage){
 
     int labelCounter = 1;
@@ -110,6 +125,7 @@ void sequentialLabeling(Image &inputImage){
     }
     equivalencyTable.pop_back();
 
+    // to store and display final labels
     std::set<int> labelDups;
 
     //second pass

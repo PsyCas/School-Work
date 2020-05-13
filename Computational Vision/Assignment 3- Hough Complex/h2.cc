@@ -1,17 +1,37 @@
+/*
+Assignment 3 - Program 2
+
+Written by:  Parakram Basnet
+Instructor:  Ioannis Stamos
+Class	  :  Computational Vision 
+
+Convert gray level image to binary using the input gray level threshold
+====================================================================================================================
+*/
+
 #include <iostream>
 #include "image.h"
 
 using namespace std;
 using namespace ComputerVisionProjects;
 
+/*
+ *  Function that uses the threshold to convert the gray-scale image to binary image
+ */
 void createBinaryImage(Image& input_image, int threshold){
-  for(int i = 0; i < input_image.num_rows(); ++i){
+    for(int i = 0; i < input_image.num_rows(); ++i){
         for(int j = 0; j < input_image.num_columns(); ++j){            
             input_image.GetPixel(i,j) > threshold? input_image.SetPixel(i, j, 255): input_image.SetPixel(i, j, 0); 
         }
     }
 }
 
+/*
+ * Driver function
+ * Reads in input from the CLI and does input validation
+ * Read in and writes image and file output
+ * Makes calls to helper function to perform the assigned tasks. 
+ */
 int main(int argc, char **argv){
 
   if(argc != 4){
@@ -47,6 +67,7 @@ int main(int argc, char **argv){
       return 0;
   }
   
+  // calling helper function to convert image
   createBinaryImage(an_image, gray_level_threshold);
 
   // saving the processed result to output file.

@@ -1,35 +1,58 @@
+/*
+Assignment 3 - Program 3
+
+Written by:  Parakram Basnet
+Instructor:  Ioannis Stamos
+Class	  :  Computational Vision 
+
+Program that implements the hough transform for an input image
+====================================================================================================================
+*/
+
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <math.h>
 #include "image.h"
 
+// setting the value of PI
 const double PI = 3.14159265358979323846;
 
 using namespace std;
 using namespace ComputerVisionProjects;
 
+/*
+ *  Writes the values stored in the output voting array into a text file. 
+ */
 void createOutputVotingArray(vector<vector<double>> accumulator, const string& output_file){
 
+  // creating ofstream object
   ofstream fout(output_file);
   if(fout.fail()){
     cout << "Failed to open file: " << output_file <<  endl;
     return;
   }
 
+  // writing the values of the voting array to file
   for(int i = 0; i < accumulator.size(); ++i){
     for(int j= 0; j < accumulator[i].size(); ++j){
       fout << "rho: " << i << " theta: " << j << " votes: " << accumulator[i][j] << "\n";
     }
   }
+
+  // closing fout object
   fout.close();
 }
 
-void drawImage(Image& output_image,  vector<vector<double>> accumulator){
+/*
+ *  Uses the voting array to update the values of pixel in the final output image. 
+ */
+void drawImage(Image& output_image, vector<vector<double>> accumulator){
 
   output_image.AllocateSpaceAndSetSize(accumulator.size(), accumulator[0].size());
   output_image.SetNumberGrayLevels(255);
 
+  // setting the value of evey individual pixel
   for(int i = 0; i < accumulator.size(); ++i){
     for(int j= 0; j < accumulator[i].size(); ++j){
         output_image.SetPixel(i, j, (int)(accumulator[i][j]>255? 255: accumulator[i][j]));
@@ -37,6 +60,9 @@ void drawImage(Image& output_image,  vector<vector<double>> accumulator){
   }
 }
 
+/*
+ *  Function that craetes the voting array that is required to get the hough image
+ */
 void createHoughImage(Image& input_image, Image& output_image, const string& output_array){
 
   int h = input_image.num_rows(), w = input_image.num_columns();
@@ -72,6 +98,7 @@ void createHoughImage(Image& input_image, Image& output_image, const string& out
         
         for(int k = 0; k < acc_thetaVal; ++k){
           
+          // setting values of theta and rho
           double thetaVal = acc_thetaMin + k * (acc_thetaMax - acc_thetaMin) / acc_thetaVal;
           double r = j * std::sin(thetaVal) + i * std::cos(thetaVal);
 
@@ -84,20 +111,26 @@ void createHoughImage(Image& input_image, Image& output_image, const string& out
     }
   }
 
+  // normalizing the values in the accumluator vector
   for(int i = 0; i < accumulator.size(); ++i){
     for(int j = 0; j < accumulator[i].size(); ++j){
       accumulator[i][j] *= 255 / maxVal;
     }
   }
 
-  createOutputVotingArray(accumulator, output_array);
+  createOutputVotingArray(accumulator, output_array); 
   drawImage(output_image, accumulator);      
 
   return;
 }
 
 
-
+/*
+ * Driver function
+ * Reads in input from the CLI and does input validation
+ * Read in and writes image and file output
+ * Makes calls to helper function to perform the assigned tasks. 
+ */
 int main(int argc, char **argv){
 
   if(argc != 4){
@@ -116,6 +149,7 @@ int main(int argc, char **argv){
     return 0;
   }
 
+  // helper function that transform an_image to hough image and stores it in hough_image
   createHoughImage(an_image, hough_image, output_array);
 
   if(!WriteImage(output_file, hough_image)){

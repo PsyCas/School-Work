@@ -1,3 +1,14 @@
+/*
+Assignment 3 - Program 1
+
+Written by:  Parakram Basnet
+Instructor:  Ioannis Stamos
+Class	  :  Computational Vision 
+
+Locating edges in a gray-level image 
+====================================================================================================================
+*/
+
 #include <iostream>
 #include <vector>
 #include <math.h>
@@ -6,11 +17,15 @@
 using namespace std;
 using namespace ComputerVisionProjects;
 
+
+// function that multiplies the neighbors of the i,j pixel with its kernel values to find the sobel value for that pixel.
+// @return magnitude of the point after performing the sobel operation
 double calculateSobel(const int &row, const int &col, const Image& input_image, const vector<vector<int>> kernelX, const vector<vector<int>> kernelY){
 
   double totalX = 0, totalY = 0;
 
   // getting the value of pixels from the image
+  // input is validated for the edge cases
   int topLeft = (row != 0 && col != 0)? input_image.GetPixel(row-1, col-1): 0;
   totalX += topLeft * kernelX[0][0];
   totalY += topLeft * kernelY[0][0];
@@ -53,9 +68,13 @@ double calculateSobel(const int &row, const int &col, const Image& input_image, 
   totalX += bottomRight * kernelX[2][2];
   totalY += bottomRight * kernelY[2][2];
   
+  // returning the square root.
   return sqrt(pow(totalX,2) + pow(totalY, 2));
 }
 
+/*
+ * iterates through the pixels of input image, performs sobel operation and saves the values into imageVec
+ */
 void calculateImage(const Image& input_image, vector<vector<double>> &imageVec, double& maxVal){
 
   // kernel for sobel operator, x and y axis
@@ -76,6 +95,9 @@ void calculateImage(const Image& input_image, vector<vector<double>> &imageVec, 
   }
 }
 
+/*
+ *  Function that plots the values if imageVec into input_image and normalizes it with the maximum intensity.
+ */
 void getFinalImage(Image& input_image, vector<vector<double>> imageVec, const double& maxVal){
 
   for(int i = 0; i < input_image.num_rows(); ++i){
@@ -85,7 +107,10 @@ void getFinalImage(Image& input_image, vector<vector<double>> imageVec, const do
   }
 }
 
-
+/*
+ *  Driver function that reads input from cli, performs input validation and calls helper functions for various operations.
+ *  Reads and writes images into file.  
+ */
 int main(int argc, char** argv){
 
   if(argc != 3){
