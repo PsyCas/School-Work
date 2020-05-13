@@ -91,6 +91,17 @@ void importAccumulator(const string& file, vector<vector<double>>& accumulator){
   fin.close();
 }
 
+void mergeOriginalImage(Image& input_image, const Image& output){
+
+  for(int i = 0; i < output.num_rows(); ++i){
+    for(int j = 0; j < output.num_columns(); ++j){
+      if(output.GetPixel(i, j) == 255){
+        input_image.SetPixel(i, j, 255);
+      }
+    }
+  }
+}
+
 
 int main(int argc, char **argv){
 
@@ -128,33 +139,23 @@ int main(int argc, char **argv){
   Image *inputHough = drawImage(accumulator, thresholdVal);
   Image *inputHoughCopy = drawImage(accumulator, thresholdVal);
 
-  for(int i =0; i < inputHough->num_rows(); ++i){
-		for(int j =0; j < inputHough->num_columns(); ++j){
-			if(inputHough->GetPixel(i, j) != 0){
-				std::cout << inputHough->GetPixel(i, j) << " ";
-			}
-		}
-		std::cout << std::endl;
-	}
-
-
   sequentialLabeling(*inputHoughCopy);  
 
-  // vector<vector<double>> databaseVec;
-  // findCenter(*inputHoughCopy, *inputHough, databaseVec);
+  vector<vector<double>> databaseVec;
+  findCenter(*inputHoughCopy, *inputHough, databaseVec);
 
-  // double maxVal = 0;
-  // vector<vector<double>> imageVec;
-  // imageVec.reserve(copy_image.num_rows() * copy_image.num_columns());
-  // calculateImage(copy_image, imageVec, maxVal); // x kernel 
-  // getFinalImage(copy_image, imageVec, maxVal);  //final Image
+  double maxVal = 0;
+  vector<vector<double>> imageVec;
+  imageVec.reserve(copy_image.num_rows() * copy_image.num_columns());
+  calculateImage(copy_image, imageVec, maxVal); // x kernel 
+  getFinalImage(copy_image, imageVec, maxVal);  //final Image
+  createBinaryImage(copy_image, 21);
+  mergeOriginalImage(input_image, copy_image);
 
-
-
-  // if(!WriteImage(output_line_image, copy_image)){
-  //   cout << "Can't write to file " << output_line_image << endl;
-  //   return 0;
-  // }
+  if(!WriteImage(output_line_image, input_image)){
+    cout << "Can't write to file " << output_line_image << endl;
+    return 0;
+  }
 
   cout << "Image manipulation Completed Successfully!\n";
   cout << "==========================================\n";

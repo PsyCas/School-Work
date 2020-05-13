@@ -69,7 +69,7 @@ void sequentialLabeling(Image &inputImage){
                 leftPixel =  j != 0? inputImage.GetPixel(i, j-1): -1;
 
             // object exists
-            if( pixel != 255){
+            if( pixel != 0){
                 // pixel above is labeled
                 if(upperPixel != 0 && upperPixel != 255){
                     inputImage.SetPixel(i, j, upperPixel);
@@ -125,11 +125,11 @@ void sequentialLabeling(Image &inputImage){
             }
         }
     }
-    cout << "\n\nThe labels in the end are: " << endl;
-    int setCounter = 0;
-    for (auto it=labelDups.begin(); it != labelDups.end(); ++it){
-        setCounter != labelDups.size()-1? cout << *it << ", ": cout << *it;
-        setCounter++;
-    }
-    cout<< endl;
+    // cout << "\n\nThe labels in the end are: " << endl;
+    // int setCounter = 0;
+    // for (auto it=labelDups.begin(); it != labelDups.end(); ++it){
+    //     setCounter != labelDups.size()-1? cout << *it << ", ": cout << *it;
+    //     setCounter++;
+    // }
+    // cout<< endl;
 }

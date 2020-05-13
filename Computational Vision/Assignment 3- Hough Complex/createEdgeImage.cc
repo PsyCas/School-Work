@@ -6,6 +6,14 @@
 using namespace std;
 using namespace ComputerVisionProjects;
 
+void createBinaryImage(Image& input_image, int threshold){
+  for(int i = 0; i < input_image.num_rows(); ++i){
+        for(int j = 0; j < input_image.num_columns(); ++j){            
+            input_image.GetPixel(i,j) > threshold? input_image.SetPixel(i, j, 255): input_image.SetPixel(i, j, 0); 
+        }
+    }
+}
+
 double calculateSobel(const int &row, const int &col, const Image& input_image, const vector<vector<int>> kernelX, const vector<vector<int>> kernelY){
 
   double totalX = 0, totalY = 0;
