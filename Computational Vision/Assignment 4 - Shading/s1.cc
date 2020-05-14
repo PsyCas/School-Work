@@ -1,3 +1,14 @@
+/*
+Assignment 4 - Program 1
+
+Written by:  Parakram Basnet
+Instructor:  Ioannis Stamos
+Class	  :  Computational Vision 
+
+Program that locates a spheres location and computes its center and radius
+====================================================================================================================
+*/
+
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -6,6 +17,9 @@
 
 using namespace std;
 
+/*
+ * Function that calculates the center of an image and stores it in the center vector
+ */
 void findCenter(const Image &an_image, vector<int> &center){
   int area = 0;
 
@@ -25,28 +39,41 @@ void findCenter(const Image &an_image, vector<int> &center){
   center[1] = center[1]/area;
 }
 
+/*
+ *  Function that calculates the radius of an image using its center.
+ *  @return radius value
+ */
 int findRadius(const Image &an_image, vector<int> center){
 
   int radius = 0, avgRow = 0, avgCol = 0;
 
+  // get the average value for the row
   for(int i = 0; i < an_image.num_rows(); ++i){
     if(an_image.GetPixel(i, center[1]) != 0){
       avgRow++;
     }
   }
 
+  // get the average value for the column
   for(int i = 0; i < an_image.num_columns(); ++i){
     if(an_image.GetPixel(center[0], i) != 0){
       avgCol++;
     }
   }
 
-  radius = (avgRow+avgCol)/4; // div by 2 for average, div by 2 again to convert diameter to radius
+  // div by 2 for average, div by 2 again to convert diameter to radius
+  radius = (avgRow+avgCol)/4; 
 
   return radius;
 }
 
 
+/*
+ * Driver function
+ * Reads in input from the CLI and does input validation
+ * Read in and writes image and file output
+ * Makes calls to helper function to perform the assigned tasks. 
+ */
 int main(int argc, char** argv){
 
   if (argc!=4) {
@@ -98,5 +125,4 @@ int main(int argc, char** argv){
     
     cout << "File Successfully Written!\n";
     cout << "==========================================\n";
-
 }

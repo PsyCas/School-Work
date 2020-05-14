@@ -1,3 +1,7 @@
+/*
+ * Parakram Basnet
+ * Header file for a Binary Image that contains methods to calculate a binary image.
+ */
 #ifndef BINARY_IMAGES_H_
 #define BINARY_IMAGES_H_
 

@@ -3,6 +3,7 @@
   Exported from: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
 
   Modified for personal use by Parakram Basnet
+  Array implementations converted to vector implementations that are using pass-by-reference to update values.
 */
 #include <iostream>
 #include <vector>
