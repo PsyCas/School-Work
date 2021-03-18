@@ -50,7 +50,7 @@ $(PROGRAM_2): $(ALL_OBJ2)
 all: 	
 		make $(PROGRAM_0)
 		make $(PROGRAM_1)
-		make $(PROGRAM_2)
+		make $(PROGRAM_2)	
 
 
 
